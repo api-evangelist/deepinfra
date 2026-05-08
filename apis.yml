@@ -1,0 +1,29 @@
+aid: deepinfra
+url: https://raw.githubusercontent.com/api-evangelist/deepinfra/refs/heads/main/apis.yml
+name: DeepInfra
+x-type: company
+description: >-
+  DeepInfra is a serverless inference platform for open-source LLMs and image models. Hosts Llama, Mixtral, Qwen, DeepSeek and more via OpenAI-compatible APIs with per-token billing.
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+tags:
+  - AI
+  - LLM
+  - Inference
+  - Open Source
+  - OpenAI Compatible
+created: '2026-05-08'
+modified: '2026-05-08'
+specificationVersion: '0.19'
+apis: []
+common:
+  - type: Website
+    url: https://deepinfra.com/
+  - type: Plans
+    url: plans/deepinfra-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/deepinfra-rate-limits.yml
+  - type: FinOps
+    url: finops/deepinfra-finops.yml
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
