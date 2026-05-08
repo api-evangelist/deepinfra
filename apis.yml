@@ -3,21 +3,69 @@ url: https://raw.githubusercontent.com/api-evangelist/deepinfra/refs/heads/main/
 name: DeepInfra
 x-type: company
 description: >-
-  DeepInfra is a serverless inference platform for open-source LLMs and image models. Hosts Llama, Mixtral, Qwen, DeepSeek and more via OpenAI-compatible APIs with per-token billing.
+  DeepInfra is a serverless inference platform for open-source models. Hosts 100+ LLMs
+  (Llama, Qwen, DeepSeek, Mixtral) plus image (Flux, Stable Diffusion), video, audio
+  (Whisper, TTS, Voxtral), embeddings/reranking, and vision/OCR models. Includes
+  fine-tuning, dedicated GPU rentals, and private deployments. OpenAI- and Anthropic-
+  compatible endpoints.
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 tags:
   - AI
   - LLM
   - Inference
+  - Serverless
   - Open Source
   - OpenAI Compatible
+  - Anthropic Compatible
+  - Image Generation
+  - Audio
+  - Embeddings
 created: '2026-05-08'
 modified: '2026-05-08'
 specificationVersion: '0.19'
-apis: []
+apis:
+  - aid: deepinfra:platform
+    name: DeepInfra Platform API
+    description: >-
+      OpenAI- and Anthropic-compatible inference API for 100+ open-source models. Surfaces
+      include chat completions, anthropic messages, embeddings, reranking, audio
+      (speech/transcriptions/translations), image generation, video generation, vision/OCR,
+      dedicated-model deployments, fine-tuning, billing, and account management. Base URL
+      https://api.deepinfra.com/v1/openai (OpenAI-compatible) and https://api.deepinfra.com
+      (native).
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://docs.deepinfra.com/
+    baseURL: https://api.deepinfra.com/v1/openai
+    tags:
+      - AI
+      - LLM
+      - Chat Completions
+      - Embeddings
+      - Reranking
+      - Image Generation
+      - Audio
+      - Vision
+      - OCR
+      - Fine Tuning
+      - Dedicated GPUs
+    properties:
+      - type: Documentation
+        url: https://docs.deepinfra.com/
+      - type: SignUp
+        url: https://deepinfra.com/dash/api_keys
+      - type: Pricing
+        url: https://deepinfra.com/pricing
+      - type: RateLimits
+        url: https://docs.deepinfra.com/account/rate-limits
+      - type: Webhooks
+        url: https://docs.deepinfra.com/account/webhooks
+      - type: AnthropicCompatible
+        url: https://api.deepinfra.com/v1/openai/anthropic
 common:
   - type: Website
     url: https://deepinfra.com/
+  - type: Documentation
+    url: https://docs.deepinfra.com/
   - type: Plans
     url: plans/deepinfra-plans-pricing.yml
   - type: RateLimits
