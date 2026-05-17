@@ -1,7 +1,7 @@
 aid: deepinfra
 url: https://raw.githubusercontent.com/api-evangelist/deepinfra/refs/heads/main/apis.yml
 name: DeepInfra
-x-type: company
+kind: company
 description: >-
   DeepInfra is a serverless inference platform for open-source models. Hosts 100+ LLMs
   (Llama, Qwen, DeepSeek, Mixtral) plus image (Flux, Stable Diffusion), video, audio
