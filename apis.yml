@@ -62,6 +62,10 @@ apis:
       - type: AnthropicCompatible
         url: https://api.deepinfra.com/v1/openai/anthropic
 common:
+  - type: GitHubOrganization
+    url: https://github.com/deepinfra
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/deep-infra
   - type: Website
     url: https://deepinfra.com/
   - type: Documentation
