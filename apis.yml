@@ -76,6 +76,8 @@ common:
     url: rate-limits/deepinfra-rate-limits.yml
   - type: FinOps
     url: finops/deepinfra-finops.yml
+  - type: LLMsTxt
+    url: https://docs.deepinfra.com/llms.txt
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
