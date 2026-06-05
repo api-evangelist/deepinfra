@@ -1,43 +1,73 @@
 # DeepInfra (deepinfra)
 
-DeepInfra is a serverless inference platform for open-source models. Hosts 100+ LLMs (Llama, Qwen, DeepSeek, Mixtral) plus image (Flux, Stable Diffusion), video, audio (Whisper, TTS, Voxtral), embeddings/reranking, and vision/OCR models. Includes fine-tuning, dedicated GPU rentals, and private deployments. OpenAI- and Anthropic-compatible endpoints.
+DeepInfra is a serverless inference platform for open-source models. Hosts 100+ LLMs (Llama, Qwen, DeepSeek, Mixtral) plus image (Flux, Stable Diffusion), video, audio (Whisper, TTS, Voxtral), embeddings/reranking, and vision/OCR models. Includes fine-tuning, dedicated GPU rentals, and private deployments. OpenAI- and Anthropic- compatible endpoints.
 
-**URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-evangelist/deepinfra/refs/heads/main/apis.yml)
-
-**Run:** [Capabilities Using Naftiko](https://github.com/naftiko/fleet?utm_source=api-evangelist&utm_medium=readme&utm_campaign=deepinfra-api-evangelist&utm_content=repo)
-
-## Type
-- **x-type:** company
+**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/deepinfra/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/deepinfra/refs/heads/main/apis.yml)
 
 ## Tags
-- AI, LLM, Inference, Serverless, Open Source, OpenAI Compatible, Anthropic Compatible, Image Generation, Audio, Embeddings
 
-## APIs
-- **DeepInfra Platform API** — Chat completions (OpenAI + Anthropic compatible), embeddings, reranking, audio (Whisper / TTS / Voxtral), image (Flux/SD), video, vision/OCR, fine-tuning, dedicated-model deployments, account, billing, webhooks. Base URL `https://api.deepinfra.com/v1/openai`. [Docs](https://docs.deepinfra.com/) · [Pricing](https://deepinfra.com/pricing) · [Rate Limits](https://docs.deepinfra.com/account/rate-limits)
-
-### Pricing Examples (May 2026)
-- DeepSeek-V3: $0.32/M input · $0.89/M output
-- Voxtral Mini audio: $0.001/minute
-- Flux schnell image: $0.0005 × (w/1024) × (h/1024) × iterations
-- Dedicated GPU rentals: A100 from $0.89/hour, B300 up to $4.20/hour
-
-## Plans, Rate Limits, FinOps
-- [Plans](plans/deepinfra-plans-pricing.yml) — PAYG per-token / per-minute / per-image, dedicated-GPU hourly. 5 usage tiers ($20-$10K).
-- [RateLimits](rate-limits/deepinfra-rate-limits.yml) — 200 concurrent requests default; rate/GPU limit increases on request.
-- [FinOps](finops/deepinfra-finops.yml) — FOCUS-aligned, Usage Record API + automatic invoicing thresholds.
+- AI
+- LLM
+- Inference
+- Serverless
+- Open Source
+- OpenAI Compatible
+- Anthropic Compatible
+- Image Generation
+- Audio
+- Embeddings
 
 ## Timestamps
+
 - **Created:** 2026-05-08
 - **Modified:** 2026-05-08
 
+## APIs
+
+### DeepInfra Platform API
+
+OpenAI- and Anthropic-compatible inference API for 100+ open-source models. Surfaces include chat completions, anthropic messages, embeddings, reranking, audio (speech/transcriptions/translations), image generation, video generation, vision/OCR, dedicated-model deployments, fine-tuning, billing, and account management. Base URL https://api.deepinfra.com/v1/openai (OpenAI-compatible) and https://api.deepinfra.com (native).
+
+- **Human URL:** [https://docs.deepinfra.com/](https://docs.deepinfra.com/)
+- **Base URL:** `https://api.deepinfra.com/v1/openai`
+
+#### Tags
+
+- AI
+- LLM
+- Chat Completions
+- Embeddings
+- Reranking
+- Image Generation
+- Audio
+- Vision
+- OCR
+- Fine Tuning
+- Dedicated GPUs
+
+#### Properties
+
+- [Documentation](https://docs.deepinfra.com/)
+- [Sign Up](https://deepinfra.com/dash/api_keys)
+- [Pricing](https://deepinfra.com/pricing)
+- [Rate Limits](https://docs.deepinfra.com/account/rate-limits)
+- [Webhooks](https://docs.deepinfra.com/account/webhooks)
+- [Anthropic Compatible](https://api.deepinfra.com/v1/openai/anthropic)
+- [Postman Collection](collections/deepinfra.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
+- [Open Collection](collections/deepinfra.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+
 ## Common Properties
+
+- [GitHub Organization](https://github.com/deepinfra)
+- [LinkedIn](https://www.linkedin.com/company/deep-infra)
 - [Website](https://deepinfra.com/)
 - [Documentation](https://docs.deepinfra.com/)
-
-## Notes
-- A documented OpenAPI URL exists (`https://docs.deepinfra.com/api-reference/openapi.json`) but currently returns a placeholder "Plant Store" sample spec rather than the real DeepInfra schema. Spec not copied locally.
+- [Plans](plans/deepinfra-plans-pricing.yml)
+- [Rate Limits](rate-limits/deepinfra-rate-limits.yml)
+- [Fin Ops](finops/deepinfra-finops.yml)
+- [L L Ms Txt](https://docs.deepinfra.com/llms.txt)
 
 ## Maintainers
-**FN:** Kin Lane
 
+**FN:** Kin Lane
 **Email:** kin@apievangelist.com
