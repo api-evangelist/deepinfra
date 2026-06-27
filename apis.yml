@@ -51,7 +51,7 @@ apis:
     properties:
       - type: Documentation
         url: https://docs.deepinfra.com/
-      - type: SignUp
+      - type: Signup
         url: https://deepinfra.com/dash/api_keys
       - type: Pricing
         url: https://deepinfra.com/pricing
@@ -76,7 +76,7 @@ common:
     url: rate-limits/deepinfra-rate-limits.yml
   - type: FinOps
     url: finops/deepinfra-finops.yml
-  - type: LLMsTxt
+  - type: LlmsText
     url: https://docs.deepinfra.com/llms.txt
 maintainers:
   - FN: Kin Lane
