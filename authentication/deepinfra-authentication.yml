@@ -1,0 +1,13 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/deepinfra-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  description: DeepInfra API token (DEEPINFRA_TOKEN) sent as a Bearer token.
+  sources:
+  - openapi/deepinfra-openapi.yml

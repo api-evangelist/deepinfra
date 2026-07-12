@@ -62,6 +62,12 @@ apis:
       - type: AnthropicCompatible
         url: https://api.deepinfra.com/v1/openai/anthropic
 common:
+  - type: TrustCenter
+    url: security/deepinfra-trust-center.yml
+  - type: DomainSecurity
+    url: security/deepinfra-domain-security.yml
+  - type: Authentication
+    url: authentication/deepinfra-authentication.yml
   - type: GitHubOrganization
     url: https://github.com/deepinfra
   - type: LinkedIn
