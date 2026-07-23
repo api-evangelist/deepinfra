@@ -1,0 +1,73 @@
+openapi: 3.1.0
+info:
+  title: DeepInfra Inference Audio Chat API
+  description: OpenAI-compatible inference API for DeepInfra's 100+ open-source models. Covers chat completions, text completions, embeddings, audio (transcriptions, translations, text-to-speech), image generation, and model listing. Authenticated with a Bearer API token.
+  version: 1.0.0
+servers:
+- url: https://api.deepinfra.com/v1/openai
+  description: OpenAI-compatible base URL
+- url: https://api.deepinfra.com
+  description: DeepInfra native base URL
+security:
+- bearerAuth: []
+tags:
+- name: Chat
+paths:
+  /chat/completions:
+    post:
+      tags:
+      - Chat
+      summary: Create a chat completion (OpenAI-compatible)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - model
+              - messages
+              properties:
+                model:
+                  type: string
+                messages:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      role:
+                        type: string
+                        enum:
+                        - system
+                        - user
+                        - assistant
+                        - tool
+                      content:
+                        type: string
+                temperature:
+                  type: number
+                top_p:
+                  type: number
+                max_tokens:
+                  type: integer
+                stream:
+                  type: boolean
+                tools:
+                  type: array
+                  items:
+                    type: object
+                response_format:
+                  type: object
+      responses:
+        '200':
+          description: Chat completion result
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: DeepInfra API token (DEEPINFRA_TOKEN) sent as a Bearer token.

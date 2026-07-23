@@ -1,0 +1,57 @@
+openapi: 3.1.0
+info:
+  title: DeepInfra Inference Audio Completions API
+  description: OpenAI-compatible inference API for DeepInfra's 100+ open-source models. Covers chat completions, text completions, embeddings, audio (transcriptions, translations, text-to-speech), image generation, and model listing. Authenticated with a Bearer API token.
+  version: 1.0.0
+servers:
+- url: https://api.deepinfra.com/v1/openai
+  description: OpenAI-compatible base URL
+- url: https://api.deepinfra.com
+  description: DeepInfra native base URL
+security:
+- bearerAuth: []
+tags:
+- name: Completions
+paths:
+  /completions:
+    post:
+      tags:
+      - Completions
+      summary: Create a text completion (legacy, OpenAI-compatible)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - model
+              - prompt
+              properties:
+                model:
+                  type: string
+                prompt:
+                  oneOf:
+                  - type: string
+                  - type: array
+                    items:
+                      type: string
+                max_tokens:
+                  type: integer
+                temperature:
+                  type: number
+                stream:
+                  type: boolean
+      responses:
+        '200':
+          description: Completion result
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: DeepInfra API token (DEEPINFRA_TOKEN) sent as a Bearer token.
