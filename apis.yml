@@ -8,7 +8,20 @@ description: >-
   (Whisper, TTS, Voxtral), embeddings/reranking, and vision/OCR models. Includes
   fine-tuning, dedicated GPU rentals, and private deployments. OpenAI- and Anthropic-
   compatible endpoints.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/deepinfra.png
 tags:
   - AI
   - LLM
@@ -24,43 +37,102 @@ created: '2026-05-08'
 modified: '2026-05-08'
 specificationVersion: '0.19'
 apis:
-  - aid: deepinfra:platform
-    name: DeepInfra Platform API
-    description: >-
-      OpenAI- and Anthropic-compatible inference API for 100+ open-source models. Surfaces
-      include chat completions, anthropic messages, embeddings, reranking, audio
-      (speech/transcriptions/translations), image generation, video generation, vision/OCR,
-      dedicated-model deployments, fine-tuning, billing, and account management. Base URL
-      https://api.deepinfra.com/v1/openai (OpenAI-compatible) and https://api.deepinfra.com
-      (native).
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://docs.deepinfra.com/
-    baseURL: https://api.deepinfra.com/v1/openai
-    tags:
-      - AI
-      - LLM
-      - Chat Completions
-      - Embeddings
-      - Reranking
-      - Image Generation
-      - Audio
-      - Vision
-      - OCR
-      - Fine Tuning
-      - Dedicated GPUs
-    properties:
-      - type: Documentation
-        url: https://docs.deepinfra.com/
-      - type: Signup
-        url: https://deepinfra.com/dash/api_keys
-      - type: Pricing
-        url: https://deepinfra.com/pricing
-      - type: RateLimits
-        url: https://docs.deepinfra.com/account/rate-limits
-      - type: Webhooks
-        url: https://docs.deepinfra.com/account/webhooks
-      - type: AnthropicCompatible
-        url: https://api.deepinfra.com/v1/openai/anthropic
+- aid: deepinfra:platform
+  name: DeepInfra Platform API
+  description: >-
+    OpenAI- and Anthropic-compatible inference API for 100+ open-source models. Surfaces include chat
+    completions, anthropic messages, embeddings, reranking, audio (speech/transcriptions/translations),
+    image generation, video generation, vision/OCR, dedicated-model deployments, fine-tuning, billing,
+    and account management. Base URL https://api.deepinfra.com/v1/openai (OpenAI-compatible) and https://api.deepinfra.com
+    (native).
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.deepinfra.com/
+  baseURL: https://api.deepinfra.com/v1/openai
+  tags:
+  - AI
+  - LLM
+  - Chat Completions
+  - Embeddings
+  - Reranking
+  - Image Generation
+  - Audio
+  - Vision
+  - OCR
+  - Fine Tuning
+  - Dedicated GPUs
+  properties:
+  - type: Documentation
+    url: https://docs.deepinfra.com/
+  - type: Signup
+    url: https://deepinfra.com/dash/api_keys
+  - type: Pricing
+    url: https://deepinfra.com/pricing
+  - type: RateLimits
+    url: https://docs.deepinfra.com/account/rate-limits
+  - type: Webhooks
+    url: https://docs.deepinfra.com/account/webhooks
+  - type: AnthropicCompatible
+    url: https://api.deepinfra.com/v1/openai/anthropic
+- aid: deepinfra:deepinfra-audio-api
+  name: DeepInfra Audio API
+  description: The Audio API from DeepInfra — 3 operation(s) for audio.
+  humanURL: https://docs.deepinfra.com/
+  baseURL: https://api.deepinfra.com/v1/openai
+  tags:
+  - Audio
+  properties:
+  - type: OpenAPI
+    url: openapi/deepinfra-audio-api-openapi.yml
+- aid: deepinfra:deepinfra-chat-api
+  name: DeepInfra Chat API
+  description: The Chat API from DeepInfra — 1 operation(s) for chat.
+  humanURL: https://docs.deepinfra.com/
+  baseURL: https://api.deepinfra.com/v1/openai
+  tags:
+  - Chat
+  properties:
+  - type: OpenAPI
+    url: openapi/deepinfra-chat-api-openapi.yml
+- aid: deepinfra:deepinfra-completions-api
+  name: DeepInfra Completions API
+  description: The Completions API from DeepInfra — 1 operation(s) for completions.
+  humanURL: https://docs.deepinfra.com/
+  baseURL: https://api.deepinfra.com/v1/openai
+  tags:
+  - Completions
+  properties:
+  - type: OpenAPI
+    url: openapi/deepinfra-completions-api-openapi.yml
+- aid: deepinfra:deepinfra-embeddings-api
+  name: DeepInfra Embeddings API
+  description: The Embeddings API from DeepInfra — 1 operation(s) for embeddings.
+  humanURL: https://docs.deepinfra.com/
+  baseURL: https://api.deepinfra.com/v1/openai
+  tags:
+  - Embeddings
+  properties:
+  - type: OpenAPI
+    url: openapi/deepinfra-embeddings-api-openapi.yml
+- aid: deepinfra:deepinfra-images-api
+  name: DeepInfra Images API
+  description: The Images API from DeepInfra — 1 operation(s) for images.
+  humanURL: https://docs.deepinfra.com/
+  baseURL: https://api.deepinfra.com/v1/openai
+  tags:
+  - Images
+  properties:
+  - type: OpenAPI
+    url: openapi/deepinfra-images-api-openapi.yml
+- aid: deepinfra:deepinfra-models-api
+  name: DeepInfra Models API
+  description: The Models API from DeepInfra — 2 operation(s) for models.
+  humanURL: https://docs.deepinfra.com/
+  baseURL: https://api.deepinfra.com/v1/openai
+  tags:
+  - Models
+  properties:
+  - type: OpenAPI
+    url: openapi/deepinfra-models-api-openapi.yml
 common:
   - type: AgenticAccess
     url: agentic-access/deepinfra-agentic-access.yml
