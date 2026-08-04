@@ -1,0 +1,24 @@
+{
+  "provider": "deepinfra",
+  "sources": [
+    "deepinfra-audio-api-openapi.yml",
+    "deepinfra-chat-api-openapi.yml",
+    "deepinfra-completions-api-openapi.yml",
+    "deepinfra-embeddings-api-openapi.yml",
+    "deepinfra-images-api-openapi.yml",
+    "deepinfra-models-api-openapi.yml"
+  ],
+  "outputs": [
+    "deepinfra-audio-api-openapi.yml",
+    "deepinfra-chat-api-openapi.yml",
+    "deepinfra-completions-api-openapi.yml",
+    "deepinfra-embeddings-api-openapi.yml",
+    "deepinfra-images-api-openapi.yml",
+    "deepinfra-models-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

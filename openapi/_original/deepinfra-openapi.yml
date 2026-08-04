@@ -1,0 +1,240 @@
+openapi: 3.1.0
+info:
+  title: DeepInfra Inference API
+  description: >-
+    OpenAI-compatible inference API for DeepInfra's 100+ open-source models.
+    Covers chat completions, text completions, embeddings, audio
+    (transcriptions, translations, text-to-speech), image generation, and
+    model listing. Authenticated with a Bearer API token.
+  version: "1.0.0"
+servers:
+  - url: https://api.deepinfra.com/v1/openai
+    description: OpenAI-compatible base URL
+  - url: https://api.deepinfra.com
+    description: DeepInfra native base URL
+security:
+  - bearerAuth: []
+tags:
+  - name: Chat
+  - name: Completions
+  - name: Embeddings
+  - name: Audio
+  - name: Images
+  - name: Models
+paths:
+  /chat/completions:
+    post:
+      tags: [Chat]
+      summary: Create a chat completion (OpenAI-compatible)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [model, messages]
+              properties:
+                model: { type: string }
+                messages:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      role: { type: string, enum: [system, user, assistant, tool] }
+                      content: { type: string }
+                temperature: { type: number }
+                top_p: { type: number }
+                max_tokens: { type: integer }
+                stream: { type: boolean }
+                tools:
+                  type: array
+                  items: { type: object }
+                response_format: { type: object }
+      responses:
+        '200':
+          description: Chat completion result
+          content:
+            application/json:
+              schema: { type: object }
+  /completions:
+    post:
+      tags: [Completions]
+      summary: Create a text completion (legacy, OpenAI-compatible)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [model, prompt]
+              properties:
+                model: { type: string }
+                prompt:
+                  oneOf:
+                    - { type: string }
+                    - { type: array, items: { type: string } }
+                max_tokens: { type: integer }
+                temperature: { type: number }
+                stream: { type: boolean }
+      responses:
+        '200':
+          description: Completion result
+          content:
+            application/json:
+              schema: { type: object }
+  /embeddings:
+    post:
+      tags: [Embeddings]
+      summary: Create embeddings for input text
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [model, input]
+              properties:
+                model: { type: string }
+                input:
+                  oneOf:
+                    - { type: string }
+                    - { type: array, items: { type: string } }
+                encoding_format:
+                  type: string
+                  enum: [float, base64]
+      responses:
+        '200':
+          description: Embeddings
+          content:
+            application/json:
+              schema: { type: object }
+  /audio/transcriptions:
+    post:
+      tags: [Audio]
+      summary: Transcribe audio to text (Whisper)
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file, model]
+              properties:
+                file: { type: string, format: binary }
+                model: { type: string }
+                language: { type: string }
+                prompt: { type: string }
+                response_format:
+                  type: string
+                  enum: [json, text, srt, verbose_json, vtt]
+                temperature: { type: number }
+      responses:
+        '200':
+          description: Transcription
+          content:
+            application/json:
+              schema: { type: object }
+  /audio/translations:
+    post:
+      tags: [Audio]
+      summary: Translate audio into English text
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file, model]
+              properties:
+                file: { type: string, format: binary }
+                model: { type: string }
+                prompt: { type: string }
+                response_format: { type: string }
+                temperature: { type: number }
+      responses:
+        '200':
+          description: Translation
+          content:
+            application/json:
+              schema: { type: object }
+  /audio/speech:
+    post:
+      tags: [Audio]
+      summary: Synthesize text to speech
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [model, input]
+              properties:
+                model: { type: string }
+                input: { type: string }
+                voice: { type: string }
+                response_format:
+                  type: string
+                  enum: [mp3, opus, aac, flac, wav, pcm]
+                speed: { type: number }
+      responses:
+        '200':
+          description: Audio bytes
+          content:
+            audio/mpeg: {}
+            audio/wav: {}
+  /images/generations:
+    post:
+      tags: [Images]
+      summary: Generate images from a prompt
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [model, prompt]
+              properties:
+                model: { type: string }
+                prompt: { type: string }
+                n: { type: integer }
+                size: { type: string }
+                response_format:
+                  type: string
+                  enum: [url, b64_json]
+      responses:
+        '200':
+          description: Generated images
+          content:
+            application/json:
+              schema: { type: object }
+  /models:
+    get:
+      tags: [Models]
+      summary: List available models
+      responses:
+        '200':
+          description: Models
+          content:
+            application/json:
+              schema: { type: object }
+  /models/{model}:
+    get:
+      tags: [Models]
+      summary: Get metadata for a model
+      parameters:
+        - in: path
+          name: model
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Model
+          content:
+            application/json:
+              schema: { type: object }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: DeepInfra API token (DEEPINFRA_TOKEN) sent as a Bearer token.
