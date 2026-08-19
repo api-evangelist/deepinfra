@@ -1,0 +1,218 @@
+# DeepInfra
+
+## Docs
+
+- [What is DeepInfra](https://docs.deepinfra.com/index.md): AI inference cloud — OpenAI-compatible API, 100s of open-source models, private GPU deployments, and GPU rental.
+- [Quickstart](https://docs.deepinfra.com/quickstart.md): Make your first API call in 60 seconds — no installation required.
+- [Models](https://docs.deepinfra.com/models.md): Browse 100+ open-source models available on DeepInfra.
+- [Chat Completions](https://docs.deepinfra.com/chat/overview.md): OpenAI-compatible chat completions API — just change the base URL and model name.
+- [Streaming](https://docs.deepinfra.com/chat/streaming.md): Stream chat completion responses token by token using server-sent events.
+- [Tool Calling](https://docs.deepinfra.com/chat/tool-calling.md): Let models call external functions — the foundation of AI agents.
+- [Structured Outputs](https://docs.deepinfra.com/chat/structured-outputs.md): Get model responses in JSON format using response_format.
+- [Vision & OCR](https://docs.deepinfra.com/chat/vision.md): Send images to multimodal models for visual understanding and text extraction.
+- [Prompt Caching](https://docs.deepinfra.com/chat/prompt-caching.md): Reduce latency and cost by caching repeated prompt prefixes.
+- [Prompt Cache Retention](https://docs.deepinfra.com/chat/prompt-cache-retention.md): Retain a prompt prefix for 5 minutes or 1 hour so reuse skips prefill and bills at the cache-read rate.
+- [Reasoning Models](https://docs.deepinfra.com/chat/reasoning.md): Configure chain-of-thought reasoning with reasoning_effort and the reasoning parameter.
+- [Log Probabilities](https://docs.deepinfra.com/chat/log-probs.md): Get per-token log probabilities from LLM responses.
+- [Text Completions](https://docs.deepinfra.com/apis/completions.md): Legacy OpenAI-compatible completions API for raw text generation.
+- [Embeddings](https://docs.deepinfra.com/apis/embeddings.md): Generate embedding vectors from text using the OpenAI-compatible embeddings API.
+- [Reranking](https://docs.deepinfra.com/apis/reranker.md): Rerank a list of documents by relevance to a query.
+- [Image Generation](https://docs.deepinfra.com/apis/image-generation.md): Generate images from text prompts using the OpenAI-compatible images API.
+- [Text to Video](https://docs.deepinfra.com/apis/text-to-video.md): Generate video clips from text prompts.
+- [Speech Recognition](https://docs.deepinfra.com/apis/speech.md): Transcribe audio to text using Whisper and other speech recognition models.
+- [Text to Speech](https://docs.deepinfra.com/apis/text-to-speech.md): Convert text to natural-sounding audio using TTS models.
+- [DeepInfra Native API](https://docs.deepinfra.com/apis/deepinfra-native.md): Advanced API with access to all model types including image generation, speech, object detection, and more.
+- [Introduction to Batch API](https://docs.deepinfra.com/batch/introduction.md): Run large, non-urgent inference jobs asynchronously at 20% off — OpenAI-compatible file upload, batch, and results workflow.
+- [Batch Objects](https://docs.deepinfra.com/batch/batch-objects.md): Reference for the objects returned by the Batch API — the Batch and BatchUsage objects.
+- [Batch Endpoints](https://docs.deepinfra.com/batch/batch-endpoints.md): Reference for the Batch API endpoints — create, retrieve, list, and cancel batch jobs.
+- [Files API](https://docs.deepinfra.com/batch/file-endpoints.md): The OpenAI-compatible Files API — upload, list, retrieve, download, and delete files.
+- [Deploy Private Models](https://docs.deepinfra.com/private-models/overview.md): Run your own LLMs and image models on dedicated GPU infrastructure with autoscaling.
+- [Custom LLMs](https://docs.deepinfra.com/private-models/custom-llms.md): Deploy your own LLM on dedicated A100/H100/H200/B200/B300 GPUs with autoscaling and an OpenAI-compatible endpoint.
+- [LoRA Adapters](https://docs.deepinfra.com/private-models/lora.md): Deploy LoRA fine-tuned language models on DeepInfra.
+- [LoRA for Image Generation](https://docs.deepinfra.com/private-models/lora-image.md): Deploy LoRA adapters for text-to-image generation using models from Civitai.
+- [GPU Instances](https://docs.deepinfra.com/gpu-instances/overview.md): Rent dedicated B200 GPU instances with SSH access for training, fine-tuning, and custom workloads.
+- [Introduction to Hosted Agents](https://docs.deepinfra.com/agents/introduction.md): Fully managed instances running open-source agent frameworks — created in minutes, billed by the hour, pre-wired to DeepInfra inference.
+- [OpenClaw](https://docs.deepinfra.com/agents/openclaw.md): Run a fully managed OpenClaw instance — your personal AI assistant with a web dashboard, powered by DeepInfra models.
+- [Hermes-Agent](https://docs.deepinfra.com/agents/hermes-agent.md): Run a fully managed Hermes-Agent instance — Nous Research's autonomous agent, driven over SSH and powered by DeepInfra models.
+- [Anthropic SDK & Claude Code](https://docs.deepinfra.com/integrations/anthropic.md): Use DeepInfra models with the Anthropic Messages API, Claude Code, and the Anthropic SDK.
+- [LangChain](https://docs.deepinfra.com/integrations/langchain.md): Use DeepInfra models with LangChain for LLM-powered applications.
+- [LlamaIndex](https://docs.deepinfra.com/integrations/llama-index.md): Use DeepInfra LLMs and embeddings with LlamaIndex.
+- [AI SDK (Vercel)](https://docs.deepinfra.com/integrations/ai-sdk.md): Use DeepInfra models with the Vercel AI SDK for TypeScript/JavaScript.
+- [AutoGen](https://docs.deepinfra.com/integrations/autogen.md): Build multi-agent LLM applications with AutoGen using DeepInfra endpoints.
+- [Pi](https://docs.deepinfra.com/integrations/pi.md): Use DeepInfra models with the Pi coding agent via a custom OpenAI-compatible provider.
+- [Hermes Agent](https://docs.deepinfra.com/integrations/hermes-agent.md): Use DeepInfra models with Hermes Agent by adding a custom OpenAI-compatible provider.
+- [Webhooks](https://docs.deepinfra.com/account/webhooks.md): Receive inference results asynchronously via HTTP callbacks.
+- [Request Compression](https://docs.deepinfra.com/request-compression.md): Compress large request bodies with gzip to cut upload bandwidth and latency.
+- [Signing In](https://docs.deepinfra.com/account/signing-in.md): Sign in with Google, GitHub, email & password, or corporate SSO — and what to know about linked accounts.
+- [Authentication](https://docs.deepinfra.com/account/authentication.md): API tokens and scoped JWT for secure, scope-limited inference access.
+- [Rate Limits](https://docs.deepinfra.com/account/rate-limits.md): Default concurrent request limits and how to increase them.
+- [Okta SSO](https://docs.deepinfra.com/account/okta-sso.md): Configure Okta as a Single Sign-On provider for your DeepInfra team.
+- [Data Privacy](https://docs.deepinfra.com/account/data-privacy.md): How DeepInfra handles your data during inference — what's stored, what's not.
+- [Subprocessors](https://docs.deepinfra.com/account/subprocessors.md): Third-party services DeepInfra uses to provide its services.
+- [Stable Diffusion](https://docs.deepinfra.com/tutorials/stable-diffusion.md): Generate images with Stable Diffusion and SDXL on DeepInfra.
+- [Whisper Speech Recognition](https://docs.deepinfra.com/tutorials/whisper.md): Transcribe audio to text with OpenAI Whisper on DeepInfra.
+- [Get Live Metrics](https://docs.deepinfra.com/api-reference/logs-&-metrics/get-live-metrics.md): Get the latest values for the Live metrics section on the web front page.
+- [Logs Query](https://docs.deepinfra.com/api-reference/logs-&-metrics/logs-query.md): Query inference logs. * Without timestamps (from/to) returns last `limit` messages (in last month). * With `from` only, returns first `limit` messages after `from` (inclusive). * With `to` only, returns last `limit` messages before `to` (inclusive). * With both `from` and `to`, return the first `lim…
+- [Deployment Logs Query](https://docs.deepinfra.com/api-reference/logs-&-metrics/deployment-logs-query.md): Query deployment logs. * Without timestamps (from/to) returns last `limit` messages (in last month). * With `from` only, returns first `limit` messages after `from` (inclusive). * With `to` only, returns last `limit` messages before `to` (inclusive). * With both `from` and `to`, return the first `li…
+- [Get Request Costs](https://docs.deepinfra.com/api-reference/logs-&-metrics/get-request-costs.md)
+- [Cli Version](https://docs.deepinfra.com/api-reference/utilities/cli-version.md)
+- [Submit Feedback](https://docs.deepinfra.com/api-reference/utilities/submit-feedback.md): Submit feedback
+- [Me](https://docs.deepinfra.com/api-reference/account/me.md)
+- [Delete Account](https://docs.deepinfra.com/api-reference/account/delete-account.md)
+- [Account Update Details](https://docs.deepinfra.com/api-reference/account/account-update-details.md)
+- [Account Email Values](https://docs.deepinfra.com/api-reference/account/account-email-values.md)
+- [Team Set Display Name](https://docs.deepinfra.com/api-reference/account/team-set-display-name.md)
+- [Account Rate Limit](https://docs.deepinfra.com/api-reference/account/account-rate-limit.md)
+- [Request Rate Limit Increase](https://docs.deepinfra.com/api-reference/account/request-rate-limit-increase.md)
+- [Gpu Pool Gpu Types](https://docs.deepinfra.com/api-reference/account/gpu-pool-gpu-types.md)
+- [Account Gpu Pool](https://docs.deepinfra.com/api-reference/account/account-gpu-pool.md)
+- [Request Gpu Pool Change](https://docs.deepinfra.com/api-reference/account/request-gpu-pool-change.md)
+- [Deploy Create](https://docs.deepinfra.com/api-reference/dedicated-models/deploy-create.md)
+- [Deploy Create Hf](https://docs.deepinfra.com/api-reference/dedicated-models/deploy-create-hf.md)
+- [Deploy Gpu Availability](https://docs.deepinfra.com/api-reference/dedicated-models/deploy-gpu-availability.md)
+- [Deploy Llm Suggest Name](https://docs.deepinfra.com/api-reference/dedicated-models/deploy-llm-suggest-name.md)
+- [Deploy Llm Standard Args](https://docs.deepinfra.com/api-reference/dedicated-models/deploy-llm-standard-args.md)
+- [Deploy Llm Presets](https://docs.deepinfra.com/api-reference/dedicated-models/deploy-llm-presets.md): DeepInfra presets and mirrored vLLM recipes for ``hf_repo_id``, told apart by ``source``; empty when none. Filter by ``gpu``/``engine``/``source``.
+- [Deploy Create Llm](https://docs.deepinfra.com/api-reference/dedicated-models/deploy-create-llm.md)
+- [Deploy List](https://docs.deepinfra.com/api-reference/dedicated-models/deploy-list.md)
+- [Deploy List](https://docs.deepinfra.com/api-reference/dedicated-models/deploy-list-1.md)
+- [Deployment Stats](https://docs.deepinfra.com/api-reference/dedicated-models/deployment-stats.md)
+- [Deploy Status](https://docs.deepinfra.com/api-reference/dedicated-models/deploy-status.md)
+- [Deploy Update](https://docs.deepinfra.com/api-reference/dedicated-models/deploy-update.md)
+- [Deploy Delete](https://docs.deepinfra.com/api-reference/dedicated-models/deploy-delete.md)
+- [Deploy Stats](https://docs.deepinfra.com/api-reference/dedicated-models/deploy-stats.md)
+- [Deploy Detailed Stats](https://docs.deepinfra.com/api-reference/dedicated-models/deploy-detailed-stats.md)
+- [Deploy Args History](https://docs.deepinfra.com/api-reference/dedicated-models/deploy-args-history.md)
+- [Deploy Args Restore](https://docs.deepinfra.com/api-reference/dedicated-models/deploy-args-restore.md)
+- [Deploy Stop](https://docs.deepinfra.com/api-reference/dedicated-models/deploy-stop.md): Stop a running deployment. Terminates pods. Can be restarted later.
+- [Deploy Start](https://docs.deepinfra.com/api-reference/dedicated-models/deploy-start.md): Start a stopped deployment. Re-creates pods via auto-scaling.
+- [Deploy Rebalance Status](https://docs.deepinfra.com/api-reference/dedicated-models/deploy-rebalance-status.md): Status of GPU pool rebalances touching this deployment. A just-started rebalance can take a moment to appear. A finished or cancelled rebalance leaves both deployments' min/max instances fixed at the final counts; edit them to resume autoscaling.
+- [Deploy Rebalance](https://docs.deepinfra.com/api-reference/dedicated-models/deploy-rebalance.md): Start a GPU pool rebalance: move GPUs from this deployment onto another deployment you own, one instance at a time and without downtime. Moving all instances stops this deployment; start it again later to resume it.
+- [Deploy Rebalance Cancel](https://docs.deepinfra.com/api-reference/dedicated-models/deploy-rebalance-cancel.md): Stop an in-flight GPU pool rebalance; instances already moved stay, and both deployments keep min/max instances fixed at their current counts.
+- [Private Models List](https://docs.deepinfra.com/api-reference/models/private-models-list.md)
+- [Model Families Names](https://docs.deepinfra.com/api-reference/models/model-families-names.md)
+- [Model Family](https://docs.deepinfra.com/api-reference/models/model-family.md)
+- [Models List](https://docs.deepinfra.com/api-reference/models/models-list.md)
+- [Models Deployment List](https://docs.deepinfra.com/api-reference/models/models-deployment-list.md)
+- [Models Lora List](https://docs.deepinfra.com/api-reference/models/models-lora-list.md)
+- [Openrouter Models](https://docs.deepinfra.com/api-reference/models/openrouter-models.md)
+- [Model Versions](https://docs.deepinfra.com/api-reference/models/model-versions.md)
+- [Model Publicity](https://docs.deepinfra.com/api-reference/models/model-publicity.md)
+- [Model Meta Update](https://docs.deepinfra.com/api-reference/models/model-meta-update.md)
+- [Models Info](https://docs.deepinfra.com/api-reference/models/models-info.md)
+- [Model Delete](https://docs.deepinfra.com/api-reference/models/model-delete.md)
+- [Models Featured](https://docs.deepinfra.com/api-reference/models/models-featured.md)
+- [Model Schema](https://docs.deepinfra.com/api-reference/models/model-schema.md)
+- [Openai Models](https://docs.deepinfra.com/api-reference/models/openai-models.md)
+- [Get Hardware](https://docs.deepinfra.com/api-reference/models/get-hardware.md)
+- [Upload Lora Model](https://docs.deepinfra.com/api-reference/lora-adapters/upload-lora-model.md)
+- [Delete Lora Model](https://docs.deepinfra.com/api-reference/lora-adapters/delete-lora-model.md)
+- [Create Lora](https://docs.deepinfra.com/api-reference/lora-adapters/create-lora.md)
+- [Get Lora Status](https://docs.deepinfra.com/api-reference/lora-adapters/get-lora-status.md)
+- [Get Lora](https://docs.deepinfra.com/api-reference/lora-adapters/get-lora.md)
+- [Delete Lora](https://docs.deepinfra.com/api-reference/lora-adapters/delete-lora.md)
+- [Update Lora](https://docs.deepinfra.com/api-reference/lora-adapters/update-lora.md)
+- [Get Model Loras](https://docs.deepinfra.com/api-reference/lora-adapters/get-model-loras.md)
+- [Get User Loras](https://docs.deepinfra.com/api-reference/lora-adapters/get-user-loras.md)
+- [Inference Deploy](https://docs.deepinfra.com/api-reference/inference/inference-deploy.md)
+- [Inference Model](https://docs.deepinfra.com/api-reference/inference/inference-model.md)
+- [Tokenize](https://docs.deepinfra.com/api-reference/tokenizer/tokenize.md)
+- [Detokenize](https://docs.deepinfra.com/api-reference/tokenizer/detokenize.md)
+- [Openai Images Generations](https://docs.deepinfra.com/api-reference/image-generation/openai-images-generations.md): Generate image using OpenAI Images API
+- [Openai Images Variations](https://docs.deepinfra.com/api-reference/image-generation/openai-images-variations.md): Generate a similar image using OpenAI Images Variations API
+- [Openai Images Edits](https://docs.deepinfra.com/api-reference/image-generation/openai-images-edits.md): Edit image using OpenAI Images Edits API
+- [Openai Audio Speech](https://docs.deepinfra.com/api-reference/audio/openai-audio-speech.md)
+- [Openai Audio Transcriptions](https://docs.deepinfra.com/api-reference/audio/openai-audio-transcriptions.md)
+- [Openai Audio Translations](https://docs.deepinfra.com/api-reference/audio/openai-audio-translations.md)
+- [Create Video Generation](https://docs.deepinfra.com/api-reference/videos/create-video-generation.md)
+- [Create Video Generation](https://docs.deepinfra.com/api-reference/videos/create-video-generation-1.md)
+- [Get Video Generation](https://docs.deepinfra.com/api-reference/videos/get-video-generation.md)
+- [Get Video Generation](https://docs.deepinfra.com/api-reference/videos/get-video-generation-1.md)
+- [Get Video Content](https://docs.deepinfra.com/api-reference/videos/get-video-content.md)
+- [Get Video Content](https://docs.deepinfra.com/api-reference/videos/get-video-content-1.md)
+- [Get Voices](https://docs.deepinfra.com/api-reference/text-to-speech/get-voices.md): Get available voices for a given user
+- [Text To Speech Stream](https://docs.deepinfra.com/api-reference/text-to-speech/text-to-speech-stream.md)
+- [Text To Speech](https://docs.deepinfra.com/api-reference/text-to-speech/text-to-speech.md)
+- [Get Voice](https://docs.deepinfra.com/api-reference/text-to-speech/get-voice.md): Get a voice by its id
+- [Delete Voice](https://docs.deepinfra.com/api-reference/text-to-speech/delete-voice.md)
+- [Create Voice](https://docs.deepinfra.com/api-reference/text-to-speech/create-voice.md): Create a new voice
+- [Update Voice](https://docs.deepinfra.com/api-reference/text-to-speech/update-voice.md)
+- [Container Rentals Get Params](https://docs.deepinfra.com/api-reference/gpu-rentals/container-rentals-get-params.md)
+- [Rent Gpu Availability](https://docs.deepinfra.com/api-reference/gpu-rentals/rent-gpu-availability.md)
+- [Container Rentals List](https://docs.deepinfra.com/api-reference/gpu-rentals/container-rentals-list.md)
+- [Container Rentals Start](https://docs.deepinfra.com/api-reference/gpu-rentals/container-rentals-start.md)
+- [Container Rentals Get](https://docs.deepinfra.com/api-reference/gpu-rentals/container-rentals-get.md)
+- [Container Rentals Delete](https://docs.deepinfra.com/api-reference/gpu-rentals/container-rentals-delete.md)
+- [Container Rentals Update](https://docs.deepinfra.com/api-reference/gpu-rentals/container-rentals-update.md)
+- [Openai Completions](https://docs.deepinfra.com/api-reference/text-completions/openai-completions.md)
+- [Openai Chat Completions](https://docs.deepinfra.com/api-reference/chat-completions/openai-chat-completions.md)
+- [Anthropic Messages](https://docs.deepinfra.com/api-reference/chat-completions/anthropic-messages.md)
+- [Anthropic Messages Count Tokens](https://docs.deepinfra.com/api-reference/chat-completions/anthropic-messages-count-tokens.md)
+- [Openai Embeddings](https://docs.deepinfra.com/api-reference/embeddings/openai-embeddings.md)
+- [Github Login](https://docs.deepinfra.com/api-reference/authentication/github-login.md): Initiate github SSO login flow. Callback is /github/callback
+- [Okta Login](https://docs.deepinfra.com/api-reference/authentication/okta-login.md)
+- [Github Cli Login](https://docs.deepinfra.com/api-reference/authentication/github-cli-login.md): deepctl is calling this request waiting for auth token during login. The token is stored in /github/callback
+- [Google Login](https://docs.deepinfra.com/api-reference/authentication/google-login.md): Initiate Google SSO login flow. Callback is /google/callback
+- [Get Api Tokens](https://docs.deepinfra.com/api-reference/authentication/get-api-tokens.md)
+- [Create Api Token](https://docs.deepinfra.com/api-reference/authentication/create-api-token.md)
+- [Get Api Token](https://docs.deepinfra.com/api-reference/authentication/get-api-token.md)
+- [Delete Api Token](https://docs.deepinfra.com/api-reference/authentication/delete-api-token.md)
+- [Export Api Token To Vercel](https://docs.deepinfra.com/api-reference/authentication/export-api-token-to-vercel.md)
+- [Inspect Scoped Jwt](https://docs.deepinfra.com/api-reference/authentication/inspect-scoped-jwt.md)
+- [ Create Scoped Jwt](https://docs.deepinfra.com/api-reference/authentication/create-scoped-jwt.md)
+- [Get Ssh Keys](https://docs.deepinfra.com/api-reference/authentication/get-ssh-keys.md)
+- [Create Ssh Key](https://docs.deepinfra.com/api-reference/authentication/create-ssh-key.md)
+- [Delete Ssh Key](https://docs.deepinfra.com/api-reference/authentication/delete-ssh-key.md)
+- [List Files](https://docs.deepinfra.com/api-reference/files-&-batches/list-files.md)
+- [Openai Files](https://docs.deepinfra.com/api-reference/files-&-batches/openai-files.md)
+- [Get File](https://docs.deepinfra.com/api-reference/files-&-batches/get-file.md)
+- [Delete File](https://docs.deepinfra.com/api-reference/files-&-batches/delete-file.md)
+- [Get File Content](https://docs.deepinfra.com/api-reference/files-&-batches/get-file-content.md)
+- [Retrieve Openai Batches](https://docs.deepinfra.com/api-reference/files-&-batches/retrieve-openai-batches.md)
+- [Create Openai Batch](https://docs.deepinfra.com/api-reference/files-&-batches/create-openai-batch.md)
+- [Retrieve Openai Batch](https://docs.deepinfra.com/api-reference/files-&-batches/retrieve-openai-batch.md)
+- [Cancel Openai Batch](https://docs.deepinfra.com/api-reference/files-&-batches/cancel-openai-batch.md)
+- [List Instances](https://docs.deepinfra.com/api-reference/agents/list-instances.md)
+- [Create Instance](https://docs.deepinfra.com/api-reference/agents/create-instance.md)
+- [Get Catalog](https://docs.deepinfra.com/api-reference/agents/get-catalog.md)
+- [Get Instance](https://docs.deepinfra.com/api-reference/agents/get-instance.md)
+- [Delete Instance](https://docs.deepinfra.com/api-reference/agents/delete-instance.md)
+- [Rename Instance](https://docs.deepinfra.com/api-reference/agents/rename-instance.md)
+- [Create Dashboard Launch Token](https://docs.deepinfra.com/api-reference/agents/create-dashboard-launch-token.md): Mint a single-use launch URL for the dashboard.
+- [Stop Instance](https://docs.deepinfra.com/api-reference/agents/stop-instance.md)
+- [Start Instance](https://docs.deepinfra.com/api-reference/agents/start-instance.md)
+- [Update Instance Version](https://docs.deepinfra.com/api-reference/agents/update-instance-version.md)
+- [List Backups](https://docs.deepinfra.com/api-reference/agents/list-backups.md)
+- [Create Backup](https://docs.deepinfra.com/api-reference/agents/create-backup.md)
+- [Restore Backup](https://docs.deepinfra.com/api-reference/agents/restore-backup.md)
+- [List Sandboxes](https://docs.deepinfra.com/api-reference/sandboxes/list-sandboxes.md)
+- [Create Sandbox](https://docs.deepinfra.com/api-reference/sandboxes/create-sandbox.md): Create a new sandbox instance with the given plan, image, and settings. The sandbox starts in CREATING state and transitions to RUNNING asynchronously.
+- [List Sandbox Plans](https://docs.deepinfra.com/api-reference/sandboxes/list-sandbox-plans.md): Returns all available sandbox plans with their resource specs and pricing.
+- [Get Sandbox](https://docs.deepinfra.com/api-reference/sandboxes/get-sandbox.md)
+- [Delete Sandbox](https://docs.deepinfra.com/api-reference/sandboxes/delete-sandbox.md)
+- [Stop Sandbox](https://docs.deepinfra.com/api-reference/sandboxes/stop-sandbox.md)
+- [Start Sandbox](https://docs.deepinfra.com/api-reference/sandboxes/start-sandbox.md)
+- [Exec Command](https://docs.deepinfra.com/api-reference/sandboxes/exec-command.md): Run a command in the sandbox. Streams NDJSON lines (application/x-ndjson): {"stdout": ...}/{"stderr": ...} chunks followed by exactly one terminal {"returncode": N} or {"error": msg} line.
+- [Read File](https://docs.deepinfra.com/api-reference/sandboxes/read-file.md): Read a file from an absolute path inside the sandbox; returns raw bytes (application/octet-stream).
+- [Write File](https://docs.deepinfra.com/api-reference/sandboxes/write-file.md): Write the raw request body (application/octet-stream, max 100 MiB) to an absolute path inside the sandbox.
+- [Get Checklist](https://docs.deepinfra.com/api-reference/billing/get-checklist.md)
+- [Get Config](https://docs.deepinfra.com/api-reference/billing/get-config.md)
+- [Set Config](https://docs.deepinfra.com/api-reference/billing/set-config.md)
+- [Billing Portal](https://docs.deepinfra.com/api-reference/billing/billing-portal.md)
+- [List Invoices](https://docs.deepinfra.com/api-reference/billing/list-invoices.md)
+- [Usage](https://docs.deepinfra.com/api-reference/billing/usage.md)
+- [Usage Tokens](https://docs.deepinfra.com/api-reference/billing/usage-tokens.md)
+- [Usage Rent](https://docs.deepinfra.com/api-reference/billing/usage-rent.md)
+- [Usage Api Token](https://docs.deepinfra.com/api-reference/billing/usage-api-token.md)
+- [Deepstart Apply](https://docs.deepinfra.com/api-reference/billing/deepstart-apply.md)
+- [Add Funds](https://docs.deepinfra.com/api-reference/billing/add-funds.md)
+- [Setup Topup](https://docs.deepinfra.com/api-reference/billing/setup-topup.md)
+
+## OpenAPI Specs
+
+- [openapi](https://docs.deepinfra.com/api-reference/openapi.json)
+
+## Optional
+
+- [Models](https://deepinfra.com/models)
+- [Discord](https://discord.com/invite/x88dCvhqYq)

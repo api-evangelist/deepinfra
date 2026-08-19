@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "DeepInfra Inference Audio Embeddings API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Embeddings",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create embeddings for input text",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.deepinfra.com/v1/openai/embeddings",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create embeddings for input text"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

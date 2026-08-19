@@ -1,0 +1,53 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "DeepInfra Inference Audio Models API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Models",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List available models",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.deepinfra.com/v1/openai/models"
+          },
+          "docs": "List available models"
+        },
+        {
+          "info": {
+            "name": "Get metadata for a model",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.deepinfra.com/v1/openai/models/:model",
+            "params": [
+              {
+                "name": "model",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get metadata for a model"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

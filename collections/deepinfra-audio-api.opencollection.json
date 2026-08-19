@@ -1,0 +1,126 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "DeepInfra Inference Audio API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Audio",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Transcribe audio to text (Whisper)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.deepinfra.com/v1/openai/audio/transcriptions",
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "file",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "model",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "language",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "prompt",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "response_format",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "temperature",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Transcribe audio to text (Whisper)"
+        },
+        {
+          "info": {
+            "name": "Translate audio into English text",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.deepinfra.com/v1/openai/audio/translations",
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "file",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "model",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "prompt",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "response_format",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "temperature",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Translate audio into English text"
+        },
+        {
+          "info": {
+            "name": "Synthesize text to speech",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.deepinfra.com/v1/openai/audio/speech",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Synthesize text to speech"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
