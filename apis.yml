@@ -23,6 +23,17 @@ accessModel:
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/deepinfra.png
 tags:
+  - Artificial Intelligence
+  - LLM
+  - Inference
+  - Serverless
+  - Open-Source
+  - OpenAI-Compatible
+  - Anthropic Compatible
+  - Image-Generation
+  - Audio
+  - Embeddings
+tags_raw:
   - AI
   - LLM
   - Inference
@@ -49,6 +60,18 @@ apis:
   humanURL: https://docs.deepinfra.com/
   baseURL: https://api.deepinfra.com/v1/openai
   tags:
+  - Artificial Intelligence
+  - LLM
+  - Chat Completions
+  - Embeddings
+  - Reranking
+  - Image-Generation
+  - Audio
+  - Vision
+  - OCR
+  - Fine-Tuning
+  - Dedicated GPUs
+  tags_raw:
   - AI
   - LLM
   - Chat Completions
@@ -119,6 +142,8 @@ apis:
   humanURL: https://docs.deepinfra.com/
   baseURL: https://api.deepinfra.com/v1/openai
   tags:
+  - Image
+  tags_raw:
   - Images
   properties:
   - type: OpenAPI
