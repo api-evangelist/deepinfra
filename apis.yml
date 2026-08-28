@@ -8,6 +8,18 @@ description: >-
   (Whisper, TTS, Voxtral), embeddings/reranking, and vision/OCR models. Includes
   fine-tuning, dedicated GPU rentals, and private deployments. OpenAI- and Anthropic-
   compatible endpoints.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: unknown
   onboarding: self-serve
