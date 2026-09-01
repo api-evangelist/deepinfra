@@ -81,7 +81,7 @@ apis:
   - Audio
   - Vision
   - OCR
-  - Fine Tuning
+  - Fine-Tuning
   - Dedicated GPUs
   tags_raw:
   - AI
