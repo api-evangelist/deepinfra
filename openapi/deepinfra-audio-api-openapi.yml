@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: DeepInfra Inference Audio API
   description: OpenAI-compatible inference API for DeepInfra's 100+ open-source models. Covers chat completions, text completions, embeddings, audio (transcriptions, translations, text-to-speech), image generation, and model listing. Authenticated with a Bearer API token.
@@ -54,6 +54,8 @@ paths:
             application/json:
               schema:
                 type: object
+      operationId: postAudioTranscriptions
+      x-operation-id-source: derived
   /audio/translations:
     post:
       tags:
@@ -87,6 +89,8 @@ paths:
             application/json:
               schema:
                 type: object
+      operationId: postAudioTranslations
+      x-operation-id-source: derived
   /audio/speech:
     post:
       tags:
@@ -125,6 +129,8 @@ paths:
           content:
             audio/mpeg: {}
             audio/wav: {}
+      operationId: postAudioSpeech
+      x-operation-id-source: derived
 components:
   securitySchemes:
     bearerAuth:
