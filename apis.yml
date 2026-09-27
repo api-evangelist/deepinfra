@@ -35,15 +35,18 @@ accessModel:
   generated: '2026-09-03'
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/deepinfra.png
+x-docs-platform: mintlify
+x-docs-platform-confidence: medium
+x-docs-platform-checked: 2026-09-25
 tags:
   - Artificial Intelligence
   - LLM
   - Inference
   - Serverless
-  - Open-Source
+  - Open Source
   - OpenAI-Compatible
   - Anthropic Compatible
-  - Image-Generation
+  - Image Generation
   - Audio
   - Embeddings
 tags_raw:
@@ -57,6 +60,8 @@ tags_raw:
   - Image Generation
   - Audio
   - Embeddings
+  - Open-Source
+  - Image-Generation
 created: '2026-05-08'
 modified: '2026-05-08'
 specificationVersion: '0.23'
@@ -78,7 +83,7 @@ apis:
   - Chat Completions
   - Embeddings
   - Reranking
-  - Image-Generation
+  - Image Generation
   - Audio
   - Vision
   - OCR
@@ -96,6 +101,7 @@ apis:
   - OCR
   - Fine Tuning
   - Dedicated GPUs
+  - Image-Generation
   properties:
   - type: Documentation
     url: https://docs.deepinfra.com/
