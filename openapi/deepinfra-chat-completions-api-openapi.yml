@@ -11,12 +11,12 @@ servers:
 security:
 - bearerAuth: []
 tags:
-- name: Chat
+- name: Chat Completions
 paths:
   /chat/completions:
     post:
       tags:
-      - Chat
+      - Chat Completions
       summary: Create a chat completion (OpenAI-compatible)
       requestBody:
         required: true
