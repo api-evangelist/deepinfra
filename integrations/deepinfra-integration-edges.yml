@@ -11,10 +11,10 @@ edges:
   - inference-host
   router_signals:
     inference-host:
-      models: 74
+      models: 76
       router_ids:
       - DeepInfra
-      tools_share: 0.81
+      tools_share: 0.82
       structured_output_share: 0.91
   matched_by: verified-token-table
   detected_by: sweep-model-routing.py
@@ -93,7 +93,7 @@ edges:
     note: 'deepinfra declares OpenAI compatibility: ''description: OpenAI-compatible inference API for DeepInfra''s
       100+ open-source models. Covers chat completions, text completions, embeddings, audio (transcriptio'''
     detected_by: sweep-model-routing.py
-    detected: '2026-10-13'
+    detected: '2026-10-15'
   detected_by: sweep-model-routing.py
   first_seen: '2026-10-13'
 - partner_name: LlamaIndex
