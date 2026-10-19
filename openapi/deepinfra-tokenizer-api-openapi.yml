@@ -1,0 +1,227 @@
+openapi: 3.2.0
+info:
+  title: DeepInfra Tokenizer API
+  description: The DeepInfra API provides serverless AI inference, custom model deployments, and GPU rentals.
+  version: 1.0.0
+servers:
+- url: https://api.deepinfra.com
+tags:
+- name: Tokenizer
+paths:
+  /v1/tokenize:
+    post:
+      tags:
+      - Tokenizer
+      summary: Tokenize
+      operationId: tokenize_v1_tokenize_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenizeIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenizeOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/detokenize:
+    post:
+      tags:
+      - Tokenizer
+      summary: Detokenize
+      operationId: detokenize_v1_detokenize_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DetokenizeIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetokenizeOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    TokenizeIn:
+      properties:
+        model:
+          type: string
+          title: Model
+          description: model name
+          examples:
+          - my-org/my-dedicated-llm
+        prompt:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prompt
+          description: text to tokenize (completion form)
+        messages:
+          anyOf:
+          - items:
+              additionalProperties: true
+              type: object
+            type: array
+          - type: 'null'
+          title: Messages
+          description: chat messages to tokenize (chat form)
+        return_token_strs:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Return Token Strs
+          description: also return the per-token strings (vLLM)
+      additionalProperties: true
+      type: object
+      required:
+      - model
+      title: TokenizeIn
+    TokenizeOut:
+      properties:
+        count:
+          type: integer
+          title: Count
+          description: number of tokens
+        max_model_len:
+          type: integer
+          title: Max Model Len
+          description: the model's maximum context length
+        tokens:
+          items:
+            type: integer
+          type: array
+          title: Tokens
+          description: token ids
+        token_strs:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Token Strs
+          description: per-token strings, if requested (vLLM)
+      type: object
+      required:
+      - count
+      - max_model_len
+      - tokens
+      title: TokenizeOut
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    DetokenizeIn:
+      properties:
+        model:
+          type: string
+          title: Model
+          description: model name
+          examples:
+          - my-org/my-dedicated-llm
+        tokens:
+          items:
+            type: integer
+          type: array
+          title: Tokens
+          description: token ids to detokenize
+      additionalProperties: true
+      type: object
+      required:
+      - model
+      title: DetokenizeIn
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    DetokenizeOut:
+      properties:
+        prompt:
+          type: string
+          title: Prompt
+          description: detokenized text
+      type: object
+      required:
+      - prompt
+      title: DetokenizeOut
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

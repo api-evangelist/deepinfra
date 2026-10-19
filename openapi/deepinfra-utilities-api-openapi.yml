@@ -1,0 +1,151 @@
+openapi: 3.2.0
+info:
+  title: DeepInfra Utilities API
+  description: The DeepInfra API provides serverless AI inference, custom model deployments, and GPU rentals.
+  version: 1.0.0
+servers:
+- url: https://api.deepinfra.com
+tags:
+- name: Utilities
+  description: Feedback submission and CLI version.
+paths:
+  /cli/version:
+    get:
+      tags:
+      - Utilities
+      summary: Cli Version
+      operationId: cli_version_cli_version_get
+      parameters:
+      - name: version
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Version
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/feedback:
+    post:
+      tags:
+      - Utilities
+      summary: Submit Feedback
+      description: Submit feedback
+      operationId: submit_feedback_v1_feedback_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedbackIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Forbidden
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    FeedbackIn:
+      properties:
+        message:
+          type: string
+          title: Message
+          description: The message you'd like to send to deepinfra team
+        contact_email:
+          anyOf:
+          - type: string
+            format: email
+          - type: 'null'
+          title: Contact Email
+          description: Optional contact email to reach you back
+      type: object
+      required:
+      - message
+      title: FeedbackIn
+    DeepError:
+      properties:
+        error:
+          type: string
+          title: Error
+          description: Error
+          examples:
+          - Model not found
+      type: object
+      required:
+      - error
+      title: DeepError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

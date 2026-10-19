@@ -1,139 +1,381 @@
 openapi: 3.2.0
 info:
-  title: DeepInfra Inference Audio API
-  description: OpenAI-compatible inference API for DeepInfra's 100+ open-source models. Covers chat completions, text completions, embeddings, audio (transcriptions, translations, text-to-speech), image generation, and model listing. Authenticated with a Bearer API token.
+  title: DeepInfra Audio API
+  description: The DeepInfra API provides serverless AI inference, custom model deployments, and GPU rentals.
   version: 1.0.0
 servers:
-- url: https://api.deepinfra.com/v1/openai
-  description: OpenAI-compatible base URL
 - url: https://api.deepinfra.com
-  description: DeepInfra native base URL
-security:
-- bearerAuth: []
 tags:
 - name: Audio
+  description: OpenAI-compatible speech synthesis, transcription, and translation.
 paths:
-  /audio/transcriptions:
+  /v1/audio/speech:
     post:
       tags:
       - Audio
-      summary: Transcribe audio to text (Whisper)
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              required:
-              - file
-              - model
-              properties:
-                file:
-                  type: string
-                  format: binary
-                model:
-                  type: string
-                language:
-                  type: string
-                prompt:
-                  type: string
-                response_format:
-                  type: string
-                  enum:
-                  - json
-                  - text
-                  - srt
-                  - verbose_json
-                  - vtt
-                temperature:
-                  type: number
-      responses:
-        '200':
-          description: Transcription
-          content:
-            application/json:
-              schema:
-                type: object
-      operationId: postAudioTranscriptions
-      x-operation-id-source: derived
-  /audio/translations:
-    post:
-      tags:
-      - Audio
-      summary: Translate audio into English text
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              required:
-              - file
-              - model
-              properties:
-                file:
-                  type: string
-                  format: binary
-                model:
-                  type: string
-                prompt:
-                  type: string
-                response_format:
-                  type: string
-                temperature:
-                  type: number
-      responses:
-        '200':
-          description: Translation
-          content:
-            application/json:
-              schema:
-                type: object
-      operationId: postAudioTranslations
-      x-operation-id-source: derived
-  /audio/speech:
-    post:
-      tags:
-      - Audio
-      summary: Synthesize text to speech
+      summary: Openai Audio Speech
+      operationId: openai_audio_speech_v1_audio_speech_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: x-deepinfra-source
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Deepinfra-Source
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              required:
-              - model
-              - input
-              properties:
-                model:
-                  type: string
-                input:
-                  type: string
-                voice:
-                  type: string
-                response_format:
-                  type: string
-                  enum:
-                  - mp3
-                  - opus
-                  - aac
-                  - flac
-                  - wav
-                  - pcm
-                speed:
-                  type: number
+              $ref: '#/components/schemas/OpenAITextToSpeechIn'
       responses:
         '200':
-          description: Audio bytes
+          description: Successful Response
           content:
-            audio/mpeg: {}
-            audio/wav: {}
-      operationId: postAudioSpeech
-      x-operation-id-source: derived
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/audio/transcriptions:
+    post:
+      tags:
+      - Audio
+      summary: Openai Audio Transcriptions
+      operationId: openai_audio_transcriptions_v1_audio_transcriptions_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: x-deepinfra-source
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Deepinfra-Source
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_openai_audio_transcriptions_v1_audio_transcriptions_post'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/audio/translations:
+    post:
+      tags:
+      - Audio
+      summary: Openai Audio Translations
+      operationId: openai_audio_translations_v1_audio_translations_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: x-deepinfra-source
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Deepinfra-Source
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_openai_audio_translations_v1_audio_translations_post'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
 components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    Body_openai_audio_translations_v1_audio_translations_post:
+      properties:
+        file:
+          type: string
+          format: binary
+          title: File
+        model:
+          type: string
+          title: Model
+        prompt:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prompt
+        response_format:
+          anyOf:
+          - type: string
+            enum:
+            - json
+            - verbose_json
+            - text
+            - srt
+            - vtt
+          - type: 'null'
+          title: Response Format
+          default: json
+        temperature:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Temperature
+          default: 0
+        service_tier:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Service Tier
+      type: object
+      required:
+      - file
+      - model
+      title: Body_openai_audio_translations_v1_audio_translations_post
+    Body_openai_audio_transcriptions_v1_audio_transcriptions_post:
+      properties:
+        file:
+          type: string
+          format: binary
+          title: File
+        model:
+          type: string
+          title: Model
+        language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Language
+        prompt:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prompt
+        response_format:
+          anyOf:
+          - type: string
+            enum:
+            - json
+            - verbose_json
+            - text
+            - srt
+            - vtt
+          - type: 'null'
+          title: Response Format
+          default: json
+        temperature:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Temperature
+          default: 0
+        timestamp_granularities:
+          anyOf:
+          - items:
+              type: string
+              enum:
+              - segment
+              - word
+            type: array
+          - type: 'null'
+          title: Timestamp Granularities
+        service_tier:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Service Tier
+      type: object
+      required:
+      - file
+      - model
+      title: Body_openai_audio_transcriptions_v1_audio_transcriptions_post
+    ServiceTier:
+      type: string
+      enum:
+      - default
+      - priority
+      - flex
+      title: ServiceTier
+    OpenAITextToSpeechIn:
+      properties:
+        service_tier:
+          anyOf:
+          - $ref: '#/components/schemas/ServiceTier'
+          - type: 'null'
+          description: The service tier used for processing the request. 'priority' processes the request with higher priority (premium rate); 'flex' processes it at lower priority for a discount, served only when spare capacity exists and may be retried/timed out under load. Both apply only to models that support the respective tier. For compatibility, 'auto' is treated as 'priority' and 'standard_only' as 'default'.
+        fail_fast:
+          type: boolean
+          title: Fail Fast
+          description: If true, the request is rejected immediately with HTTP 429 when the model has no spare capacity, instead of waiting in the queue. Opt-in; the default (false) keeps standard queueing behavior.
+          default: false
+        model:
+          type: string
+          title: Model
+          description: model name
+          examples:
+          - deepinfra/tts
+        input:
+          type: string
+          title: Input
+          description: Text to convert to speech
+          examples:
+          - 'I''m beginnin'' to feel like a Rap God, Rap God
+
+            All my people from the front to the back nod, back nod
+
+            Now, who thinks their arms are long enough to slap box, slap box?
+
+            They said I rap like a robot, so call me Rap-bot'
+        voice:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Voice
+          description: Preset voices to use for the speech.
+        response_format:
+          $ref: '#/components/schemas/TtsResponseFormat'
+          description: response format for the speech
+        speed:
+          type: number
+          maximum: 4.0
+          minimum: 0.25
+          title: Speed
+          description: speed of the speech
+          default: 1.0
+        extra_body:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Extra Body
+          description: Extra body parameters for the model.
+      type: object
+      required:
+      - model
+      - input
+      title: OpenAITextToSpeechIn
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    TtsResponseFormat:
+      type: string
+      enum:
+      - mp3
+      - opus
+      - flac
+      - wav
+      - pcm
+      title: TtsResponseFormat
+      description: Select the desired format for the speech output. Supported formats include mp3, opus, flac, wav, and pcm.
+      default: wav
+      examples:
+      - mp3
+      - opus
+      - flac
+      - wav
+      - pcm
   securitySchemes:
-    bearerAuth:
+    HTTPBearer:
       type: http
       scheme: bearer
-      description: DeepInfra API token (DEEPINFRA_TOKEN) sent as a Bearer token.

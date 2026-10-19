@@ -1,55 +1,2203 @@
 openapi: 3.2.0
 info:
-  title: DeepInfra Inference Models API
-  description: OpenAI-compatible inference API for DeepInfra's 100+ open-source models. Covers chat completions, text completions, embeddings, audio (transcriptions, translations, text-to-speech), image generation, and model listing. Authenticated with a Bearer API token.
+  title: DeepInfra Models API
+  description: The DeepInfra API provides serverless AI inference, custom model deployments, and GPU rentals.
   version: 1.0.0
 servers:
-- url: https://api.deepinfra.com/v1/openai
-  description: OpenAI-compatible base URL
 - url: https://api.deepinfra.com
-  description: DeepInfra native base URL
-security:
-- bearerAuth: []
 tags:
 - name: Models
+  description: Browse, search, and manage AI models.
 paths:
-  /models:
+  /models/private/list:
     get:
       tags:
       - Models
-      summary: List available models
+      summary: Private Models List
+      operationId: private_models_list_models_private_list_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
       responses:
         '200':
-          description: Models
+          description: Successful Response
           content:
             application/json:
               schema:
-                type: object
-      operationId: getModels
-      x-operation-id-source: derived
-  /models/{model}:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ModelOut'
+                title: Response Private Models List Models Private List Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /model-families/names:
     get:
       tags:
       - Models
-      summary: Get metadata for a model
+      summary: Model Families Names
+      operationId: model_families_names_model_families_names_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  type: string
+                type: array
+                title: Response Model Families Names Model Families Names Get
+  /model-families/{family_name}:
+    get:
+      tags:
+      - Models
+      summary: Model Family
+      operationId: model_family_model_families__family_name__get
       parameters:
-      - in: path
-        name: model
+      - name: family_name
+        in: path
         required: true
         schema:
           type: string
+          title: Family Name
       responses:
         '200':
-          description: Model
+          description: Successful Response
           content:
             application/json:
               schema:
-                type: object
-      operationId: getModelsByModel
-      x-operation-id-source: derived
+                $ref: '#/components/schemas/ModelFamilyOut'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /models/list:
+    get:
+      tags:
+      - Models
+      summary: Models List
+      operationId: models_list_models_list_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ModelOut'
+                type: array
+                title: Response Models List Models List Get
+  /models/deployment/list:
+    get:
+      tags:
+      - Models
+      summary: Models Deployment List
+      operationId: models_deployment_list_models_deployment_list_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ModelOut'
+                title: Response Models Deployment List Models Deployment List Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /models/lora/list:
+    get:
+      tags:
+      - Models
+      summary: Models Lora List
+      operationId: models_lora_list_models_lora_list_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ModelOut'
+                type: array
+                title: Response Models Lora List Models Lora List Get
+  /openrouter/models:
+    get:
+      tags:
+      - Models
+      summary: Openrouter Models
+      operationId: openrouter_models_openrouter_models_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenRouterModelsOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /models/{model_name}/publicity:
+    post:
+      tags:
+      - Models
+      summary: Model Publicity
+      operationId: model_publicity_models__model_name__publicity_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: model_name
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Model Name
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelPublicityIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Forbidden
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /models/{model_name}/meta:
+    post:
+      tags:
+      - Models
+      summary: Model Meta Update
+      operationId: model_meta_update_models__model_name__meta_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: model_name
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Model Name
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelMetaIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /models/{model_name}:
+    delete:
+      tags:
+      - Models
+      summary: Model Delete
+      operationId: model_delete_models__model_name__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: model_name
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Model Name
+      - name: version
+        in: query
+        required: true
+        schema:
+          type: string
+          description: delete a particular version, pass 'ALL' to wipe everything
+          title: Version
+        description: delete a particular version, pass 'ALL' to wipe everything
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Models
+      summary: Models Info
+      operationId: models_info_models__model_name__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: model_name
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Model Name
+      - name: version
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Version
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelInfoOut'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /models/featured:
+    get:
+      tags:
+      - Models
+      summary: Models Featured
+      operationId: models_featured_models_featured_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ModelOut'
+                type: array
+                title: Response Models Featured Models Featured Get
+  /models/{model_name}/schema/{variantKey}:
+    get:
+      tags:
+      - Models
+      summary: Model Schema
+      operationId: model_schema_models__model_name__schema__variantKey__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: model_name
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Model Name
+      - name: variantKey
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/SchemaVariantKey'
+      - name: version
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Version
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchemaOut'
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '423':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Locked
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/models:
+    get:
+      tags:
+      - Models
+      summary: Openai Models
+      operationId: openai_models_v1_models_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: sort_by
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sort By
+      - name: filter
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Filter
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAIModelsOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v2/hardware:
+    get:
+      tags:
+      - Models
+      summary: Get Hardware
+      operationId: get_hardware_v2_hardware_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: model
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Model name (NVIDIA NemoClaw format)
+          title: Model
+        description: Model name (NVIDIA NemoClaw format)
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HardwareResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
 components:
+  schemas:
+    ModelDocBlock:
+      properties:
+        key:
+          $ref: '#/components/schemas/ModelDocBlockKey'
+        url:
+          type: string
+          title: Url
+      type: object
+      required:
+      - key
+      - url
+      title: ModelDocBlock
+    PricingPageSectionOut:
+      properties:
+        section_id:
+          type: string
+          title: Section Id
+        ptype:
+          $ref: '#/components/schemas/PricingType'
+        title:
+          type: string
+          title: Title
+        description:
+          type: string
+          title: Description
+        mf_description:
+          type: string
+          title: Mf Description
+          description: Model family description for this section, if applicable. Will use description from the section if not set
+          default: ''
+        entries:
+          items:
+            $ref: '#/components/schemas/PricingPageEntryOut'
+          type: array
+          title: Entries
+      type: object
+      required:
+      - section_id
+      - ptype
+      - title
+      - description
+      - entries
+      title: PricingPageSectionOut
+    SchemaOut:
+      properties:
+        variant:
+          $ref: '#/components/schemas/SchemaVariant'
+        schema_in:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Schema In
+        schema_out:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Schema Out
+        schema_stream:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Schema Stream
+        fields_in:
+          items:
+            $ref: '#/components/schemas/ModelFieldInfo'
+          type: array
+          title: Fields In
+      type: object
+      required:
+      - variant
+      - fields_in
+      title: SchemaOut
+    OpenAIModelsOut:
+      properties:
+        object:
+          type: string
+          title: Object
+          default: list
+        data:
+          items:
+            $ref: '#/components/schemas/OpenAIModelOut'
+          type: array
+          title: Data
+      type: object
+      title: OpenAIModelsOut
+    OpenRouterModelsOut:
+      properties:
+        data:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Data
+          description: List of available models
+      type: object
+      required:
+      - data
+      title: OpenRouterModelsOut
+    HFTasksE:
+      type: string
+      enum:
+      - automatic-speech-recognition
+      - image-classification
+      - question-answering
+      - token-classification
+      - text-to-image
+      - fill-mask
+      - zero-shot-image-classification
+      - text2text-generation
+      - text-generation
+      - text-classification
+      - object-detection
+      - embeddings
+      - dreambooth
+      - custom
+      - text-to-speech
+      - text-to-video
+      - text-to-music
+      - rent-container
+      - bare-metal
+      - cluster
+      - reranker
+      - openclaw
+      - hermes
+      - world-model
+      - sandbox
+      - web-search
+      - commitment
+      - capacity
+      - decision
+      title: HFTasksE
+    ModelOut:
+      properties:
+        model_name:
+          type: string
+          title: Model Name
+          description: Model Name
+          examples:
+          - microsoft/resnet-50
+        type:
+          type: string
+          title: Type
+          description: raw type of the model
+          examples:
+          - image-classification
+        reported_type:
+          type: string
+          title: Reported Type
+          description: reported type of the model
+          examples:
+          - text-generation
+        description:
+          type: string
+          title: Description
+          description: description of the model
+          default: ''
+          examples:
+          - ResNet-50 is a convolutional neural network that is trained on more than a million images from the ImageNet database. It is a 50-layer deep neural network.
+        cover_img_url:
+          type: string
+          title: Cover Img Url
+          description: cover image link
+          default: ''
+        tags:
+          items:
+            type: string
+          type: array
+          title: Tags
+          description: list of tags
+        pricing:
+          anyOf:
+          - $ref: '#/components/schemas/ModelPricingTime'
+          - $ref: '#/components/schemas/ModelPricingTokens'
+          - $ref: '#/components/schemas/ModelPricingInputLength'
+          - $ref: '#/components/schemas/ModelPricingInputTokens'
+          - $ref: '#/components/schemas/ModelPricingUptime'
+          - $ref: '#/components/schemas/ModelPricingInputCharacterLength'
+          - $ref: '#/components/schemas/ModelPricingImageUnits'
+          - $ref: '#/components/schemas/ModelPricingOutputLength'
+          - $ref: '#/components/schemas/ModelPricingFrameUnits'
+          title: Pricing
+          description: The pricing type and cost for this model
+        max_tokens:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Tokens
+          description: The maximum context size of this model, if applicable
+        replaced_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Replaced By
+        deprecated:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Deprecated
+        quantization:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Quantization
+        mmlu:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Mmlu
+        expected:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Expected
+        create_ts:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Create Ts
+        private:
+          type: integer
+          title: Private
+          default: 0
+        is_partner:
+          type: boolean
+          title: Is Partner
+          default: false
+      type: object
+      required:
+      - model_name
+      - type
+      - reported_type
+      - pricing
+      title: ModelOut
+    ModelPricingTime:
+      properties:
+        discount:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Discount
+          description: Promotional discount; you are charged price * (1 - discount)
+          examples:
+          - 0.2
+        discount_ends_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Discount Ends At
+          description: Unix timestamp (seconds) when the discount ends, null when it has no scheduled end
+          examples:
+          - 1786000000
+        short:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Short
+          description: Short description of the pricing, ideal for cards and headers
+          examples:
+          - $0.15 / second
+        full:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Full
+          description: Full description of the pricing, perfect for details
+          examples:
+          - $0.15 / second for 1080P, $0.10 / second for 720P
+        table:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Table
+          description: Could be used to generate pricing tables
+          examples:
+          - columns:
+            - resolution
+            - $ cost per second
+            rows:
+            - - 780P
+              - $0.10
+            - - 1080P
+              - $0.15
+        type:
+          type: string
+          title: Type
+          default: time
+        cents_per_sec:
+          type: number
+          title: Cents Per Sec
+      type: object
+      required:
+      - cents_per_sec
+      title: ModelPricingTime
+    ModelPricingFrameUnits:
+      properties:
+        discount:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Discount
+          description: Promotional discount; you are charged price * (1 - discount)
+          examples:
+          - 0.2
+        discount_ends_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Discount Ends At
+          description: Unix timestamp (seconds) when the discount ends, null when it has no scheduled end
+          examples:
+          - 1786000000
+        short:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Short
+          description: Short description of the pricing, ideal for cards and headers
+          examples:
+          - $0.15 / second
+        full:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Full
+          description: Full description of the pricing, perfect for details
+          examples:
+          - $0.15 / second for 1080P, $0.10 / second for 720P
+        table:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Table
+          description: Could be used to generate pricing tables
+          examples:
+          - columns:
+            - resolution
+            - $ cost per second
+            rows:
+            - - 780P
+              - $0.10
+            - - 1080P
+              - $0.15
+        type:
+          type: string
+          title: Type
+          default: frame_units
+        cents_per_frame_unit:
+          type: number
+          title: Cents Per Frame Unit
+      type: object
+      required:
+      - cents_per_frame_unit
+      title: ModelPricingFrameUnits
+    ModelInfoOut:
+      properties:
+        model_name:
+          type: string
+          title: Model Name
+        type:
+          type: string
+          title: Type
+        tags:
+          items:
+            type: string
+          type: array
+          title: Tags
+        reported_type:
+          type: string
+          title: Reported Type
+        version:
+          type: string
+          title: Version
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        mf_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Mf Description
+        featured:
+          type: boolean
+          title: Featured
+        owner:
+          type: boolean
+          title: Owner
+          default: false
+        public:
+          type: boolean
+          title: Public
+        curl_inv:
+          type: string
+          title: Curl Inv
+        cmdline_inv:
+          type: string
+          title: Cmdline Inv
+        txt_docs:
+          type: string
+          title: Txt Docs
+        out_example:
+          type: string
+          title: Out Example
+        out_docs:
+          type: string
+          title: Out Docs
+        in_schema:
+          title: In Schema
+        out_schema:
+          title: Out Schema
+        in_fields:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/ModelFieldInfo'
+            type: array
+          - type: 'null'
+          title: In Fields
+        pricing:
+          anyOf:
+          - $ref: '#/components/schemas/ModelPricingTime'
+          - $ref: '#/components/schemas/ModelPricingUptime'
+          - $ref: '#/components/schemas/ModelPricingTokens'
+          - $ref: '#/components/schemas/ModelPricingInputLength'
+          - $ref: '#/components/schemas/ModelPricingInputTokens'
+          - $ref: '#/components/schemas/ModelPricingInputCharacterLength'
+          - $ref: '#/components/schemas/ModelPricingImageUnits'
+          - $ref: '#/components/schemas/ModelPricingOutputLength'
+          - $ref: '#/components/schemas/ModelPricingFrameUnits'
+          title: Pricing
+        doc_blocks:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/ModelDocBlock'
+            type: array
+          - type: 'null'
+          title: Doc Blocks
+        short_doc_block:
+          anyOf:
+          - $ref: '#/components/schemas/ModelDocBlock'
+          - type: 'null'
+        schemas:
+          items:
+            $ref: '#/components/schemas/SchemaVariant'
+          type: array
+          title: Schemas
+        meta:
+          additionalProperties: true
+          type: object
+          title: Meta
+          default: {}
+        max_tokens:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Tokens
+        max_output_tokens:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Output Tokens
+        replaced_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Replaced By
+        deprecated:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Deprecated
+        quantization:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Quantization
+        mmlu:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Mmlu
+        expected:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Expected
+        import_time:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Import Time
+        is_partner:
+          type: boolean
+          title: Is Partner
+          default: false
+        is_custom_deployable:
+          type: boolean
+          title: Is Custom Deployable
+          default: false
+        mf_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Mf Name
+        mf_title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Mf Title
+      type: object
+      required:
+      - model_name
+      - type
+      - tags
+      - reported_type
+      - version
+      - featured
+      - public
+      - curl_inv
+      - cmdline_inv
+      - txt_docs
+      - out_example
+      - out_docs
+      - pricing
+      - schemas
+      title: ModelInfoOut
+    OpenAIModelOut:
+      properties:
+        id:
+          type: string
+          title: Id
+        object:
+          type: string
+          title: Object
+          default: model
+        created:
+          type: integer
+          title: Created
+        owned_by:
+          type: string
+          title: Owned By
+        root:
+          type: string
+          title: Root
+        parent:
+          type: 'null'
+          title: Parent
+        metadata:
+          anyOf:
+          - $ref: '#/components/schemas/deepinfra__deepapi__models__ModelMetadata'
+          - type: 'null'
+      type: object
+      required:
+      - id
+      - created
+      - owned_by
+      - root
+      title: OpenAIModelOut
+    ModelMetaIn:
+      properties:
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: short model description in plain text
+        github_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Github Url
+          description: source code project link (empty to delete)
+        paper_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Paper Url
+          description: paper/research link (empty to delete)
+        license_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: License Url
+          description: usage license link (empty to delete)
+        readme:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Readme
+          description: markdown flavored model readme
+        cover_img_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cover Img Url
+          description: dataurl or regular url to cover image (empty to delete)
+        sample_output_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sample Output Url
+          description: dataurl or regular url to a sample of this model's output, shown on the model page before the first run (empty to delete)
+        reported_type:
+          anyOf:
+          - $ref: '#/components/schemas/HFTasksE'
+          - type: 'null'
+          description: model type
+      additionalProperties: false
+      type: object
+      title: ModelMetaIn
+    ModelDocBlockKey:
+      type: string
+      enum:
+      - http
+      - http-bge-m3-multimodal
+      - http-bagel-multimodal
+      - deepctl
+      - js-text-gen
+      - js-emb
+      - js-text-to-img
+      - js-speech-to-text
+      - openai-python
+      - openai-python-short
+      - openai-http
+      - openai-js
+      - openai-js-short
+      - openai-speech-http
+      - openai-speech-python
+      - openai-speech-js
+      - openai-images-http
+      - openai-images-python
+      - openai-images-js
+      - openai-images-variations-http
+      - openai-images-variations-python
+      - openai-images-variations-js
+      - openai-images-edits-http
+      - openai-images-edits-python
+      - openai-images-edits-js
+      - openai-comp-python
+      - openai-comp-python-short
+      - openai-comp-http
+      - openai-comp-js
+      - openai-comp-js-short
+      - openai-emb-py
+      - openai-emb-http
+      - openai-emb-js
+      - openai-tts-http
+      - openai-tts-python
+      - openai-tts-js
+      - elevenlabs-tts-http
+      - elevenlabs-tts-python
+      - elevenlabs-tts-js
+      - create-voice-http
+      - create-voice-python
+      - create-voice-js
+      - read-voice-http
+      - read-voice-python
+      - read-voice-js
+      - update-voice-http
+      - update-voice-python
+      - update-voice-js
+      - delete-voice-http
+      - delete-voice-python
+      - delete-voice-js
+      - list-voices-http
+      - list-voices-python
+      - list-voices-js
+      - ai-sdk-js
+      - ai-sdk-js-short
+      title: ModelDocBlockKey
+    ModelPricingInputTokens:
+      properties:
+        discount:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Discount
+          description: Promotional discount; you are charged price * (1 - discount)
+          examples:
+          - 0.2
+        discount_ends_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Discount Ends At
+          description: Unix timestamp (seconds) when the discount ends, null when it has no scheduled end
+          examples:
+          - 1786000000
+        short:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Short
+          description: Short description of the pricing, ideal for cards and headers
+          examples:
+          - $0.15 / second
+        full:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Full
+          description: Full description of the pricing, perfect for details
+          examples:
+          - $0.15 / second for 1080P, $0.10 / second for 720P
+        table:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Table
+          description: Could be used to generate pricing tables
+          examples:
+          - columns:
+            - resolution
+            - $ cost per second
+            rows:
+            - - 780P
+              - $0.10
+            - - 1080P
+              - $0.15
+        type:
+          type: string
+          title: Type
+          default: input_tokens
+        cents_per_input_token:
+          type: number
+          title: Cents Per Input Token
+      type: object
+      required:
+      - cents_per_input_token
+      title: ModelPricingInputTokens
+    FAQEntryOut:
+      properties:
+        faq_id:
+          type: string
+          title: Faq Id
+          description: FAQ entry ID, usually the question
+        question:
+          type: string
+          title: Question
+          description: FAQ question
+        answer:
+          type: string
+          title: Answer
+          description: FAQ answer in markdown format
+        order:
+          type: integer
+          title: Order
+          description: order of the FAQ entry in the list, lower numbers come first
+          default: 0
+      type: object
+      required:
+      - faq_id
+      - question
+      - answer
+      title: FAQEntryOut
+    ModelPricingTokens:
+      properties:
+        discount:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Discount
+          description: Promotional discount; you are charged price * (1 - discount)
+          examples:
+          - 0.2
+        discount_ends_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Discount Ends At
+          description: Unix timestamp (seconds) when the discount ends, null when it has no scheduled end
+          examples:
+          - 1786000000
+        short:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Short
+          description: Short description of the pricing, ideal for cards and headers
+          examples:
+          - $0.15 / second
+        full:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Full
+          description: Full description of the pricing, perfect for details
+          examples:
+          - $0.15 / second for 1080P, $0.10 / second for 720P
+        table:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Table
+          description: Could be used to generate pricing tables
+          examples:
+          - columns:
+            - resolution
+            - $ cost per second
+            rows:
+            - - 780P
+              - $0.10
+            - - 1080P
+              - $0.15
+        type:
+          type: string
+          title: Type
+          default: tokens
+        cents_per_input_token:
+          type: number
+          title: Cents Per Input Token
+        cents_per_output_token:
+          type: number
+          title: Cents Per Output Token
+        rate_per_input_token_cached:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Rate Per Input Token Cached
+        rate_per_input_token_cache_write:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Rate Per Input Token Cache Write
+        rate_per_service_tier_priority:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Rate Per Service Tier Priority
+        rate_per_service_tier_flex:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Rate Per Service Tier Flex
+        rate_per_explicit_cache_write_token:
+          anyOf:
+          - additionalProperties:
+              type: number
+            type: object
+          - type: 'null'
+          title: Rate Per Explicit Cache Write Token
+        explicit_cache_granularity_tokens:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Explicit Cache Granularity Tokens
+      type: object
+      required:
+      - cents_per_input_token
+      - cents_per_output_token
+      title: ModelPricingTokens
+    ModelFieldInfo:
+      properties:
+        name:
+          type: string
+          title: Name
+        parent:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Parent
+        ftype:
+          type: string
+          title: Ftype
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        allowed:
+          anyOf:
+          - items: {}
+            type: array
+          - type: 'null'
+          title: Allowed
+        default:
+          title: Default
+        examples:
+          items: {}
+          type: array
+          title: Examples
+          default: []
+        minimum:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Minimum
+        exclusiveMinimum:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Exclusiveminimum
+        maximum:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Maximum
+        exclusiveMaximum:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Exclusivemaximum
+      type: object
+      required:
+      - name
+      - ftype
+      title: ModelFieldInfo
+    ModelPricingInputCharacterLength:
+      properties:
+        discount:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Discount
+          description: Promotional discount; you are charged price * (1 - discount)
+          examples:
+          - 0.2
+        discount_ends_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Discount Ends At
+          description: Unix timestamp (seconds) when the discount ends, null when it has no scheduled end
+          examples:
+          - 1786000000
+        short:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Short
+          description: Short description of the pricing, ideal for cards and headers
+          examples:
+          - $0.15 / second
+        full:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Full
+          description: Full description of the pricing, perfect for details
+          examples:
+          - $0.15 / second for 1080P, $0.10 / second for 720P
+        table:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Table
+          description: Could be used to generate pricing tables
+          examples:
+          - columns:
+            - resolution
+            - $ cost per second
+            rows:
+            - - 780P
+              - $0.10
+            - - 1080P
+              - $0.15
+        type:
+          type: string
+          title: Type
+          default: input_character_length
+        cents_per_input_chars:
+          type: number
+          title: Cents Per Input Chars
+      type: object
+      required:
+      - cents_per_input_chars
+      title: ModelPricingInputCharacterLength
+    ModelPublicityIn:
+      properties:
+        public:
+          type: boolean
+          title: Public
+          description: whether to make the model public of private
+      additionalProperties: false
+      type: object
+      required:
+      - public
+      title: ModelPublicityIn
+    deepinfra__deepapi__models__ModelMetadata:
+      properties:
+        description:
+          type: string
+          title: Description
+        context_length:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Context Length
+        max_tokens:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Tokens
+        pricing:
+          additionalProperties:
+            type: number
+          type: object
+          title: Pricing
+        discount:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Discount
+        tags:
+          items:
+            type: string
+          type: array
+          title: Tags
+        default_width:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Default Width
+        default_height:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Default Height
+        default_iterations:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Default Iterations
+      type: object
+      required:
+      - description
+      - pricing
+      - tags
+      title: ModelMetadata
+      description: 'Per-model metadata exposed by ``/v1/openai/models``.
+
+
+        Pricing key names are surface-specific:
+
+
+        - chat / vlm:  {"input_tokens", "output_tokens", "cache_read_tokens"}  ($/1M tokens)
+
+        - embed:       {"input_tokens"}                                        ($/1M tokens)
+
+        - image-gen:   {"per_image_unit"}                                      ($/image at default geometry)
+
+        - video-gen:   {"output_seconds"}                                      ($/sec generated)
+
+        - tts:         {"input_characters"}                                    ($/1M input chars)
+
+        - stt:         {"input_seconds"}                                       ($/sec input audio)
+
+
+        ``tags`` always carries the surface short alias (e.g. ``''chat''``,
+
+        ``''image-gen''``) and, for chat models, any of ``''vision''``,
+
+        ``''prompt_cache''``, ``''reasoning_effort''``, ``''reasoning''``.'
+    HardwareOption:
+      properties:
+        id:
+          type: string
+          title: Id
+        name:
+          type: string
+          title: Name
+        type:
+          type: string
+          enum:
+          - serverless
+          - dedicated
+          title: Type
+        pricing:
+          anyOf:
+          - $ref: '#/components/schemas/HardwarePricingServerless'
+          - $ref: '#/components/schemas/HardwarePricingDedicated'
+          title: Pricing
+      type: object
+      required:
+      - id
+      - name
+      - type
+      - pricing
+      title: HardwareOption
+    PricingPageEntryOut:
+      properties:
+        model_name:
+          type: string
+          title: Model Name
+        short_name:
+          type: string
+          title: Short Name
+        max_tokens:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Tokens
+          description: The maximum context size of this model, if applicable
+        pricing:
+          anyOf:
+          - $ref: '#/components/schemas/ModelPricingTime'
+          - $ref: '#/components/schemas/ModelPricingTokens'
+          - $ref: '#/components/schemas/ModelPricingInputLength'
+          - $ref: '#/components/schemas/ModelPricingInputTokens'
+          - $ref: '#/components/schemas/ModelPricingUptime'
+          - $ref: '#/components/schemas/ModelPricingInputCharacterLength'
+          - $ref: '#/components/schemas/ModelPricingImageUnits'
+          - $ref: '#/components/schemas/ModelPricingOutputLength'
+          - $ref: '#/components/schemas/ModelPricingFrameUnits'
+          title: Pricing
+      type: object
+      required:
+      - model_name
+      - short_name
+      - pricing
+      title: PricingPageEntryOut
+    ModelFamilyOut:
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Name
+          description: Model family name
+        title:
+          type: string
+          title: Title
+          description: Model family title
+        description:
+          type: string
+          title: Description
+          description: Model family description
+        developer:
+          type: string
+          title: Developer
+          description: Model family developer organization
+        meta_title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Meta Title
+          description: Meta title for SEO
+        meta_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Meta Description
+          description: Meta description for SEO
+        featured_models:
+          items:
+            type: string
+          type: array
+          title: Featured Models
+        pp_sections_out:
+          items:
+            $ref: '#/components/schemas/PricingPageSectionOut'
+          type: array
+          title: Pp Sections Out
+        faq_entries:
+          items:
+            $ref: '#/components/schemas/FAQEntryOut'
+          type: array
+          title: Faq Entries
+          description: List of FAQ entries for this model family, ordered by their order field
+      type: object
+      required:
+      - name
+      - title
+      - description
+      - developer
+      - featured_models
+      - pp_sections_out
+      title: ModelFamilyOut
+    HardwarePricingServerless:
+      properties:
+        cents_per_million_input_tokens:
+          type: number
+          title: Cents Per Million Input Tokens
+        cents_per_million_output_tokens:
+          type: number
+          title: Cents Per Million Output Tokens
+        discount:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Discount
+      type: object
+      required:
+      - cents_per_million_input_tokens
+      - cents_per_million_output_tokens
+      title: HardwarePricingServerless
+    HardwarePricingDedicated:
+      properties:
+        cents_per_minute:
+          type: number
+          title: Cents Per Minute
+      type: object
+      required:
+      - cents_per_minute
+      title: HardwarePricingDedicated
+    ModelPricingInputLength:
+      properties:
+        discount:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Discount
+          description: Promotional discount; you are charged price * (1 - discount)
+          examples:
+          - 0.2
+        discount_ends_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Discount Ends At
+          description: Unix timestamp (seconds) when the discount ends, null when it has no scheduled end
+          examples:
+          - 1786000000
+        short:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Short
+          description: Short description of the pricing, ideal for cards and headers
+          examples:
+          - $0.15 / second
+        full:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Full
+          description: Full description of the pricing, perfect for details
+          examples:
+          - $0.15 / second for 1080P, $0.10 / second for 720P
+        table:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Table
+          description: Could be used to generate pricing tables
+          examples:
+          - columns:
+            - resolution
+            - $ cost per second
+            rows:
+            - - 780P
+              - $0.10
+            - - 1080P
+              - $0.15
+        type:
+          type: string
+          title: Type
+          default: input_length
+        cents_per_input_sec:
+          type: number
+          title: Cents Per Input Sec
+      type: object
+      required:
+      - cents_per_input_sec
+      title: ModelPricingInputLength
+    ModelPricingImageUnits:
+      properties:
+        discount:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Discount
+          description: Promotional discount; you are charged price * (1 - discount)
+          examples:
+          - 0.2
+        discount_ends_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Discount Ends At
+          description: Unix timestamp (seconds) when the discount ends, null when it has no scheduled end
+          examples:
+          - 1786000000
+        short:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Short
+          description: Short description of the pricing, ideal for cards and headers
+          examples:
+          - $0.15 / second
+        full:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Full
+          description: Full description of the pricing, perfect for details
+          examples:
+          - $0.15 / second for 1080P, $0.10 / second for 720P
+        table:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Table
+          description: Could be used to generate pricing tables
+          examples:
+          - columns:
+            - resolution
+            - $ cost per second
+            rows:
+            - - 780P
+              - $0.10
+            - - 1080P
+              - $0.15
+        type:
+          type: string
+          title: Type
+          default: image_units
+        cents_per_image_unit:
+          type: number
+          title: Cents Per Image Unit
+        default_width:
+          type: integer
+          title: Default Width
+        default_height:
+          type: integer
+          title: Default Height
+        default_iterations:
+          type: integer
+          title: Default Iterations
+        default_price_cents:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Default Price Cents
+        usage_from_cost:
+          type: boolean
+          title: Usage From Cost
+      type: object
+      required:
+      - cents_per_image_unit
+      - default_width
+      - default_height
+      - default_iterations
+      - usage_from_cost
+      title: ModelPricingImageUnits
+    HardwareResponse:
+      properties:
+        hardware:
+          items:
+            $ref: '#/components/schemas/HardwareOption'
+          type: array
+          title: Hardware
+      type: object
+      title: HardwareResponse
+    ModelPricingOutputLength:
+      properties:
+        discount:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Discount
+          description: Promotional discount; you are charged price * (1 - discount)
+          examples:
+          - 0.2
+        discount_ends_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Discount Ends At
+          description: Unix timestamp (seconds) when the discount ends, null when it has no scheduled end
+          examples:
+          - 1786000000
+        short:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Short
+          description: Short description of the pricing, ideal for cards and headers
+          examples:
+          - $0.15 / second
+        full:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Full
+          description: Full description of the pricing, perfect for details
+          examples:
+          - $0.15 / second for 1080P, $0.10 / second for 720P
+        table:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Table
+          description: Could be used to generate pricing tables
+          examples:
+          - columns:
+            - resolution
+            - $ cost per second
+            rows:
+            - - 780P
+              - $0.10
+            - - 1080P
+              - $0.15
+        type:
+          type: string
+          title: Type
+          default: output_length
+        cents_per_output_sec:
+          type: number
+          title: Cents Per Output Sec
+      type: object
+      required:
+      - cents_per_output_sec
+      title: ModelPricingOutputLength
+    ModelPricingUptime:
+      properties:
+        discount:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Discount
+          description: Promotional discount; you are charged price * (1 - discount)
+          examples:
+          - 0.2
+        discount_ends_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Discount Ends At
+          description: Unix timestamp (seconds) when the discount ends, null when it has no scheduled end
+          examples:
+          - 1786000000
+        short:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Short
+          description: Short description of the pricing, ideal for cards and headers
+          examples:
+          - $0.15 / second
+        full:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Full
+          description: Full description of the pricing, perfect for details
+          examples:
+          - $0.15 / second for 1080P, $0.10 / second for 720P
+        table:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Table
+          description: Could be used to generate pricing tables
+          examples:
+          - columns:
+            - resolution
+            - $ cost per second
+            rows:
+            - - 780P
+              - $0.10
+            - - 1080P
+              - $0.15
+        type:
+          type: string
+          title: Type
+          default: uptime
+        cents_per_sec:
+          type: number
+          title: Cents Per Sec
+      type: object
+      required:
+      - cents_per_sec
+      title: ModelPricingUptime
+    SchemaVariant:
+      properties:
+        key:
+          $ref: '#/components/schemas/SchemaVariantKey'
+        url:
+          type: string
+          title: Url
+      type: object
+      required:
+      - key
+      - url
+      title: SchemaVariant
+    SchemaVariantKey:
+      type: string
+      enum:
+      - default
+      - openai-completions
+      - openai-chat-completions
+      - openai-embeddings
+      - openai-speech-to-text
+      - openai-tts
+      - openai-images
+      - openai-images-variations
+      - openai-images-edits
+      - elevenlabs-tts
+      - create-voice
+      - read-voice
+      - update-voice
+      - delete-voice
+      - list-voices
+      - ai-sdk
+      title: SchemaVariantKey
+    DeepError:
+      properties:
+        error:
+          type: string
+          title: Error
+          description: Error
+          examples:
+          - Model not found
+      type: object
+      required:
+      - error
+      title: DeepError
+    PricingType:
+      type: string
+      enum:
+      - tokens
+      - time
+      - uptime
+      - input_length
+      - input_tokens
+      - input_character_length
+      - image_units
+      - output_length
+      - frame_units
+      title: PricingType
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
   securitySchemes:
-    bearerAuth:
+    HTTPBearer:
       type: http
       scheme: bearer
-      description: DeepInfra API token (DEEPINFRA_TOKEN) sent as a Bearer token.

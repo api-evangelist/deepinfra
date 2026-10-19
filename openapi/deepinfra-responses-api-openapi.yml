@@ -1,0 +1,849 @@
+openapi: 3.2.0
+info:
+  title: DeepInfra Responses API
+  description: The DeepInfra API provides serverless AI inference, custom model deployments, and GPU rentals.
+  version: 1.0.0
+servers:
+- url: https://api.deepinfra.com
+tags:
+- name: Responses
+paths:
+  /v1/responses:
+    post:
+      tags:
+      - Responses
+      summary: Openai Responses
+      operationId: openai_responses_v1_responses_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: x-deepinfra-source
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Deepinfra-Source
+      - name: x-deepinfra-service-tier
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Per-request service tier (`priority` or `flex`) for clients that cannot set the `service_tier` body field. The body field wins when both are present; unrecognized values ride the default tier.
+          title: X-Deepinfra-Service-Tier
+        description: Per-request service tier (`priority` or `flex`) for clients that cannot set the `service_tier` body field. The body field wins when both are present; unrecognized values ride the default tier.
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResponsesIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/responses/{response_id}:
+    delete:
+      tags:
+      - Responses
+      summary: Openai Responses Not Found
+      operationId: openai_responses_not_found_v1_responses__response_id__delete
+      parameters:
+      - name: response_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Response Id
+      - name: x-deepinfra-service-tier
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Per-request service tier (`priority` or `flex`) for clients that cannot set the `service_tier` body field. The body field wins when both are present; unrecognized values ride the default tier.
+          title: X-Deepinfra-Service-Tier
+        description: Per-request service tier (`priority` or `flex`) for clients that cannot set the `service_tier` body field. The body field wins when both are present; unrecognized values ride the default tier.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Responses
+      summary: Openai Responses Not Found
+      operationId: openai_responses_not_found_v1_responses__response_id__get
+      parameters:
+      - name: response_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Response Id
+      - name: x-deepinfra-service-tier
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Per-request service tier (`priority` or `flex`) for clients that cannot set the `service_tier` body field. The body field wins when both are present; unrecognized values ride the default tier.
+          title: X-Deepinfra-Service-Tier
+        description: Per-request service tier (`priority` or `flex`) for clients that cannot set the `service_tier` body field. The body field wins when both are present; unrecognized values ride the default tier.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    InputMessageItem:
+      properties:
+        type:
+          type: string
+          const: message
+          title: Type
+          default: message
+        role:
+          type: string
+          enum:
+          - user
+          - assistant
+          - system
+          - developer
+          title: Role
+        content:
+          anyOf:
+          - type: string
+          - items:
+              anyOf:
+              - $ref: '#/components/schemas/InputTextPart'
+              - $ref: '#/components/schemas/InputImagePart'
+              - $ref: '#/components/schemas/InputFilePart'
+              - $ref: '#/components/schemas/OutputTextPart'
+            type: array
+          title: Content
+        status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Status
+      type: object
+      required:
+      - role
+      - content
+      title: InputMessageItem
+    InputFunctionCallOutputItem:
+      properties:
+        type:
+          type: string
+          const: function_call_output
+          title: Type
+        call_id:
+          type: string
+          title: Call Id
+        output:
+          type: string
+          title: Output
+        id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Id
+        status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Status
+      type: object
+      required:
+      - type
+      - call_id
+      - output
+      title: InputFunctionCallOutputItem
+    ResponsesTextConfig:
+      properties:
+        format:
+          anyOf:
+          - $ref: '#/components/schemas/ResponsesTextFormatText'
+          - $ref: '#/components/schemas/ResponsesTextFormatJsonObject'
+          - $ref: '#/components/schemas/ResponsesTextFormatJsonSchema'
+          - type: 'null'
+          title: Format
+        verbosity:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Verbosity
+      type: object
+      title: ResponsesTextConfig
+    InputTextPart:
+      properties:
+        type:
+          type: string
+          const: input_text
+          title: Type
+        text:
+          type: string
+          title: Text
+      type: object
+      required:
+      - type
+      - text
+      title: InputTextPart
+    ResponsesReasoningConfig:
+      properties:
+        effort:
+          anyOf:
+          - type: string
+            enum:
+            - none
+            - minimal
+            - low
+            - medium
+            - high
+            - xhigh
+            - max
+          - type: 'null'
+          title: Effort
+        summary:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Summary
+        generate_summary:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Generate Summary
+      type: object
+      title: ResponsesReasoningConfig
+    OutputTextPart:
+      properties:
+        type:
+          type: string
+          const: output_text
+          title: Type
+        text:
+          type: string
+          title: Text
+      type: object
+      required:
+      - type
+      - text
+      title: OutputTextPart
+    ResponsesTextFormatJsonSchema:
+      properties:
+        type:
+          type: string
+          const: json_schema
+          title: Type
+          default: json_schema
+        name:
+          type: string
+          title: Name
+        schema:
+          additionalProperties: true
+          type: object
+          title: Schema
+        strict:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Strict
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+      type: object
+      required:
+      - name
+      - schema
+      title: ResponsesTextFormatJsonSchema
+    InputFunctionCallItem:
+      properties:
+        type:
+          type: string
+          const: function_call
+          title: Type
+        call_id:
+          type: string
+          title: Call Id
+        name:
+          type: string
+          title: Name
+        arguments:
+          type: string
+          title: Arguments
+        id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Id
+        status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Status
+      type: object
+      required:
+      - type
+      - call_id
+      - name
+      - arguments
+      title: InputFunctionCallItem
+    ResponsesFunctionToolChoice:
+      properties:
+        type:
+          type: string
+          const: function
+          title: Type
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - type
+      - name
+      title: ResponsesFunctionToolChoice
+    ReasoningSummaryPart:
+      properties:
+        type:
+          type: string
+          enum:
+          - summary_text
+          - reasoning_text
+          title: Type
+          default: summary_text
+        text:
+          type: string
+          title: Text
+      type: object
+      required:
+      - text
+      title: ReasoningSummaryPart
+    ServiceTier:
+      type: string
+      enum:
+      - default
+      - priority
+      - flex
+      title: ServiceTier
+    PromptCacheOptions:
+      properties:
+        mode:
+          anyOf:
+          - type: string
+            enum:
+            - explicit
+            - implicit
+          - type: 'null'
+          title: Mode
+          description: Prompt caching mode; 'explicit' requests explicit caching.
+        ttl:
+          anyOf:
+          - type: string
+            enum:
+            - 5m
+            - 1h
+          - type: 'null'
+          title: Ttl
+          description: Requested cache retention for this request's prefix.
+      type: object
+      title: PromptCacheOptions
+    ResponsesTextFormatJsonObject:
+      properties:
+        type:
+          type: string
+          const: json_object
+          title: Type
+          default: json_object
+      type: object
+      title: ResponsesTextFormatJsonObject
+    InputReasoningItem:
+      properties:
+        type:
+          type: string
+          const: reasoning
+          title: Type
+        id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Id
+        summary:
+          items:
+            $ref: '#/components/schemas/ReasoningSummaryPart'
+          type: array
+          title: Summary
+        content:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/ReasoningSummaryPart'
+            type: array
+          - type: 'null'
+          title: Content
+        encrypted_content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Encrypted Content
+        status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Status
+      type: object
+      required:
+      - type
+      title: InputReasoningItem
+    ResponsesWebSearchTool:
+      properties:
+        type:
+          type: string
+          const: web_search
+          title: Type
+        max_results:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Results
+        include_domains:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Include Domains
+        exclude_domains:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Exclude Domains
+        search_prompt:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Search Prompt
+        external_web_access:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: External Web Access
+      type: object
+      required:
+      - type
+      title: ResponsesWebSearchTool
+    ResponsesIn:
+      properties:
+        service_tier:
+          anyOf:
+          - $ref: '#/components/schemas/ServiceTier'
+          - type: 'null'
+          description: The service tier used for processing the request. 'priority' processes the request with higher priority (premium rate); 'flex' processes it at lower priority for a discount, served only when spare capacity exists and may be retried/timed out under load. Both apply only to models that support the respective tier. For compatibility, 'auto' is treated as 'priority' and 'standard_only' as 'default'.
+        fail_fast:
+          type: boolean
+          title: Fail Fast
+          description: If true, the request is rejected immediately with HTTP 429 when the model has no spare capacity, instead of waiting in the queue. Opt-in; the default (false) keeps standard queueing behavior.
+          default: false
+        models:
+          anyOf:
+          - items:
+              type: string
+            type: array
+            maxItems: 4
+            minItems: 1
+          - type: 'null'
+          title: Models
+          description: 'Ordered list of up to 4 fallback models. The request is attempted on each model in order: when a model rejects it for lack of capacity (HTTP 429 model-busy / flex no-capacity), the next model is tried server-side. The first model that accepts serves the request; the response''s model field and billing reflect that model, at that model''s pricing. Models before the last are attempted without queueing (as if fail_fast were set); the last model honors the request''s own fail_fast value. When models is set, the model field is ignored. Entries must be plain model names (no deploy_id:, custom_hostport, or :revision specifiers); duplicate entries are ignored, keeping the first occurrence.'
+        model:
+          type: string
+          title: Model
+        input:
+          anyOf:
+          - type: string
+          - items:
+              anyOf:
+              - $ref: '#/components/schemas/InputMessageItem'
+              - $ref: '#/components/schemas/InputFunctionCallItem'
+              - $ref: '#/components/schemas/InputFunctionCallOutputItem'
+              - $ref: '#/components/schemas/InputReasoningItem'
+            type: array
+          title: Input
+        instructions:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Instructions
+        tools:
+          anyOf:
+          - items:
+              anyOf:
+              - $ref: '#/components/schemas/ResponsesFunctionTool'
+              - $ref: '#/components/schemas/ResponsesWebSearchTool'
+              - $ref: '#/components/schemas/ResponsesNamespaceTool'
+              - additionalProperties: true
+                type: object
+            type: array
+          - type: 'null'
+          title: Tools
+        tool_choice:
+          anyOf:
+          - type: string
+            enum:
+            - auto
+            - none
+            - required
+          - $ref: '#/components/schemas/ResponsesFunctionToolChoice'
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Tool Choice
+        text:
+          anyOf:
+          - $ref: '#/components/schemas/ResponsesTextConfig'
+          - type: 'null'
+        reasoning:
+          anyOf:
+          - $ref: '#/components/schemas/ResponsesReasoningConfig'
+          - type: 'null'
+        max_output_tokens:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Output Tokens
+        max_tool_calls:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Tool Calls
+        temperature:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Temperature
+        top_p:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Top P
+        top_logprobs:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Top Logprobs
+        metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Metadata
+        parallel_tool_calls:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Parallel Tool Calls
+        stream:
+          type: boolean
+          title: Stream
+          default: false
+        user:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User
+        store:
+          type: boolean
+          title: Store
+          default: false
+        previous_response_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Previous Response Id
+        background:
+          type: boolean
+          title: Background
+          default: false
+        include:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Include
+        truncation:
+          anyOf:
+          - type: string
+            enum:
+            - auto
+            - disabled
+          - type: 'null'
+          title: Truncation
+        prompt:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Prompt
+        conversation:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Conversation
+        min_p:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Min P
+        top_k:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Top K
+        repetition_penalty:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Repetition Penalty
+        stop_token_ids:
+          anyOf:
+          - items:
+              type: integer
+            type: array
+          - type: 'null'
+          title: Stop Token Ids
+        chat_template_kwargs:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Chat Template Kwargs
+        continue_final_message:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Continue Final Message
+        ignore_eos:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Ignore Eos
+        prompt_cache_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prompt Cache Key
+        prompt_cache_options:
+          anyOf:
+          - $ref: '#/components/schemas/PromptCacheOptions'
+          - type: 'null'
+      type: object
+      required:
+      - model
+      - input
+      title: ResponsesIn
+    ResponsesTextFormatText:
+      properties:
+        type:
+          type: string
+          const: text
+          title: Type
+          default: text
+      type: object
+      title: ResponsesTextFormatText
+    ResponsesNamespaceTool:
+      properties:
+        type:
+          type: string
+          const: namespace
+          title: Type
+        name:
+          type: string
+          title: Name
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        tools:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/ResponsesFunctionTool'
+            - additionalProperties: true
+              type: object
+          type: array
+          title: Tools
+      type: object
+      required:
+      - type
+      - name
+      title: ResponsesNamespaceTool
+    InputImagePart:
+      properties:
+        type:
+          type: string
+          const: input_image
+          title: Type
+        image_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Image Url
+        file_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: File Id
+        detail:
+          type: string
+          enum:
+          - auto
+          - low
+          - high
+          title: Detail
+          default: auto
+      type: object
+      required:
+      - type
+      title: InputImagePart
+    ResponsesFunctionTool:
+      properties:
+        type:
+          type: string
+          const: function
+          title: Type
+        name:
+          type: string
+          title: Name
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        parameters:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Parameters
+        strict:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Strict
+      type: object
+      required:
+      - type
+      - name
+      title: ResponsesFunctionTool
+    InputFilePart:
+      properties:
+        type:
+          type: string
+          const: input_file
+          title: Type
+        file_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: File Id
+        filename:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Filename
+        file_data:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: File Data
+        file_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: File Url
+      type: object
+      required:
+      - type
+      title: InputFilePart
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

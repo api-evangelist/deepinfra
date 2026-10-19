@@ -1,0 +1,185 @@
+openapi: 3.2.0
+info:
+  title: DeepInfra Inference API
+  description: The DeepInfra API provides serverless AI inference, custom model deployments, and GPU rentals.
+  version: 1.0.0
+servers:
+- url: https://api.deepinfra.com
+tags:
+- name: Inference
+  description: Native DeepInfra inference API for models and deployments.
+paths:
+  /v1/inference/deploy/{deploy_id}:
+    post:
+      tags:
+      - Inference
+      summary: Inference Deploy
+      operationId: inference_deploy_v1_inference_deploy__deploy_id__post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: deploy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Deploy Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/inference/{model_name}:
+    post:
+      tags:
+      - Inference
+      summary: Inference Model
+      operationId: inference_model_v1_inference__model_name__post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: model_name
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Model Name
+      - name: version
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: model version to run inference against
+          title: Version
+        description: model version to run inference against
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '423':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Locked
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    DeepError:
+      properties:
+        error:
+          type: string
+          title: Error
+          description: Error
+          examples:
+          - Model not found
+      type: object
+      required:
+      - error
+      title: DeepError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

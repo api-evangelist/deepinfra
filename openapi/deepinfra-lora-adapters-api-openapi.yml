@@ -1,0 +1,834 @@
+openapi: 3.2.0
+info:
+  title: DeepInfra LoRA Adapters API
+  description: The DeepInfra API provides serverless AI inference, custom model deployments, and GPU rentals.
+  version: 1.0.0
+servers:
+- url: https://api.deepinfra.com
+tags:
+- name: LoRA Adapters
+  description: Create, manage, and query LoRA adapter models.
+paths:
+  /lora-model:
+    post:
+      tags:
+      - LoRA Adapters
+      summary: Upload Lora Model
+      operationId: upload_lora_model_lora_model_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoraModelUploadIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeploymentOut'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Bad Request
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /lora-model/{lora_model_name}:
+    delete:
+      tags:
+      - LoRA Adapters
+      summary: Delete Lora Model
+      operationId: delete_lora_model_lora_model__lora_model_name__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: lora_model_name
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Lora Model Name
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Bad Request
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/lora/create:
+    post:
+      tags:
+      - LoRA Adapters
+      summary: Create Lora
+      operationId: create_lora_v1_lora_create_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLoraApiRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeploymentOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/lora/{lora_name}/status:
+    get:
+      tags:
+      - LoRA Adapters
+      summary: Get Lora Status
+      operationId: get_lora_status_v1_lora__lora_name__status_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: lora_name
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Lora Name
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/lora/{lora_name}:
+    get:
+      tags:
+      - LoRA Adapters
+      summary: Get Lora
+      operationId: get_lora_v1_lora__lora_name__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: lora_name
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Lora Name
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - LoRA Adapters
+      summary: Update Lora
+      operationId: update_lora_v1_lora__lora_name__patch
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: lora_name
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Lora Name
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateLoraApiRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - LoRA Adapters
+      summary: Delete Lora
+      operationId: delete_lora_v1_lora__lora_name__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: lora_name
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Lora Name
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/model/{model_name}/loras:
+    get:
+      tags:
+      - LoRA Adapters
+      summary: Get Model Loras
+      operationId: get_model_loras_v1_model__model_name__loras_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: model_name
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Model Name
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/user/loras:
+    get:
+      tags:
+      - LoRA Adapters
+      summary: Get User Loras
+      operationId: get_user_loras_v1_user_loras_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    DeployRollout:
+      properties:
+        up_to_date:
+          type: integer
+          title: Up To Date
+          description: Instances serving the current config.
+        outdated:
+          type: integer
+          title: Outdated
+          description: Instances still serving a previous config.
+        booting:
+          type: integer
+          title: Booting
+          description: Instances starting up.
+      type: object
+      required:
+      - up_to_date
+      - outdated
+      - booting
+      title: DeployRollout
+    DeployInstances:
+      properties:
+        running:
+          type: integer
+          title: Running
+          description: Instances serving at full capacity.
+        pending:
+          type: integer
+          title: Pending
+          description: Instances still starting up.
+        warming:
+          type: integer
+          title: Warming
+          description: Instances that are up but still warming up, so they take a reduced share of the traffic.
+          default: 0
+      type: object
+      required:
+      - running
+      - pending
+      title: DeployInstances
+      description: 'A deployment''s capacity: running + pending + warming.'
+    HFWeights:
+      properties:
+        repo:
+          type: string
+          title: Repo
+          description: huggingface repository i.e username/reponame
+        revision:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Revision
+          description: commit sha or branch name
+        token:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Token
+          description: huggingface access token with read access to the repo
+      type: object
+      required:
+      - repo
+      title: HFWeights
+    LoraModelUploadIn:
+      properties:
+        hf_model_name:
+          type: string
+          title: Hf Model Name
+        hf_token:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Hf Token
+        lora_model_name:
+          type: string
+          title: Lora Model Name
+        base_model_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Base Model Name
+      type: object
+      required:
+      - hf_model_name
+      - lora_model_name
+      title: LoraModelUploadIn
+    SourceTypeEnum:
+      type: string
+      enum:
+      - civitai
+      title: SourceTypeEnum
+    SourceModel:
+      properties:
+        type:
+          $ref: '#/components/schemas/SourceTypeEnum'
+        civit_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Civit Url
+      type: object
+      required:
+      - type
+      title: SourceModel
+    DeepError:
+      properties:
+        error:
+          type: string
+          title: Error
+          description: Error
+          examples:
+          - Model not found
+      type: object
+      required:
+      - error
+      title: DeepError
+    DeployGPUs:
+      type: string
+      enum:
+      - L4-24GB
+      - L40S-48GB
+      - A100-80GB
+      - H100-80GB
+      - H200-141GB
+      - B200-180GB
+      - B300-270GB
+      - RTXPRO6000-96GB
+      - other
+      title: DeployGPUs
+    DeploymentOut:
+      properties:
+        type:
+          $ref: '#/components/schemas/DeployType'
+          default: legacy
+        deploy_id:
+          type: string
+          title: Deploy Id
+          description: Deploy Id
+          examples:
+          - fkj843kjh8
+        model_name:
+          type: string
+          title: Model Name
+          description: Model Id from huggingface
+          examples:
+          - google/vit-base-patch16-224
+        version:
+          type: string
+          title: Version
+          description: Model version
+          examples:
+          - d8b79b422843bd59d628bf25b01aded94a9ec1a9b917e69fe460df9ff39ec42b
+        task:
+          type: string
+          title: Task
+          description: Task
+          examples:
+          - image-classification
+        status:
+          type: string
+          title: Status
+          description: Status
+          examples:
+          - deployed
+        fail_reason:
+          type: string
+          title: Fail Reason
+          description: Failure reason
+          examples:
+          - Initialization failed
+        created_at:
+          type: string
+          title: Created At
+          description: Created at
+          examples:
+          - '2021-08-27T17:19:21+00:00'
+        updated_at:
+          type: string
+          title: Updated At
+          description: Updated at
+          examples:
+          - '2021-08-27T17:19:21+00:00'
+        instances:
+          anyOf:
+          - $ref: '#/components/schemas/DeployInstances'
+          - type: 'null'
+          description: Details about number of instances running right now
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/DeployLLMConfig'
+          - type: 'null'
+          description: Immutable deploy configuration
+        settings:
+          anyOf:
+          - $ref: '#/components/schemas/ScaleSettings'
+          - type: 'null'
+          description: Scale Settings
+        standard_args:
+          properties:
+            max_context_size:
+              anyOf:
+              - type: integer
+                maximum: 10000000.0
+                minimum: 1.0
+              - type: 'null'
+              title: Max Context Size
+              description: Maximum total sequence length (prompt + generation).
+            max_concurrent_requests:
+              anyOf:
+              - type: integer
+                maximum: 1024.0
+                minimum: 1.0
+              - type: 'null'
+              title: Max Concurrent Requests
+              description: Max number of requests served concurrently.
+            max_images_per_prompt:
+              anyOf:
+              - type: integer
+                maximum: 1024.0
+                minimum: 0.0
+              - type: 'null'
+              title: Max Images Per Prompt
+              description: Images the engine accepts in one request; deepapi refuses more before rendering. 0 disables image input entirely.
+            gpu_memory_fraction:
+              anyOf:
+              - type: number
+                maximum: 0.97
+                minimum: 0.5
+              - type: 'null'
+              title: Gpu Memory Fraction
+              description: Fraction of GPU memory the engine may use for weights + KV cache.
+            max_prefill_tokens:
+              anyOf:
+              - type: integer
+                maximum: 131072.0
+                minimum: 512.0
+              - type: 'null'
+              title: Max Prefill Tokens
+              description: Max tokens processed per prefill/engine step (chunked prefill size).
+            kv_cache_dtype:
+              anyOf:
+              - type: string
+                enum:
+                - auto
+                - fp8
+              - type: 'null'
+              title: Kv Cache Dtype
+              description: KV cache precision. fp8 ~doubles KV capacity at <1% accuracy loss.
+            enable_prefix_caching:
+              anyOf:
+              - type: boolean
+              - type: 'null'
+              title: Enable Prefix Caching
+              description: Reuse KV cache for shared prompt prefixes.
+            quantization:
+              anyOf:
+              - type: string
+                enum:
+                - fp8
+                - awq
+                - gptq
+                - awq_marlin
+                - gptq_marlin
+                - compressed-tensors
+                - bitsandbytes
+              - type: 'null'
+              title: Quantization
+              description: On-the-fly weight quantization method.
+          additionalProperties: false
+          type: object
+          title: StandardArgs
+          description: Current engine tuning knobs
+        extra_args:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Extra Args
+          description: Current extra engine-specific command-line args (custom-weight deploys only)
+        update_error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Update Error
+          description: If the last config update was auto-reverted after an engine crash-loop, the error that caused it (status stays 'running')
+        rollout:
+          anyOf:
+          - $ref: '#/components/schemas/DeployRollout'
+          - type: 'null'
+          description: Per-instance rollout progress of the current config
+      type: object
+      required:
+      - deploy_id
+      - model_name
+      - version
+      - task
+      - status
+      - fail_reason
+      - created_at
+      - updated_at
+      title: DeploymentOut
+    CreateLoraApiRequest:
+      properties:
+        base_model:
+          type: string
+          title: Base Model
+        lora_name:
+          type: string
+          title: Lora Name
+        source:
+          $ref: '#/components/schemas/SourceModel'
+        private:
+          type: boolean
+          title: Private
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          default: ''
+      type: object
+      required:
+      - base_model
+      - lora_name
+      - source
+      - private
+      title: CreateLoraApiRequest
+    DeployLLMConfig:
+      properties:
+        gpu:
+          $ref: '#/components/schemas/DeployGPUs'
+          description: The type of GPU the deployment is running on
+        num_gpus:
+          type: integer
+          title: Num Gpus
+          description: Number of GPUs used by one instance
+        max_batch_size:
+          type: integer
+          title: Max Batch Size
+          description: Maximum number of concurrent requests
+        weights:
+          anyOf:
+          - $ref: '#/components/schemas/HFWeights'
+          - type: 'null'
+          description: Model weights information
+      type: object
+      required:
+      - gpu
+      - num_gpus
+      - max_batch_size
+      title: DeployLLMConfig
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    UpdateLoraApiRequest:
+      properties:
+        private:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Private
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+      type: object
+      title: UpdateLoraApiRequest
+    ScaleSettings:
+      properties:
+        min_instances:
+          type: integer
+          title: Min Instances
+          description: Minimum number of model instances to run
+          default: 1
+        max_instances:
+          type: integer
+          title: Max Instances
+          description: Maximum number of model instances to run
+          default: 1
+      type: object
+      title: ScaleSettings
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    DeployType:
+      type: string
+      enum:
+      - legacy
+      - llm
+      - lora
+      - tts
+      title: DeployType
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

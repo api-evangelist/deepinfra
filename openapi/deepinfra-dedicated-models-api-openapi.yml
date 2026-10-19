@@ -1,0 +1,2582 @@
+openapi: 3.2.0
+info:
+  title: DeepInfra Dedicated Models API
+  description: The DeepInfra API provides serverless AI inference, custom model deployments, and GPU rentals.
+  version: 1.0.0
+servers:
+- url: https://api.deepinfra.com
+tags:
+- name: Dedicated Models
+  description: Deploy and manage private model instances with autoscaling.
+paths:
+  /v1/deploy:
+    post:
+      tags:
+      - Dedicated Models
+      summary: Deploy Create
+      operationId: deploy_create_v1_deploy_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeployModelIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeployResult'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Conflict
+        '423':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Locked
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /deploy/hf/:
+    post:
+      tags:
+      - Dedicated Models
+      summary: Deploy Create Hf
+      operationId: deploy_create_hf_deploy_hf__post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HFModel'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeployResult'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Conflict
+        '423':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Locked
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /deploy/llm/gpu_availability:
+    get:
+      tags:
+      - Dedicated Models
+      summary: Deploy Gpu Availability
+      operationId: deploy_gpu_availability_deploy_llm_gpu_availability_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: source
+        in: query
+        required: false
+        schema:
+          type: string
+          default: ''
+          title: Source
+      - name: base_model
+        in: query
+        required: false
+        schema:
+          type: string
+          default: ''
+          title: Base Model
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeployGPUAvailability'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /deploy/llm/suggest_name:
+    get:
+      tags:
+      - Dedicated Models
+      summary: Deploy Llm Suggest Name
+      operationId: deploy_llm_suggest_name_deploy_llm_suggest_name_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: model_name
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Model Name
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelNameSuggestionOut'
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Conflict
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /deploy/llm/standard_args:
+    get:
+      tags:
+      - Dedicated Models
+      summary: Deploy Llm Standard Args
+      operationId: deploy_llm_standard_args_deploy_llm_standard_args_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: engine
+        in: query
+        required: false
+        schema:
+          type: string
+          default: vllm
+          title: Engine
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Deploy Llm Standard Args Deploy Llm Standard Args Get
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unprocessable Entity
+  /deploy/llm/presets:
+    get:
+      tags:
+      - Dedicated Models
+      summary: Deploy Llm Presets
+      description: 'DeepInfra presets and mirrored vLLM recipes for ``hf_repo_id``, told apart by
+
+        ``source``; empty when none. Filter by ``gpu``/``engine``/``source``.'
+      operationId: deploy_llm_presets_deploy_llm_presets_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: hf_repo_id
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Hf Repo Id
+      - name: gpu
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/DeployGPUs'
+          - type: 'null'
+          title: Gpu
+      - name: engine
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Engine
+      - name: source
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Source
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PresetConfigOut'
+                title: Response Deploy Llm Presets Deploy Llm Presets Get
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unprocessable Entity
+  /deploy/llm:
+    post:
+      tags:
+      - Dedicated Models
+      summary: Deploy Create Llm
+      operationId: deploy_create_llm_deploy_llm_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeployLLMIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeploymentOut'
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Payment Required
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Conflict
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unprocessable Entity
+  /deploy/list/:
+    get:
+      tags:
+      - Dedicated Models
+      summary: Deploy List
+      operationId: deploy_list_deploy_list__get
+      deprecated: true
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'A list of statuses that should be returned, separated by comma. Allowed values in the list are: initializing,downloading,deploying,running,updating,stopped,failed,deleted'
+          title: Status
+        description: 'A list of statuses that should be returned, separated by comma. Allowed values in the list are: initializing,downloading,deploying,running,updating,stopped,failed,deleted'
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeploymentOut'
+                title: Response Deploy List Deploy List  Get
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Bad Request
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /deploy/list:
+    get:
+      tags:
+      - Dedicated Models
+      summary: Deploy List
+      operationId: deploy_list_deploy_list_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'A list of statuses that should be returned, separated by comma. Allowed values in the list are: initializing,downloading,deploying,running,updating,stopped,failed,deleted'
+          title: Status
+        description: 'A list of statuses that should be returned, separated by comma. Allowed values in the list are: initializing,downloading,deploying,running,updating,stopped,failed,deleted'
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeploymentOut'
+                title: Response Deploy List Deploy List Get
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Bad Request
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /deploy/stats:
+    get:
+      tags:
+      - Dedicated Models
+      summary: Deployment Stats
+      operationId: deployment_stats_deploy_stats_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: from
+        in: query
+        required: true
+        schema:
+          type: string
+          description: start of period, unix ts or 'now-5h', supported units s(ec), m(min), h(our), d(ay), w(eek), M(onth)
+          title: From
+        description: start of period, unix ts or 'now-5h', supported units s(ec), m(min), h(our), d(ay), w(eek), M(onth)
+      - name: to
+        in: query
+        required: false
+        schema:
+          type: string
+          description: end of period, unix ts or now-relative, check from, defaults to now
+          default: now
+          title: To
+        description: end of period, unix ts or now-relative, check from, defaults to now
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeploymentMainStatsOut'
+                title: Response Deployment Stats Deploy Stats Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /deploy/{deploy_id}:
+    get:
+      tags:
+      - Dedicated Models
+      summary: Deploy Status
+      operationId: deploy_status_deploy__deploy_id__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: deploy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Deploy Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeploymentOut'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - Dedicated Models
+      summary: Deploy Update
+      operationId: deploy_update_deploy__deploy_id__put
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: deploy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Deploy Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeployLLMUpdateIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeployStatusOut'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Conflict
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Dedicated Models
+      summary: Deploy Delete
+      operationId: deploy_delete_deploy__deploy_id__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: deploy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Deploy Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeployDelete'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Conflict
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /deploy/{deploy_id}/stats:
+    get:
+      tags:
+      - Dedicated Models
+      summary: Deploy Stats
+      operationId: deploy_stats_deploy__deploy_id__stats_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: deploy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Deploy Id
+      - name: from
+        in: query
+        required: true
+        schema:
+          type: string
+          description: start of period, unix ts or 'now-5h', supported units s(ec), m(min), h(our), d(ay), w(eek), M(onth)
+          title: From
+        description: start of period, unix ts or 'now-5h', supported units s(ec), m(min), h(our), d(ay), w(eek), M(onth)
+      - name: to
+        in: query
+        required: false
+        schema:
+          type: string
+          description: end of period, unix ts or now-relative, check from, defaults to now
+          default: now
+          title: To
+        description: end of period, unix ts or now-relative, check from, defaults to now
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeploymentStatsOut'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Gone
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /deploy/{deploy_id}/stats2:
+    get:
+      tags:
+      - Dedicated Models
+      summary: Deploy Detailed Stats
+      operationId: deploy_detailed_stats_deploy__deploy_id__stats2_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: deploy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Deploy Id
+      - name: from
+        in: query
+        required: true
+        schema:
+          type: string
+          description: start of period, unix ts or 'now-5h', supported units s, m, h, d, w
+          title: From
+        description: start of period, unix ts or 'now-5h', supported units s, m, h, d, w
+      - name: to
+        in: query
+        required: false
+        schema:
+          type: string
+          description: end of period, unix ts or now-relative, check from, defaults to now
+          default: now
+          title: To
+        description: end of period, unix ts or now-relative, check from, defaults to now
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailedDeploymentStatsOut'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Gone
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /deploy/{deploy_id}/config/history:
+    get:
+      tags:
+      - Dedicated Models
+      summary: Deploy Args History
+      operationId: deploy_args_history_deploy__deploy_id__config_history_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: deploy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Deploy Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeployArgsHistoryOut'
+                title: Response Deploy Args History Deploy  Deploy Id  Config History Get
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /deploy/{deploy_id}/config/history/{entry_id}/restore:
+    post:
+      tags:
+      - Dedicated Models
+      summary: Deploy Args Restore
+      operationId: deploy_args_restore_deploy__deploy_id__config_history__entry_id__restore_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: deploy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Deploy Id
+      - name: entry_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Entry Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeployStatusOut'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Conflict
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /deploy/{deploy_id}/stop:
+    post:
+      tags:
+      - Dedicated Models
+      summary: Deploy Stop
+      description: Stop a running deployment. Terminates pods. Can be restarted later.
+      operationId: deploy_stop_deploy__deploy_id__stop_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: deploy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Deploy Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeployStatusOut'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Conflict
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /deploy/{deploy_id}/start:
+    post:
+      tags:
+      - Dedicated Models
+      summary: Deploy Start
+      description: Start a stopped deployment. Re-creates pods via auto-scaling.
+      operationId: deploy_start_deploy__deploy_id__start_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: deploy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Deploy Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeployStatusOut'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Conflict
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /deploy/{deploy_id}/rebalance:
+    post:
+      tags:
+      - Dedicated Models
+      summary: Deploy Rebalance
+      description: 'Start a GPU pool rebalance: move GPUs from this deployment onto another
+
+        deployment you own, a target instance at a time unless concurrency raises it.
+
+        A source instance is never left half-moved, so one larger target instance stops
+
+        several of this deployment''s at once, and one larger source instance is replaced
+
+        by several target instances at once. Moving all instances stops this deployment;
+
+        start it again later to resume it.'
+      operationId: deploy_rebalance_deploy__deploy_id__rebalance_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: deploy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Deploy Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RebalanceIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RebalanceOut'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Conflict
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Service Unavailable
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Dedicated Models
+      summary: Deploy Rebalance Status
+      description: 'Status of GPU pool rebalances touching this deployment. A just-started
+
+        rebalance can take a moment to appear. A finished or cancelled rebalance
+
+        leaves both deployments'' min/max instances fixed at the final counts; edit
+
+        them to resume autoscaling.'
+      operationId: deploy_rebalance_status_deploy__deploy_id__rebalance_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: deploy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Deploy Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RebalanceStatusOut'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /deploy/{deploy_id}/rebalance/cancel:
+    post:
+      tags:
+      - Dedicated Models
+      summary: Deploy Rebalance Cancel
+      description: 'Stop an in-flight GPU pool rebalance; instances already moved stay, and
+
+        both deployments keep min/max instances fixed at their current counts.'
+      operationId: deploy_rebalance_cancel_deploy__deploy_id__rebalance_cancel_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: deploy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Deploy Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+              - $ref: '#/components/schemas/RebalanceCancelIn'
+              - type: 'null'
+              title: Cancel
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RebalanceCancelOut'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Conflict
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HFWeights:
+      properties:
+        repo:
+          type: string
+          title: Repo
+          description: huggingface repository i.e username/reponame
+        revision:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Revision
+          description: commit sha or branch name
+        token:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Token
+          description: huggingface access token with read access to the repo
+      type: object
+      required:
+      - repo
+      title: HFWeights
+    RebalanceStatus:
+      properties:
+        replace_id:
+          type: string
+          title: Replace Id
+          description: Id of the rebalance.
+        direction:
+          type: string
+          enum:
+          - outgoing
+          - incoming
+          title: Direction
+          description: Whether this deployment is the source or the target.
+        status:
+          type: string
+          title: Status
+          description: Rebalance status.
+          examples:
+          - active
+          - done
+          - failed
+          - cancelled
+        placed:
+          type: integer
+          title: Placed
+          description: Target instances delivered so far.
+        count:
+          type: integer
+          title: Count
+          description: Target instances requested.
+        source_deploy_id:
+          type: string
+          title: Source Deploy Id
+          description: Deploy Id of the source; empty if not yours.
+          default: ''
+        target_deploy_id:
+          type: string
+          title: Target Deploy Id
+          description: Deploy Id of the target; empty if not yours.
+          default: ''
+        source_model_name:
+          type: string
+          title: Source Model Name
+          description: Model name of the source; empty if not yours.
+          default: ''
+        target_model_name:
+          type: string
+          title: Target Model Name
+          description: Model name of the target; empty if not yours.
+          default: ''
+        error:
+          type: string
+          title: Error
+          description: Failure reason, if any.
+          default: ''
+        created_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Created At
+          description: When the rebalance was requested.
+        finished_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Finished At
+          description: When the rebalance finished.
+      type: object
+      required:
+      - replace_id
+      - direction
+      - status
+      - placed
+      - count
+      - created_at
+      title: RebalanceStatus
+    GPUAvailabilityInfo:
+      properties:
+        gpu_config:
+          type: string
+          title: Gpu Config
+        usd_per_hour:
+          type: number
+          title: Usd Per Hour
+        available:
+          type: boolean
+          title: Available
+        recommended:
+          type: boolean
+          title: Recommended
+          default: false
+      type: object
+      required:
+      - gpu_config
+      - usd_per_hour
+      - available
+      title: GPUAvailabilityInfo
+    ModelNameSuggestionOut:
+      properties:
+        model_name:
+          type: string
+          title: Model Name
+          description: A model name that is currently free to claim (prefixed in username/model-name format).
+      type: object
+      required:
+      - model_name
+      title: ModelNameSuggestionOut
+    DeployGPUs:
+      type: string
+      enum:
+      - L4-24GB
+      - L40S-48GB
+      - A100-80GB
+      - H100-80GB
+      - H200-141GB
+      - B200-180GB
+      - B300-270GB
+      - RTXPRO6000-96GB
+      - other
+      title: DeployGPUs
+    DeployLLMIn:
+      properties:
+        model_name:
+          type: string
+          title: Model Name
+          description: model name for deepinfra (username/mode-name format)
+        gpu:
+          $ref: '#/components/schemas/DeployGPUs'
+          description: The type of GPU the deployment is running on.
+        num_gpus:
+          type: integer
+          maximum: 8.0
+          minimum: 1.0
+          title: Num Gpus
+          description: Number of GPUs used by one instance
+          default: 1
+        hf:
+          anyOf:
+          - $ref: '#/components/schemas/HFWeights'
+          - type: 'null'
+        base_model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Base Model
+          description: Base public model
+        container_image:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Container Image
+          description: Docker image for the deployment (e.g. vllm/vllm-openai:v0.8.4)
+        settings:
+          anyOf:
+          - $ref: '#/components/schemas/ScaleSettings'
+          - type: 'null'
+        extra_args:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Extra Args
+          description: Extra command line arguments for custom deployments
+        standard_args:
+          anyOf:
+          - $ref: '#/components/schemas/StandardArgs'
+          - type: 'null'
+          description: Engine tuning knobs. Values are validated on submission; unsupported or out-of-range values are rejected. Unset knobs use the model/engine defaults.
+        preset_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Preset Id
+          description: Apply a stored preset or vLLM recipe by id. A non-empty standard_args or extra_args in this request replaces the preset's whole matching field.
+      type: object
+      required:
+      - model_name
+      - gpu
+      title: DeployLLMIn
+    RebalanceCancelIn:
+      properties:
+        replace_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Replace Id
+          description: Rebalance to cancel; defaults to the active one.
+      type: object
+      title: RebalanceCancelIn
+    DeployGPUAvailability:
+      properties:
+        gpus:
+          items:
+            $ref: '#/components/schemas/GPUAvailabilityInfo'
+          type: array
+          title: Gpus
+          description: A list of all provided GPUs configurations, including their price and wether they are available
+      type: object
+      required:
+      - gpus
+      title: DeployGPUAvailability
+    DeployResult:
+      properties:
+        deploy_id:
+          type: string
+          title: Deploy Id
+          description: Deploy Id
+          examples:
+          - fkj843kjh8
+      type: object
+      required:
+      - deploy_id
+      title: DeployResult
+    PresetConfigOut:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Preset id.
+        source:
+          type: string
+          title: Source
+          description: Config source.
+          default: deepinfra
+        engine:
+          type: string
+          title: Engine
+          description: Inference engine.
+          default: vllm
+        gpu_configs:
+          items:
+            type: string
+          type: array
+          title: Gpu Configs
+          description: Allowed Nx<GPU> configs.
+        standard_args:
+          properties:
+            max_context_size:
+              anyOf:
+              - type: integer
+                maximum: 10000000.0
+                minimum: 1.0
+              - type: 'null'
+              title: Max Context Size
+              description: Maximum total sequence length (prompt + generation).
+            max_concurrent_requests:
+              anyOf:
+              - type: integer
+                maximum: 1024.0
+                minimum: 1.0
+              - type: 'null'
+              title: Max Concurrent Requests
+              description: Max number of requests served concurrently.
+            max_images_per_prompt:
+              anyOf:
+              - type: integer
+                maximum: 1024.0
+                minimum: 0.0
+              - type: 'null'
+              title: Max Images Per Prompt
+              description: Images the engine accepts in one request; deepapi refuses more before rendering. 0 disables image input entirely.
+            gpu_memory_fraction:
+              anyOf:
+              - type: number
+                maximum: 0.97
+                minimum: 0.5
+              - type: 'null'
+              title: Gpu Memory Fraction
+              description: Fraction of GPU memory the engine may use for weights + KV cache.
+            max_prefill_tokens:
+              anyOf:
+              - type: integer
+                maximum: 131072.0
+                minimum: 512.0
+              - type: 'null'
+              title: Max Prefill Tokens
+              description: Max tokens processed per prefill/engine step (chunked prefill size).
+            kv_cache_dtype:
+              anyOf:
+              - type: string
+                enum:
+                - auto
+                - fp8
+              - type: 'null'
+              title: Kv Cache Dtype
+              description: KV cache precision. fp8 ~doubles KV capacity at <1% accuracy loss.
+            enable_prefix_caching:
+              anyOf:
+              - type: boolean
+              - type: 'null'
+              title: Enable Prefix Caching
+              description: Reuse KV cache for shared prompt prefixes.
+            quantization:
+              anyOf:
+              - type: string
+                enum:
+                - fp8
+                - awq
+                - gptq
+                - awq_marlin
+                - gptq_marlin
+                - compressed-tensors
+                - bitsandbytes
+              - type: 'null'
+              title: Quantization
+              description: On-the-fly weight quantization method.
+          additionalProperties: false
+          type: object
+          title: StandardArgs
+          description: Engine tuning knobs.
+        extra_args:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Extra Args
+          description: Raw engine flags; vLLM recipes only.
+        label:
+          type: string
+          title: Label
+          description: Short display name (e.g. "Throughput-optimized").
+          default: ''
+      type: object
+      required:
+      - id
+      - gpu_configs
+      title: PresetConfigOut
+      description: One preset deploy config for an HF model on specific hardware.
+    DeployType:
+      type: string
+      enum:
+      - legacy
+      - llm
+      - lora
+      - tts
+      title: DeployType
+    DeployArgsHistoryOut:
+      properties:
+        entry_id:
+          type: string
+          title: Entry Id
+          description: Identifier of this past config; pass it to POST /deploy/{deploy_id}/config/history/{entry_id}/restore.
+        retired_at:
+          type: string
+          title: Retired At
+          description: When this config was retired.
+          examples:
+          - '2021-08-27T17:19:21+00:00'
+        standard_args:
+          additionalProperties: true
+          type: object
+          description: Engine tuning knobs of this config.
+        extra_args:
+          items:
+            type: string
+          type: array
+          title: Extra Args
+          description: Extra engine-specific command-line args of this config (custom-weight deploys only).
+      type: object
+      required:
+      - entry_id
+      - retired_at
+      - standard_args
+      title: DeployArgsHistoryOut
+    DeployInstances:
+      properties:
+        running:
+          type: integer
+          title: Running
+          description: Instances serving at full capacity.
+        pending:
+          type: integer
+          title: Pending
+          description: Instances still starting up.
+        warming:
+          type: integer
+          title: Warming
+          description: Instances that are up but still warming up, so they take a reduced share of the traffic.
+          default: 0
+      type: object
+      required:
+      - running
+      - pending
+      title: DeployInstances
+      description: 'A deployment''s capacity: running + pending + warming.'
+    DeployDelete:
+      properties:
+        deploy_id:
+          type: string
+          title: Deploy Id
+          description: Deploy Id
+          examples:
+          - fkj843kjh8
+      type: object
+      required:
+      - deploy_id
+      title: DeployDelete
+    ModelProvider:
+      type: string
+      enum:
+      - huggingface
+      - deepinfra
+      - cnt
+      title: ModelProvider
+    DeployStatusOut:
+      properties:
+        deploy_id:
+          type: string
+          title: Deploy Id
+          description: Deploy Id
+          examples:
+          - fkj843kjh8
+      type: object
+      required:
+      - deploy_id
+      title: DeployStatusOut
+    DeploymentStatsOut:
+      properties:
+        requests:
+          type: integer
+          title: Requests
+          description: number of inference requests in the provided interval
+        total_time:
+          type: integer
+          title: Total Time
+          description: total number of seconds spend in inference
+        total_tokens:
+          type: integer
+          title: Total Tokens
+          description: total number of tokens generated
+        input_tokens:
+          type: integer
+          title: Input Tokens
+          description: number of input tokens generated
+        output_tokens:
+          type: integer
+          title: Output Tokens
+          description: number of output tokens generated
+        total_amount:
+          type: integer
+          title: Total Amount
+          description: total number of cents spent
+        avg_time:
+          type: number
+          title: Avg Time
+          description: average millisecond inference time
+        avg95_time:
+          type: number
+          title: Avg95 Time
+          description: 95th percentile inference time (estimated)
+        errors:
+          type: integer
+          title: Errors
+          description: number of errors
+      type: object
+      required:
+      - requests
+      - total_time
+      - total_tokens
+      - input_tokens
+      - output_tokens
+      - total_amount
+      - avg_time
+      - avg95_time
+      - errors
+      title: DeploymentStatsOut
+    DeployModelIn:
+      properties:
+        provider:
+          $ref: '#/components/schemas/ModelProvider'
+          description: namespace for the model name
+          default: cnt
+        model_name:
+          type: string
+          title: Model Name
+          description: model name in specified provider
+        version:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Version
+          description: A specific revision, if left empty uses the last one
+      type: object
+      required:
+      - model_name
+      title: DeployModelIn
+    ScaleSettings:
+      properties:
+        min_instances:
+          type: integer
+          title: Min Instances
+          description: Minimum number of model instances to run
+          default: 1
+        max_instances:
+          type: integer
+          title: Max Instances
+          description: Maximum number of model instances to run
+          default: 1
+      type: object
+      title: ScaleSettings
+    RebalanceStatusOut:
+      properties:
+        active:
+          anyOf:
+          - $ref: '#/components/schemas/RebalanceStatus'
+          - type: 'null'
+          description: The in-flight rebalance touching this deployment.
+        recent:
+          items:
+            $ref: '#/components/schemas/RebalanceStatus'
+          type: array
+          title: Recent
+          description: Finished rebalances, newest first.
+      type: object
+      title: RebalanceStatusOut
+    EmbeddingsDeploymentStatsOut:
+      properties:
+        requests:
+          type: integer
+          title: Requests
+          description: number of inference requests in the provided interval
+        input_tokens:
+          type: integer
+          title: Input Tokens
+          description: number of input tokens generated
+        avg_tpt_ms:
+          type: number
+          title: Avg Tpt Ms
+          description: average millisecond time per token
+        avg95_tpt_ms:
+          type: number
+          title: Avg95 Tpt Ms
+          description: 95th percentile time per token (estimated)
+        total_amount_cents:
+          type: integer
+          title: Total Amount Cents
+          description: total number of cents spent
+        errors:
+          type: integer
+          title: Errors
+          description: number of errors
+      type: object
+      required:
+      - requests
+      - input_tokens
+      - avg_tpt_ms
+      - avg95_tpt_ms
+      - total_amount_cents
+      - errors
+      title: EmbeddingsDeploymentStatsOut
+    TimeDeploymentStatsOut:
+      properties:
+        requests:
+          type: integer
+          title: Requests
+          description: number of inference requests in the provided interval
+        total_time_s:
+          type: integer
+          title: Total Time S
+          description: total number of seconds spend in inference
+        total_amount_cents:
+          type: integer
+          title: Total Amount Cents
+          description: total number of cents spent
+        avg_time_ms:
+          type: number
+          title: Avg Time Ms
+          description: average millisecond inference time
+        avg95_time_ms:
+          type: number
+          title: Avg95 Time Ms
+          description: 95th percentile inference time (estimated)
+        errors:
+          type: integer
+          title: Errors
+          description: number of errors
+      type: object
+      required:
+      - requests
+      - total_time_s
+      - total_amount_cents
+      - avg_time_ms
+      - avg95_time_ms
+      - errors
+      title: TimeDeploymentStatsOut
+    LLMDeploymentStatsOut:
+      properties:
+        requests:
+          type: integer
+          title: Requests
+          description: number of inference requests in the provided interval
+        input_tokens:
+          type: integer
+          title: Input Tokens
+          description: number of input tokens generated
+        output_tokens:
+          type: integer
+          title: Output Tokens
+          description: number of output tokens generated
+        avg_ttft_ms:
+          type: number
+          title: Avg Ttft Ms
+          description: average millisecond time to first token
+        avg95_ttft_ms:
+          type: number
+          title: Avg95 Ttft Ms
+          description: 95th percentile time to first token (estimated)
+        avg_tpt_ms:
+          type: number
+          title: Avg Tpt Ms
+          description: average millisecond time per token
+        avg95_tpt_ms:
+          type: number
+          title: Avg95 Tpt Ms
+          description: 95th percentile time per token (estimated)
+        total_amount_cents:
+          type: integer
+          title: Total Amount Cents
+          description: total number of cents spent
+        errors:
+          type: integer
+          title: Errors
+          description: number of errors
+      type: object
+      required:
+      - requests
+      - input_tokens
+      - output_tokens
+      - avg_ttft_ms
+      - avg95_ttft_ms
+      - avg_tpt_ms
+      - avg95_tpt_ms
+      - total_amount_cents
+      - errors
+      title: LLMDeploymentStatsOut
+    DeployLLMUpdateIn:
+      properties:
+        settings:
+          anyOf:
+          - $ref: '#/components/schemas/ScaleSettings'
+          - type: 'null'
+        standard_args:
+          anyOf:
+          - $ref: '#/components/schemas/StandardArgs'
+          - type: 'null'
+          description: Engine tuning knobs. Replaces the whole set; omitted knobs are cleared.
+        extra_args:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Extra Args
+          description: Extra engine-specific command-line args (custom-weight deploys only). Replaces the whole list; omitted args are cleared.
+      type: object
+      title: DeployLLMUpdateIn
+    RebalanceCancelOut:
+      properties:
+        replace_id:
+          type: string
+          title: Replace Id
+          description: Id of the cancelled rebalance.
+        placed:
+          type: integer
+          title: Placed
+          description: Target instances delivered before the cancel.
+        count:
+          type: integer
+          title: Count
+          description: Target instances requested.
+      type: object
+      required:
+      - replace_id
+      - placed
+      - count
+      title: RebalanceCancelOut
+    RebalanceIn:
+      properties:
+        target_deploy_id:
+          type: string
+          title: Target Deploy Id
+          description: Deployment to grow using GPUs freed from this one.
+        count:
+          type: integer
+          maximum: 2147483647.0
+          minimum: 1.0
+          title: Count
+          description: Number of target instances to create.
+        concurrency:
+          type: integer
+          maximum: 5.0
+          minimum: 1.0
+          title: Concurrency
+          description: 'How many target instances may start at once (default 1). Higher finishes sooner at a deeper dip in source capacity; clamped to count. How many source instances that takes down depends on their relative size: one target instance the size of 4 source instances stops 4 of them at once, while a source instance that yields 4 target instances is always drained in one go, starting all 4.'
+          default: 1
+        dry_run:
+          type: boolean
+          title: Dry Run
+          description: Validate and preview without moving anything.
+          default: false
+      type: object
+      required:
+      - target_deploy_id
+      - count
+      title: RebalanceIn
+    HFModel:
+      properties:
+        model_name:
+          type: string
+          title: Model Name
+          description: Model Id from huggingface
+          examples:
+          - google/vit-base-patch16-224
+        task:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Task
+          description: Task
+          examples:
+          - image-classification
+      type: object
+      required:
+      - model_name
+      title: HFModel
+    DeploymentOut:
+      properties:
+        type:
+          $ref: '#/components/schemas/DeployType'
+          default: legacy
+        deploy_id:
+          type: string
+          title: Deploy Id
+          description: Deploy Id
+          examples:
+          - fkj843kjh8
+        model_name:
+          type: string
+          title: Model Name
+          description: Model Id from huggingface
+          examples:
+          - google/vit-base-patch16-224
+        version:
+          type: string
+          title: Version
+          description: Model version
+          examples:
+          - d8b79b422843bd59d628bf25b01aded94a9ec1a9b917e69fe460df9ff39ec42b
+        task:
+          type: string
+          title: Task
+          description: Task
+          examples:
+          - image-classification
+        status:
+          type: string
+          title: Status
+          description: Status
+          examples:
+          - deployed
+        fail_reason:
+          type: string
+          title: Fail Reason
+          description: Failure reason
+          examples:
+          - Initialization failed
+        created_at:
+          type: string
+          title: Created At
+          description: Created at
+          examples:
+          - '2021-08-27T17:19:21+00:00'
+        updated_at:
+          type: string
+          title: Updated At
+          description: Updated at
+          examples:
+          - '2021-08-27T17:19:21+00:00'
+        instances:
+          anyOf:
+          - $ref: '#/components/schemas/DeployInstances'
+          - type: 'null'
+          description: Details about number of instances running right now
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/DeployLLMConfig'
+          - type: 'null'
+          description: Immutable deploy configuration
+        settings:
+          anyOf:
+          - $ref: '#/components/schemas/ScaleSettings'
+          - type: 'null'
+          description: Scale Settings
+        standard_args:
+          properties:
+            max_context_size:
+              anyOf:
+              - type: integer
+                maximum: 10000000.0
+                minimum: 1.0
+              - type: 'null'
+              title: Max Context Size
+              description: Maximum total sequence length (prompt + generation).
+            max_concurrent_requests:
+              anyOf:
+              - type: integer
+                maximum: 1024.0
+                minimum: 1.0
+              - type: 'null'
+              title: Max Concurrent Requests
+              description: Max number of requests served concurrently.
+            max_images_per_prompt:
+              anyOf:
+              - type: integer
+                maximum: 1024.0
+                minimum: 0.0
+              - type: 'null'
+              title: Max Images Per Prompt
+              description: Images the engine accepts in one request; deepapi refuses more before rendering. 0 disables image input entirely.
+            gpu_memory_fraction:
+              anyOf:
+              - type: number
+                maximum: 0.97
+                minimum: 0.5
+              - type: 'null'
+              title: Gpu Memory Fraction
+              description: Fraction of GPU memory the engine may use for weights + KV cache.
+            max_prefill_tokens:
+              anyOf:
+              - type: integer
+                maximum: 131072.0
+                minimum: 512.0
+              - type: 'null'
+              title: Max Prefill Tokens
+              description: Max tokens processed per prefill/engine step (chunked prefill size).
+            kv_cache_dtype:
+              anyOf:
+              - type: string
+                enum:
+                - auto
+                - fp8
+              - type: 'null'
+              title: Kv Cache Dtype
+              description: KV cache precision. fp8 ~doubles KV capacity at <1% accuracy loss.
+            enable_prefix_caching:
+              anyOf:
+              - type: boolean
+              - type: 'null'
+              title: Enable Prefix Caching
+              description: Reuse KV cache for shared prompt prefixes.
+            quantization:
+              anyOf:
+              - type: string
+                enum:
+                - fp8
+                - awq
+                - gptq
+                - awq_marlin
+                - gptq_marlin
+                - compressed-tensors
+                - bitsandbytes
+              - type: 'null'
+              title: Quantization
+              description: On-the-fly weight quantization method.
+          additionalProperties: false
+          type: object
+          title: StandardArgs
+          description: Current engine tuning knobs
+        extra_args:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Extra Args
+          description: Current extra engine-specific command-line args (custom-weight deploys only)
+        update_error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Update Error
+          description: If the last config update was auto-reverted after an engine crash-loop, the error that caused it (status stays 'running')
+        rollout:
+          anyOf:
+          - $ref: '#/components/schemas/DeployRollout'
+          - type: 'null'
+          description: Per-instance rollout progress of the current config
+      type: object
+      required:
+      - deploy_id
+      - model_name
+      - version
+      - task
+      - status
+      - fail_reason
+      - created_at
+      - updated_at
+      title: DeploymentOut
+    RebalanceOut:
+      properties:
+        replace_id:
+          type: string
+          title: Replace Id
+          description: Id of the started rebalance; empty on a dry run.
+          default: ''
+        gpu:
+          type: string
+          title: Gpu
+          description: GPU type being rebalanced.
+        source_instances:
+          type: integer
+          title: Source Instances
+          description: Source instances now.
+        source_instances_after:
+          type: integer
+          title: Source Instances After
+          description: Source instances once the rebalance completes.
+        target_instances:
+          type: integer
+          title: Target Instances
+          description: Target instances now.
+        target_instances_after:
+          type: integer
+          title: Target Instances After
+          description: Target instances once the rebalance completes.
+      type: object
+      required:
+      - gpu
+      - source_instances
+      - source_instances_after
+      - target_instances
+      - target_instances_after
+      title: RebalanceOut
+    DeployRollout:
+      properties:
+        up_to_date:
+          type: integer
+          title: Up To Date
+          description: Instances serving the current config.
+        outdated:
+          type: integer
+          title: Outdated
+          description: Instances still serving a previous config.
+        booting:
+          type: integer
+          title: Booting
+          description: Instances starting up.
+      type: object
+      required:
+      - up_to_date
+      - outdated
+      - booting
+      title: DeployRollout
+    StandardArgs:
+      properties:
+        max_context_size:
+          anyOf:
+          - type: integer
+            maximum: 10000000.0
+            minimum: 1.0
+          - type: 'null'
+          title: Max Context Size
+          description: Maximum total sequence length (prompt + generation).
+        max_concurrent_requests:
+          anyOf:
+          - type: integer
+            maximum: 1024.0
+            minimum: 1.0
+          - type: 'null'
+          title: Max Concurrent Requests
+          description: Max number of requests served concurrently.
+        max_images_per_prompt:
+          anyOf:
+          - type: integer
+            maximum: 1024.0
+            minimum: 0.0
+          - type: 'null'
+          title: Max Images Per Prompt
+          description: Images the engine accepts in one request; deepapi refuses more before rendering. 0 disables image input entirely.
+        gpu_memory_fraction:
+          anyOf:
+          - type: number
+            maximum: 0.97
+            minimum: 0.5
+          - type: 'null'
+          title: Gpu Memory Fraction
+          description: Fraction of GPU memory the engine may use for weights + KV cache.
+        max_prefill_tokens:
+          anyOf:
+          - type: integer
+            maximum: 131072.0
+            minimum: 512.0
+          - type: 'null'
+          title: Max Prefill Tokens
+          description: Max tokens processed per prefill/engine step (chunked prefill size).
+        kv_cache_dtype:
+          anyOf:
+          - type: string
+            enum:
+            - auto
+            - fp8
+          - type: 'null'
+          title: Kv Cache Dtype
+          description: KV cache precision. fp8 ~doubles KV capacity at <1% accuracy loss.
+        enable_prefix_caching:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Enable Prefix Caching
+          description: Reuse KV cache for shared prompt prefixes.
+        quantization:
+          anyOf:
+          - type: string
+            enum:
+            - fp8
+            - awq
+            - gptq
+            - awq_marlin
+            - gptq_marlin
+            - compressed-tensors
+            - bitsandbytes
+          - type: 'null'
+          title: Quantization
+          description: On-the-fly weight quantization method.
+      additionalProperties: false
+      type: object
+      title: StandardArgs
+      description: 'The standard-argument allowlist. Construct from a raw ``dict[str, str]``
+
+        via :meth:`from_raw`; render to engine flags via :func:`standard_parts`.'
+    DetailedDeploymentStatsOut:
+      properties:
+        llm:
+          anyOf:
+          - $ref: '#/components/schemas/LLMDeploymentStatsOut'
+          - type: 'null'
+          description: LLM Deployment Stats
+        embeddings:
+          anyOf:
+          - $ref: '#/components/schemas/EmbeddingsDeploymentStatsOut'
+          - type: 'null'
+          description: Embeddings Deployment Stats
+        time:
+          anyOf:
+          - $ref: '#/components/schemas/TimeDeploymentStatsOut'
+          - type: 'null'
+          description: Time based Deployment Stats
+      type: object
+      title: DetailedDeploymentStatsOut
+    DeepError:
+      properties:
+        error:
+          type: string
+          title: Error
+          description: Error
+          examples:
+          - Model not found
+      type: object
+      required:
+      - error
+      title: DeepError
+    DeployLLMConfig:
+      properties:
+        gpu:
+          $ref: '#/components/schemas/DeployGPUs'
+          description: The type of GPU the deployment is running on
+        num_gpus:
+          type: integer
+          title: Num Gpus
+          description: Number of GPUs used by one instance
+        max_batch_size:
+          type: integer
+          title: Max Batch Size
+          description: Maximum number of concurrent requests
+        weights:
+          anyOf:
+          - $ref: '#/components/schemas/HFWeights'
+          - type: 'null'
+          description: Model weights information
+      type: object
+      required:
+      - gpu
+      - num_gpus
+      - max_batch_size
+      title: DeployLLMConfig
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    DeploymentMainStatsOut:
+      properties:
+        model_name:
+          type: string
+          title: Model Name
+          description: Model name
+          examples:
+          - google/vit-base-patch16-224
+        requests:
+          type: integer
+          title: Requests
+          description: number of inference requests in the provided interval
+      type: object
+      required:
+      - model_name
+      - requests
+      title: DeploymentMainStatsOut
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

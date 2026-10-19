@@ -1,0 +1,1330 @@
+openapi: 3.2.0
+info:
+  title: DeepInfra Account API
+  description: The DeepInfra API provides serverless AI inference, custom model deployments, and GPU rentals.
+  version: 1.0.0
+servers:
+- url: https://api.deepinfra.com
+tags:
+- name: Account
+  description: User profile, team management, rate limits, and GPU pool limits.
+paths:
+  /v1/me:
+    get:
+      tags:
+      - Account
+      summary: Me
+      operationId: me_v1_me_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: checklist
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+          title: Checklist
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Me'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Account
+      summary: Delete Account
+      operationId: delete_account_v1_me_delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Me'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Account
+      summary: Account Update Details
+      operationId: account_update_details_v1_me_patch
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MeIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Conflict
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unprocessable Entity
+  /v1/me/emails:
+    get:
+      tags:
+      - Account
+      summary: Account Email Values
+      operationId: account_email_values_v1_me_emails_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailsOut'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/me/team_display_name:
+    post:
+      tags:
+      - Account
+      summary: Team Set Display Name
+      operationId: team_set_display_name_v1_me_team_display_name_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DisplayNameIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Conflict
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/me/rate_limit:
+    get:
+      tags:
+      - Account
+      summary: Account Rate Limit
+      operationId: account_rate_limit_v1_me_rate_limit_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateLimitOut'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/me/rate_limit/request:
+    post:
+      tags:
+      - Account
+      summary: Request Rate Limit Increase
+      operationId: request_rate_limit_increase_v1_me_rate_limit_request_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RateLimitRequestIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Forbidden
+        '429':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Too Many Requests
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/gpu_pool/gpu_types:
+    get:
+      tags:
+      - Account
+      summary: Gpu Pool Gpu Types
+      operationId: gpu_pool_gpu_types_v1_gpu_pool_gpu_types_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GpuTypesOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/me/gpu_pool:
+    get:
+      tags:
+      - Account
+      summary: Account Gpu Pool
+      operationId: account_gpu_pool_v1_me_gpu_pool_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GpuPoolOut'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/me/gpu_pool/request:
+    post:
+      tags:
+      - Account
+      summary: Request Gpu Pool Change
+      description: File or amend the caller's single open GPU limit request.
+      operationId: request_gpu_pool_change_v1_me_gpu_pool_request_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GpuPoolRequestIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GpuPoolPendingRequestOut'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Conflict
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/me/gpu_pool/request/{request_id}:
+    delete:
+      tags:
+      - Account
+      summary: Cancel Gpu Pool Request
+      description: Withdraw the caller's open request.
+      operationId: cancel_gpu_pool_request_v1_me_gpu_pool_request__request_id__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: request_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Request Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Conflict
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    SuspendReason:
+      type: string
+      enum:
+      - balance
+      - payment-method
+      - overdue-invoices
+      - limit-reached
+      - admin
+      - bad-cc
+      - missing-address
+      title: SuspendReason
+    RateLimitRequestIn:
+      properties:
+        rate_limit:
+          type: integer
+          title: Rate Limit
+        tpm_rate_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tpm Rate Limit
+        reason:
+          type: string
+          maxLength: 2048
+          title: Reason
+      type: object
+      required:
+      - rate_limit
+      - reason
+      title: RateLimitRequestIn
+    DeployGPUs:
+      type: string
+      enum:
+      - L4-24GB
+      - L40S-48GB
+      - A100-80GB
+      - H100-80GB
+      - H200-141GB
+      - B200-180GB
+      - B300-270GB
+      - RTXPRO6000-96GB
+      - other
+      title: DeployGPUs
+    PaymentMethodCashApp:
+      properties:
+        cashtag:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cashtag
+      type: object
+      title: PaymentMethodCashApp
+    MeVercelConnection:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        team_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Id
+        installation_id:
+          type: string
+          title: Installation Id
+      type: object
+      required:
+      - user_id
+      - installation_id
+      title: MeVercelConnection
+    MeIn:
+      properties:
+        name:
+          anyOf:
+          - type: string
+            maxLength: 256
+            minLength: 1
+          - type: 'null'
+          title: Name
+          description: Personal name
+        first_name:
+          anyOf:
+          - type: string
+            maxLength: 128
+            minLength: 1
+          - type: 'null'
+          title: First Name
+          description: First name of the user
+        last_name:
+          anyOf:
+          - type: string
+            maxLength: 128
+            minLength: 1
+          - type: 'null'
+          title: Last Name
+          description: Last name of the user
+        country:
+          anyOf:
+          - type: string
+            maxLength: 128
+            minLength: 1
+          - type: 'null'
+          title: Country
+          description: Country of the user
+        email:
+          anyOf:
+          - type: string
+            maxLength: 320
+            minLength: 1
+          - type: 'null'
+          title: Email
+        is_business_account:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Business Account
+        company:
+          anyOf:
+          - type: string
+            maxLength: 128
+            minLength: 1
+          - type: 'null'
+          title: Company
+          description: Company name
+        website:
+          anyOf:
+          - type: string
+            maxLength: 128
+            minLength: 0
+          - type: 'null'
+          title: Website
+          description: Company website address
+        title:
+          anyOf:
+          - type: string
+            maxLength: 128
+            minLength: 1
+          - type: 'null'
+          title: Title
+          description: Job title of the user, e.g. 'Software Engineer'
+        display_name:
+          anyOf:
+          - type: string
+            maxLength: 39
+            minLength: 1
+            pattern: ^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$
+          - type: 'null'
+          title: Display Name
+          description: String with length between 1 and 39 characters. Only alphanumeric characters and dashes allowed. Must contain no leading, trailing or consecutive dashes.
+        use_case:
+          anyOf:
+          - type: string
+            maxLength: 512
+            minLength: 1
+          - type: 'null'
+          title: Use Case
+          description: Short description of the use case for the account
+        attribution:
+          anyOf:
+          - type: string
+            maxLength: 512
+            minLength: 1
+          - type: 'null'
+          title: Attribution
+          description: Short description of how the user found out about DeepInfra
+        marketing_emails:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Marketing Emails
+          description: Set to false to opt out of marketing emails
+        country_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Country Code
+          description: ISO 3166-1 alpha-2 country code of the user selected country
+      type: object
+      title: MeIn
+    DisplayNameIn:
+      properties:
+        display_name:
+          type: string
+          maxLength: 39
+          minLength: 1
+          pattern: ^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$
+          title: Display Name
+          description: String with length between 1 and 39 characters. Only alphanumeric characters and dashes allowed. Must contain no leading, trailing or consecutive dashes.
+      type: object
+      required:
+      - display_name
+      title: DisplayNameIn
+    GpuTypesOut:
+      properties:
+        gpu_types:
+          items:
+            $ref: '#/components/schemas/DeployGPUs'
+          type: array
+          title: Gpu Types
+          description: 'GPU types to show in the pools UI, in display order. A guide, not a limit: a pool may hold types outside this list.'
+      type: object
+      required:
+      - gpu_types
+      title: GpuTypesOut
+    Checklist:
+      properties:
+        email:
+          type: boolean
+          title: Email
+          default: false
+        billing_address:
+          type: boolean
+          title: Billing Address
+          default: false
+        billing_address_info:
+          anyOf:
+          - $ref: '#/components/schemas/BillingAddressOut'
+          - type: 'null'
+        payment_method:
+          type: boolean
+          title: Payment Method
+          default: false
+        payment_method_info:
+          anyOf:
+          - $ref: '#/components/schemas/PaymentMethodOut'
+          - type: 'null'
+        suspended:
+          type: boolean
+          title: Suspended
+          default: false
+        overdue_invoices:
+          type: number
+          title: Overdue Invoices
+          default: 0.0
+        last_checked:
+          type: integer
+          title: Last Checked
+          default: 0
+        stripe_balance:
+          type: number
+          title: Stripe Balance
+          description: Negative value indicates funds ready-to-spend. Positive value indicates money owed
+        recent:
+          type: number
+          title: Recent
+          description: usage since most recent invoice
+        limit:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Limit
+        suspend_reason:
+          anyOf:
+          - $ref: '#/components/schemas/SuspendReason'
+          - type: 'null'
+        topup:
+          type: boolean
+          title: Topup
+          default: false
+        topup_amount:
+          type: integer
+          title: Topup Amount
+          default: 0
+        topup_threshold:
+          type: integer
+          title: Topup Threshold
+          default: 0
+        topup_failed:
+          type: boolean
+          title: Topup Failed
+          default: false
+        billing_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Billing Type
+        scoped_credits:
+          items:
+            $ref: '#/components/schemas/ScopedCredit'
+          type: array
+          title: Scoped Credits
+      type: object
+      required:
+      - stripe_balance
+      - recent
+      - limit
+      - suspend_reason
+      title: Checklist
+    GpuPoolRejectionOut:
+      properties:
+        id:
+          type: string
+          title: Id
+        created_at:
+          type: integer
+          title: Created At
+        resolved_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Resolved At
+        requested_max:
+          additionalProperties:
+            type: integer
+          propertyNames:
+            $ref: '#/components/schemas/DeployGPUs'
+          type: object
+          title: Requested Max
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reason
+          description: Why the user requested the change
+        resolution_reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Resolution Reason
+          description: Why it was declined
+      type: object
+      required:
+      - id
+      - created_at
+      title: GpuPoolRejectionOut
+      description: The user's most recently rejected request
+    GpuPoolPendingRequestOut:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Pass as expected_request_id to edit or cancel this
+        created_at:
+          type: integer
+          title: Created At
+        requested_max:
+          additionalProperties:
+            type: integer
+          propertyNames:
+            $ref: '#/components/schemas/DeployGPUs'
+          type: object
+          title: Requested Max
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reason
+      type: object
+      required:
+      - id
+      - created_at
+      title: GpuPoolPendingRequestOut
+    PaymentMethodCard:
+      properties:
+        brand:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Brand
+        last4:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last4
+        wallet:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Wallet
+      type: object
+      title: PaymentMethodCard
+    PaymentMethodOut:
+      properties:
+        type:
+          type: string
+          title: Type
+        card:
+          anyOf:
+          - $ref: '#/components/schemas/PaymentMethodCard'
+          - type: 'null'
+        us_bank_account:
+          anyOf:
+          - $ref: '#/components/schemas/PaymentMethodBank'
+          - type: 'null'
+        cashapp:
+          anyOf:
+          - $ref: '#/components/schemas/PaymentMethodCashApp'
+          - type: 'null'
+      type: object
+      required:
+      - type
+      title: PaymentMethodOut
+    GpuPoolRequestIn:
+      properties:
+        reason:
+          type: string
+          maxLength: 2000
+          title: Reason
+          description: Why you need the change. Shown to the reviewer.
+        requested_min:
+          anyOf:
+          - additionalProperties:
+              type: integer
+            type: object
+          - type: 'null'
+          title: Requested Min
+          description: Guaranteed capacity.
+        requested_max:
+          anyOf:
+          - additionalProperties:
+              type: integer
+            type: object
+          - type: 'null'
+          title: Requested Max
+          description: 'Desired max GPUs per type, e.g. {"H100-80GB": 16}. REPLACES the contents of your pending request, so send every entry you still want changed.'
+        expected_request_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Expected Request Id
+          description: Id of the pending request you are editing, from GET /v1/me/gpu_pool (pending_request.id), or null if you have none.
+      type: object
+      required:
+      - reason
+      title: GpuPoolRequestIn
+    EmailsOut:
+      properties:
+        emails:
+          items:
+            type: string
+          type: array
+          title: Emails
+          description: List of emails verified by theauthenticaiton provider
+      type: object
+      required:
+      - emails
+      title: EmailsOut
+    ScopedCredit:
+      properties:
+        name:
+          type: string
+          title: Name
+        description:
+          type: string
+          title: Description
+          default: ''
+        granted_cents:
+          type: number
+          title: Granted Cents
+        remaining_cents:
+          type: number
+          title: Remaining Cents
+        granted_ts:
+          type: integer
+          title: Granted Ts
+        expires_ts:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Expires Ts
+        expired:
+          type: boolean
+          title: Expired
+          default: false
+      type: object
+      required:
+      - name
+      - granted_cents
+      - remaining_cents
+      - granted_ts
+      title: ScopedCredit
+      description: 'A credit spendable only on certain models, with what is left of it.
+
+
+        Backed by a capped discount rather than a balance, so `remaining_cents` is
+
+        the cap minus what has been spent, and it stops moving once the term lapses.'
+    GpuPoolOut:
+      properties:
+        max_limits:
+          additionalProperties:
+            type: integer
+          propertyNames:
+            $ref: '#/components/schemas/DeployGPUs'
+          type: object
+          title: Max Limits
+          description: Effective GPU max per type (pool, 0 if unset)
+        min_limits:
+          additionalProperties:
+            type: integer
+          propertyNames:
+            $ref: '#/components/schemas/DeployGPUs'
+          type: object
+          title: Min Limits
+          description: Effective GPU min per type (pool, 0 if unset)
+        pending_request:
+          anyOf:
+          - $ref: '#/components/schemas/GpuPoolPendingRequestOut'
+          - type: 'null'
+          description: Your open request, if any. At most one exists at a time.
+        last_rejection:
+          anyOf:
+          - $ref: '#/components/schemas/GpuPoolRejectionOut'
+          - type: 'null'
+          description: Your most recent decision, present only when it was a rejection. A later approval retires it; cancelling a later request does not.
+      type: object
+      title: GpuPoolOut
+    PaymentMethodBank:
+      properties:
+        bank_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Bank Name
+        last4:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last4
+      type: object
+      title: PaymentMethodBank
+    DeepError:
+      properties:
+        error:
+          type: string
+          title: Error
+          description: Error
+          examples:
+          - Model not found
+      type: object
+      required:
+      - error
+      title: DeepError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    RateLimitOut:
+      properties:
+        rate_limit:
+          type: integer
+          title: Rate Limit
+          description: Per model outstanding request rate limit
+        tpm_rate_limit:
+          type: integer
+          title: Tpm Rate Limit
+          description: Per model token per minute rate limit
+      type: object
+      required:
+      - rate_limit
+      - tpm_rate_limit
+      title: RateLimitOut
+    BillingAddressOut:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+        line1:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Line1
+        line2:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Line2
+        city:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: City
+        state:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: State
+        postal_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Postal Code
+        country:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Country
+      type: object
+      title: BillingAddressOut
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    Me:
+      properties:
+        uid:
+          type: string
+          title: Uid
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+        email_verified:
+          type: boolean
+          title: Email Verified
+        account_setup:
+          type: boolean
+          title: Account Setup
+        require_email_verified:
+          type: boolean
+          title: Require Email Verified
+          default: false
+        display_name:
+          type: string
+          title: Display Name
+          description: Name that is used to identifythe account on the website
+        provider:
+          type: string
+          title: Provider
+          description: Authentication provider, e.g. 'github'
+        picture:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Picture
+        is_admin:
+          type: boolean
+          title: Is Admin
+        can_access_agents:
+          type: boolean
+          title: Can Access Agents
+          description: Whether the user may use the hosted-agents feature (admins, plus the AGENTS_ACCESS_UIDS allowlist)
+          default: false
+        can_access_sandboxes:
+          type: boolean
+          title: Can Access Sandboxes
+          description: Whether the user may use the sandboxes feature (available to all users)
+          default: true
+        name:
+          type: string
+          title: Name
+          description: Personal name
+        first_name:
+          type: string
+          title: First Name
+          description: First name of the user
+        last_name:
+          type: string
+          title: Last Name
+          description: Last name of the user
+        country:
+          type: string
+          title: Country
+          description: Country of the user
+        is_business_account:
+          type: boolean
+          title: Is Business Account
+        company:
+          type: string
+          title: Company
+          description: Company name
+        website:
+          type: string
+          title: Website
+          description: Company website address
+        title:
+          type: string
+          title: Title
+          description: Job title of the user, e.g. 'Software Engineer'
+        root_uid:
+          type: string
+          title: Root Uid
+          description: UID of the team root account, or the account's own uid outside a team
+        is_team_account:
+          type: boolean
+          title: Is Team Account
+          default: false
+        is_team_owner:
+          type: boolean
+          title: Is Team Owner
+          default: false
+        team_role:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Role
+        team_display_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Display Name
+        is_team_upgrade_enabled:
+          type: boolean
+          title: Is Team Upgrade Enabled
+          default: true
+        vercel_connection:
+          anyOf:
+          - $ref: '#/components/schemas/MeVercelConnection'
+          - type: 'null'
+        google_linked:
+          type: boolean
+          title: Google Linked
+          description: Whether a Google account is linked
+          default: false
+        mfa_enabled:
+          type: boolean
+          title: Mfa Enabled
+          default: false
+        mfa_available:
+          type: boolean
+          title: Mfa Available
+          default: false
+        show_signup_form:
+          type: boolean
+          title: Show Signup Form
+          description: Frontend should route the user into the post-signup account-details form
+          default: false
+        checklist:
+          anyOf:
+          - $ref: '#/components/schemas/Checklist'
+          - type: 'null'
+      type: object
+      required:
+      - uid
+      - email
+      - email_verified
+      - account_setup
+      - display_name
+      - provider
+      - picture
+      - is_admin
+      - name
+      - first_name
+      - last_name
+      - country
+      - is_business_account
+      - company
+      - website
+      - title
+      - root_uid
+      title: Me
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

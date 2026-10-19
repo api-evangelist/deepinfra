@@ -125,16 +125,6 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/deepinfra-audio-api-openapi.yml
-- aid: deepinfra:deepinfra-completions-api
-  name: DeepInfra Completions API
-  description: The Completions API from DeepInfra — 1 operation(s) for completions.
-  humanURL: https://docs.deepinfra.com/
-  baseURL: https://api.deepinfra.com/v1/openai
-  tags:
-  - Completions
-  properties:
-  - type: OpenAPI
-    url: openapi/deepinfra-completions-api-openapi.yml
 - aid: deepinfra:deepinfra-embeddings-api
   name: DeepInfra Embeddings API
   description: The Embeddings API from DeepInfra — 1 operation(s) for embeddings.
@@ -145,18 +135,6 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/deepinfra-embeddings-api-openapi.yml
-- aid: deepinfra:deepinfra-images-api
-  name: DeepInfra Images API
-  description: The Images API from DeepInfra — 1 operation(s) for images.
-  humanURL: https://docs.deepinfra.com/
-  baseURL: https://api.deepinfra.com/v1/openai
-  tags:
-  - Image
-  tags_raw:
-  - Images
-  properties:
-  - type: OpenAPI
-    url: openapi/deepinfra-images-api-openapi.yml
 - aid: deepinfra:deepinfra-models-api
   name: DeepInfra Models API
   description: The Models API from DeepInfra — 2 operation(s) for models.
@@ -177,6 +155,196 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/deepinfra-chat-completions-api-openapi.yml
+- aid: deepinfra:deepinfra-account-api
+  name: DeepInfra Account API
+  description: User profile, team management, rate limits, and GPU pool limits.
+  humanURL: https://docs.deepinfra.com/
+  baseURL: https://api.deepinfra.com/v1/openai
+  tags:
+  - Account
+  properties:
+  - type: OpenAPI
+    url: openapi/deepinfra-account-api-openapi.yml
+- aid: deepinfra:deepinfra-agents-api
+  name: DeepInfra Agents API
+  description: Manage agent-framework instances (OpenClaw and friends).
+  humanURL: https://docs.deepinfra.com/
+  baseURL: https://api.deepinfra.com/v1/openai
+  tags:
+  - Agents
+  properties:
+  - type: OpenAPI
+    url: openapi/deepinfra-agents-api-openapi.yml
+- aid: deepinfra:deepinfra-authentication-api
+  name: DeepInfra Authentication API
+  description: API tokens, SSH keys, scoped JWTs, and login flows.
+  humanURL: https://docs.deepinfra.com/
+  baseURL: https://api.deepinfra.com/v1/openai
+  tags:
+  - Authentication
+  properties:
+  - type: OpenAPI
+    url: openapi/deepinfra-authentication-api-openapi.yml
+- aid: deepinfra:deepinfra-billing-api
+  name: DeepInfra Billing API
+  description: Payment methods, usage tracking, and billing.
+  humanURL: https://docs.deepinfra.com/
+  baseURL: https://api.deepinfra.com/v1/openai
+  tags:
+  - Billing
+  properties:
+  - type: OpenAPI
+    url: openapi/deepinfra-billing-api-openapi.yml
+- aid: deepinfra:deepinfra-decisions-api
+  name: DeepInfra Decisions API
+  description: The Decisions API from DeepInfra — 2 operation(s) for decisions.
+  humanURL: https://docs.deepinfra.com/
+  baseURL: https://api.deepinfra.com/v1/openai
+  tags:
+  - Decisions
+  properties:
+  - type: OpenAPI
+    url: openapi/deepinfra-decisions-api-openapi.yml
+- aid: deepinfra:deepinfra-dedicated-models-api
+  name: DeepInfra Dedicated Models API
+  description: Deploy and manage private model instances with autoscaling.
+  humanURL: https://docs.deepinfra.com/
+  baseURL: https://api.deepinfra.com/v1/openai
+  tags:
+  - Dedicated Models
+  properties:
+  - type: OpenAPI
+    url: openapi/deepinfra-dedicated-models-api-openapi.yml
+- aid: deepinfra:deepinfra-files-batches-api
+  name: DeepInfra Files & Batches API
+  description: File uploads and batch processing.
+  humanURL: https://docs.deepinfra.com/
+  baseURL: https://api.deepinfra.com/v1/openai
+  tags:
+  - Files & Batches
+  properties:
+  - type: OpenAPI
+    url: openapi/deepinfra-files-batches-api-openapi.yml
+- aid: deepinfra:deepinfra-gpu-rentals-api
+  name: DeepInfra GPU Rentals API
+  description: Rent dedicated GPU containers.
+  humanURL: https://docs.deepinfra.com/
+  baseURL: https://api.deepinfra.com/v1/openai
+  tags:
+  - GPU Rentals
+  properties:
+  - type: OpenAPI
+    url: openapi/deepinfra-gpu-rentals-api-openapi.yml
+- aid: deepinfra:deepinfra-image-generation-api
+  name: DeepInfra Image Generation API
+  description: Generate, edit, and create variations of images.
+  humanURL: https://docs.deepinfra.com/
+  baseURL: https://api.deepinfra.com/v1/openai
+  tags:
+  - Image Generation
+  properties:
+  - type: OpenAPI
+    url: openapi/deepinfra-image-generation-api-openapi.yml
+- aid: deepinfra:deepinfra-inference-api
+  name: DeepInfra Inference API
+  description: Native DeepInfra inference API for models and deployments.
+  humanURL: https://docs.deepinfra.com/
+  baseURL: https://api.deepinfra.com/v1/openai
+  tags:
+  - Inference
+  properties:
+  - type: OpenAPI
+    url: openapi/deepinfra-inference-api-openapi.yml
+- aid: deepinfra:deepinfra-logs-metrics-api
+  name: DeepInfra Logs & Metrics API
+  description: Query inference logs, deployment logs, and usage metrics.
+  humanURL: https://docs.deepinfra.com/
+  baseURL: https://api.deepinfra.com/v1/openai
+  tags:
+  - Logs & Metrics
+  properties:
+  - type: OpenAPI
+    url: openapi/deepinfra-logs-metrics-api-openapi.yml
+- aid: deepinfra:deepinfra-lora-adapters-api
+  name: DeepInfra LoRA Adapters API
+  description: Create, manage, and query LoRA adapter models.
+  humanURL: https://docs.deepinfra.com/
+  baseURL: https://api.deepinfra.com/v1/openai
+  tags:
+  - LoRA Adapters
+  properties:
+  - type: OpenAPI
+    url: openapi/deepinfra-lora-adapters-api-openapi.yml
+- aid: deepinfra:deepinfra-responses-api
+  name: DeepInfra Responses API
+  description: The Responses API from DeepInfra — 2 operation(s) for responses.
+  humanURL: https://docs.deepinfra.com/
+  baseURL: https://api.deepinfra.com/v1/openai
+  tags:
+  - Responses
+  properties:
+  - type: OpenAPI
+    url: openapi/deepinfra-responses-api-openapi.yml
+- aid: deepinfra:deepinfra-sandboxes-api
+  name: DeepInfra Sandboxes API
+  description: Create and manage isolated sandbox environments.
+  humanURL: https://docs.deepinfra.com/
+  baseURL: https://api.deepinfra.com/v1/openai
+  tags:
+  - Sandboxes
+  properties:
+  - type: OpenAPI
+    url: openapi/deepinfra-sandboxes-api-openapi.yml
+- aid: deepinfra:deepinfra-text-completions-api
+  name: DeepInfra Text Completions API
+  description: OpenAI-compatible text completion endpoints.
+  humanURL: https://docs.deepinfra.com/
+  baseURL: https://api.deepinfra.com/v1/openai
+  tags:
+  - Text Completions
+  properties:
+  - type: OpenAPI
+    url: openapi/deepinfra-text-completions-api-openapi.yml
+- aid: deepinfra:deepinfra-text-to-speech-api
+  name: DeepInfra Text to Speech API
+  description: ElevenLabs-compatible TTS endpoints and voice management.
+  humanURL: https://docs.deepinfra.com/
+  baseURL: https://api.deepinfra.com/v1/openai
+  tags:
+  - Text to Speech
+  properties:
+  - type: OpenAPI
+    url: openapi/deepinfra-text-to-speech-api-openapi.yml
+- aid: deepinfra:deepinfra-tokenizer-api
+  name: DeepInfra Tokenizer API
+  description: The Tokenizer API from DeepInfra — 2 operation(s) for tokenizer.
+  humanURL: https://docs.deepinfra.com/
+  baseURL: https://api.deepinfra.com/v1/openai
+  tags:
+  - Tokenizer
+  properties:
+  - type: OpenAPI
+    url: openapi/deepinfra-tokenizer-api-openapi.yml
+- aid: deepinfra:deepinfra-utilities-api
+  name: DeepInfra Utilities API
+  description: Feedback submission and CLI version.
+  humanURL: https://docs.deepinfra.com/
+  baseURL: https://api.deepinfra.com/v1/openai
+  tags:
+  - Utilities
+  properties:
+  - type: OpenAPI
+    url: openapi/deepinfra-utilities-api-openapi.yml
+- aid: deepinfra:deepinfra-videos-api
+  name: DeepInfra Videos API
+  description: The Videos API from DeepInfra — 6 operation(s) for videos.
+  humanURL: https://docs.deepinfra.com/
+  baseURL: https://api.deepinfra.com/v1/openai
+  tags:
+  - Videos
+  properties:
+  - type: OpenAPI
+    url: openapi/deepinfra-videos-api-openapi.yml
 common:
   - url: https://deepinfra.com/blog
     type: Blog

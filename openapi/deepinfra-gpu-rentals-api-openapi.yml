@@ -1,0 +1,607 @@
+openapi: 3.2.0
+info:
+  title: DeepInfra GPU Rentals API
+  description: The DeepInfra API provides serverless AI inference, custom model deployments, and GPU rentals.
+  version: 1.0.0
+servers:
+- url: https://api.deepinfra.com
+tags:
+- name: GPU Rentals
+  description: Rent dedicated GPU containers.
+paths:
+  /v1/containers/params:
+    get:
+      tags:
+      - GPU Rentals
+      summary: Container Rentals Get Params
+      operationId: container_rentals_get_params_v1_containers_params_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/containers/gpu_availability:
+    get:
+      tags:
+      - GPU Rentals
+      summary: Rent Gpu Availability
+      operationId: rent_gpu_availability_v1_containers_gpu_availability_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: source
+        in: query
+        required: false
+        schema:
+          type: string
+          default: ''
+          title: Source
+      - name: base_model
+        in: query
+        required: false
+        schema:
+          type: string
+          default: ''
+          title: Base Model
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeployGPUAvailability'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/containers:
+    post:
+      tags:
+      - GPU Rentals
+      summary: Container Rentals Start
+      operationId: container_rentals_start_v1_containers_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContainerRentalStartIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContainerRentalStartOut'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Conflict
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unprocessable Entity
+        '429':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Too Many Requests
+    get:
+      tags:
+      - GPU Rentals
+      summary: Container Rentals List
+      operationId: container_rentals_list_v1_containers_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: state
+        in: query
+        required: false
+        schema:
+          enum:
+          - active
+          - inactive
+          type: string
+          description: whether to return active or inactive containers
+          default: active
+          title: State
+        description: whether to return active or inactive containers
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ContainerRentalOut'
+                title: Response Container Rentals List V1 Containers Get
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unprocessable Entity
+  /v1/containers/{container_id}:
+    get:
+      tags:
+      - GPU Rentals
+      summary: Container Rentals Get
+      operationId: container_rentals_get_v1_containers__container_id__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: container_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Container Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContainerRentalOut'
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - GPU Rentals
+      summary: Container Rentals Update
+      operationId: container_rentals_update_v1_containers__container_id__patch
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: container_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Container Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContainerRentalUpdateIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unprocessable Entity
+    delete:
+      tags:
+      - GPU Rentals
+      summary: Container Rentals Delete
+      operationId: container_rentals_delete_v1_containers__container_id__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: container_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Container Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ContainerRentalStartOut:
+      properties:
+        container_id:
+          type: string
+          title: Container Id
+          description: Container Id
+      type: object
+      required:
+      - container_id
+      title: ContainerRentalStartOut
+    GPUAvailabilityInfo:
+      properties:
+        gpu_config:
+          type: string
+          title: Gpu Config
+        usd_per_hour:
+          type: number
+          title: Usd Per Hour
+        available:
+          type: boolean
+          title: Available
+        recommended:
+          type: boolean
+          title: Recommended
+          default: false
+      type: object
+      required:
+      - gpu_config
+      - usd_per_hour
+      - available
+      title: GPUAvailabilityInfo
+    ContainerRentalStartIn:
+      properties:
+        name:
+          type: string
+          maxLength: 64
+          minLength: 1
+          title: Name
+          description: Container Name
+        gpu_config:
+          type: string
+          minLength: 1
+          title: Gpu Config
+          description: GPU config
+        container_image:
+          type: string
+          minLength: 1
+          title: Container Image
+          description: Container Image
+        cloud_init_user_data:
+          type: string
+          maxLength: 32000
+          minLength: 1
+          title: Cloud Init User Data
+          description: Cloud Init User Data
+      type: object
+      required:
+      - name
+      - gpu_config
+      - container_image
+      - cloud_init_user_data
+      title: ContainerRentalStartIn
+    ContainerRentalStateOut:
+      type: string
+      enum:
+      - creating
+      - starting
+      - running
+      - shutting_down
+      - failed
+      - deleted
+      title: ContainerRentalStateOut
+    ContainerRentalUpdateIn:
+      properties:
+        name:
+          type: string
+          maxLength: 64
+          minLength: 1
+          title: Name
+          description: Container Name
+      additionalProperties: false
+      type: object
+      required:
+      - name
+      title: ContainerRentalUpdateIn
+    DeepError:
+      properties:
+        error:
+          type: string
+          title: Error
+          description: Error
+          examples:
+          - Model not found
+      type: object
+      required:
+      - error
+      title: DeepError
+    ContainerRentalOut:
+      properties:
+        id:
+          type: string
+          title: Id
+        name:
+          type: string
+          title: Name
+        state:
+          $ref: '#/components/schemas/ContainerRentalStateOut'
+        start_ts:
+          type: integer
+          title: Start Ts
+        state_ts:
+          type: integer
+          title: State Ts
+        stop_ts:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Stop Ts
+        ip:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ip
+        gpu_config:
+          type: string
+          title: Gpu Config
+        price_per_hour:
+          type: number
+          title: Price Per Hour
+        container_image:
+          type: string
+          title: Container Image
+        fail_reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Fail Reason
+      type: object
+      required:
+      - id
+      - name
+      - state
+      - start_ts
+      - state_ts
+      - stop_ts
+      - ip
+      - gpu_config
+      - price_per_hour
+      - container_image
+      - fail_reason
+      title: ContainerRentalOut
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    DeployGPUAvailability:
+      properties:
+        gpus:
+          items:
+            $ref: '#/components/schemas/GPUAvailabilityInfo'
+          type: array
+          title: Gpus
+          description: A list of all provided GPUs configurations, including their price and wether they are available
+      type: object
+      required:
+      - gpus
+      title: DeployGPUAvailability
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

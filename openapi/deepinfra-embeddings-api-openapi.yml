@@ -1,58 +1,356 @@
 openapi: 3.2.0
 info:
-  title: DeepInfra Inference Embeddings API
-  description: OpenAI-compatible inference API for DeepInfra's 100+ open-source models. Covers chat completions, text completions, embeddings, audio (transcriptions, translations, text-to-speech), image generation, and model listing. Authenticated with a Bearer API token.
+  title: DeepInfra Embeddings API
+  description: The DeepInfra API provides serverless AI inference, custom model deployments, and GPU rentals.
   version: 1.0.0
 servers:
-- url: https://api.deepinfra.com/v1/openai
-  description: OpenAI-compatible base URL
 - url: https://api.deepinfra.com
-  description: DeepInfra native base URL
-security:
-- bearerAuth: []
 tags:
 - name: Embeddings
+  description: Generate text embeddings for search and RAG.
 paths:
-  /embeddings:
+  /v1/embeddings:
     post:
       tags:
       - Embeddings
-      summary: Create embeddings for input text
+      summary: Openai Embeddings
+      operationId: openai_embeddings_v1_embeddings_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: x-deepinfra-source
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Deepinfra-Source
+      - name: user-agent
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User-Agent
+      - name: x-deepinfra-service-tier
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Per-request service tier (`priority` or `flex`) for clients that cannot set the `service_tier` body field. The body field wins when both are present; unrecognized values ride the default tier.
+          title: X-Deepinfra-Service-Tier
+        description: Per-request service tier (`priority` or `flex`) for clients that cannot set the `service_tier` body field. The body field wins when both are present; unrecognized values ride the default tier.
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              required:
-              - model
-              - input
-              properties:
-                model:
-                  type: string
-                input:
-                  oneOf:
-                  - type: string
-                  - type: array
-                    items:
-                      type: string
-                encoding_format:
-                  type: string
-                  enum:
-                  - float
-                  - base64
+              $ref: '#/components/schemas/OpenAIEmbeddingsIn'
       responses:
         '200':
-          description: Embeddings
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
           content:
             application/json:
               schema:
-                type: object
-      operationId: postEmbeddings
-      x-operation-id-source: derived
+                $ref: '#/components/schemas/HTTPValidationError'
 components:
+  schemas:
+    VideoURL:
+      properties:
+        url:
+          type: string
+          title: Url
+      type: object
+      required:
+      - url
+      title: VideoURL
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ChatCompletionContentPartImage:
+      properties:
+        type:
+          type: string
+          const: image_url
+          title: Type
+        image_url:
+          $ref: '#/components/schemas/ImageURL'
+      type: object
+      required:
+      - type
+      - image_url
+      title: ChatCompletionContentPartImage
+    AudioURL:
+      properties:
+        url:
+          type: string
+          title: Url
+      type: object
+      required:
+      - url
+      title: AudioURL
+    OpenAIEmbeddingsIn:
+      properties:
+        service_tier:
+          anyOf:
+          - $ref: '#/components/schemas/ServiceTier'
+          - type: 'null'
+          description: The service tier used for processing the request. 'priority' processes the request with higher priority (premium rate); 'flex' processes it at lower priority for a discount, served only when spare capacity exists and may be retried/timed out under load. Both apply only to models that support the respective tier. For compatibility, 'auto' is treated as 'priority' and 'standard_only' as 'default'.
+        fail_fast:
+          type: boolean
+          title: Fail Fast
+          description: If true, the request is rejected immediately with HTTP 429 when the model has no spare capacity, instead of waiting in the queue. Opt-in; the default (false) keeps standard queueing behavior.
+          default: false
+        model:
+          type: string
+          title: Model
+          description: model name
+          examples:
+          - thenlper/gte-large
+        input:
+          anyOf:
+          - type: string
+          - items:
+              anyOf:
+              - type: string
+              - items:
+                  oneOf:
+                  - $ref: '#/components/schemas/ChatCompletionContentPartText'
+                  - $ref: '#/components/schemas/ChatCompletionContentPartImage'
+                  - $ref: '#/components/schemas/ChatCompletionContentPartAudio'
+                  - $ref: '#/components/schemas/ChatCompletionContentPartAudioURL'
+                  - $ref: '#/components/schemas/ChatCompletionContentPartVideo'
+                  discriminator:
+                    propertyName: type
+                    mapping:
+                      audio_url: '#/components/schemas/ChatCompletionContentPartAudioURL'
+                      image_url: '#/components/schemas/ChatCompletionContentPartImage'
+                      input_audio: '#/components/schemas/ChatCompletionContentPartAudio'
+                      text: '#/components/schemas/ChatCompletionContentPartText'
+                      video_url: '#/components/schemas/ChatCompletionContentPartVideo'
+                type: array
+            type: array
+          maxLength: 1024
+          title: Input
+          description: text or multimodal content to embed; one embedding per item. Each item is either a string, or a list of content parts (text / image_url / input_audio / audio_url / video_url) embedded together in part order, for multimodal embedding models such as google/embeddinggemma-2.
+          examples:
+          - - I like chocolate
+          soft_required: true
+        input_type:
+          anyOf:
+          - type: string
+            enum:
+            - query
+            - passage
+            - document
+          - type: 'null'
+          title: Input Type
+          description: 'Role hint for asymmetric retrieval models: ''query'' embeds a search query, ''passage''/''document'' embeds a document. Controls the query:/passage: prefix on VL embedding models; ignored by symmetric models.'
+        task:
+          anyOf:
+          - type: string
+            enum:
+            - search_query
+            - document
+            - question_answering
+            - fact_checking
+            - code_retrieval
+            - classification
+            - clustering
+            - sentence_similarity
+          - type: 'null'
+          title: Task
+          description: Task the embedding is optimized for, on models trained with task prompts (e.g. google/embeddinggemma-2). Applied to items containing text; mutually exclusive with input_type.
+        encoding_format:
+          type: string
+          enum:
+          - float
+          - base64
+          title: Encoding Format
+          description: format used when encoding
+          default: float
+        dimensions:
+          anyOf:
+          - type: integer
+            minimum: 32.0
+          - type: 'null'
+          title: Dimensions
+          description: The number of dimensions in the embedding. If not provided, the model's default will be used.If provided bigger than model's default, the embedding will be padded with zeros.
+          examples:
+          - 1536
+          - 1024
+          - 768
+          - 512
+          - 256
+          - 128
+          - 64
+      type: object
+      required:
+      - model
+      - input
+      title: OpenAIEmbeddingsIn
+    ImageURL:
+      properties:
+        url:
+          type: string
+          title: Url
+        detail:
+          type: string
+          enum:
+          - auto
+          - low
+          - high
+          title: Detail
+          default: auto
+      type: object
+      required:
+      - url
+      title: ImageURL
+    ChatCompletionContentPartText:
+      properties:
+        type:
+          type: string
+          const: text
+          title: Type
+        text:
+          type: string
+          title: Text
+        prompt_cache_breakpoint:
+          anyOf:
+          - $ref: '#/components/schemas/PromptCacheBreakpoint'
+          - type: 'null'
+          description: Marks the end of the prefix that prompt_cache_options retention applies to.
+      type: object
+      required:
+      - type
+      - text
+      title: ChatCompletionContentPartText
+    ChatCompletionContentPartAudioURL:
+      properties:
+        type:
+          type: string
+          const: audio_url
+          title: Type
+        audio_url:
+          $ref: '#/components/schemas/AudioURL'
+      type: object
+      required:
+      - type
+      - audio_url
+      title: ChatCompletionContentPartAudioURL
+    ServiceTier:
+      type: string
+      enum:
+      - default
+      - priority
+      - flex
+      title: ServiceTier
+    InputAudio:
+      properties:
+        data:
+          type: string
+          title: Data
+        format:
+          type: string
+          enum:
+          - wav
+          - mp3
+          title: Format
+          default: wav
+      type: object
+      required:
+      - data
+      title: InputAudio
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ChatCompletionContentPartAudio:
+      properties:
+        type:
+          type: string
+          const: input_audio
+          title: Type
+        input_audio:
+          $ref: '#/components/schemas/InputAudio'
+      type: object
+      required:
+      - type
+      - input_audio
+      title: ChatCompletionContentPartAudio
+    PromptCacheBreakpoint:
+      properties:
+        mode:
+          anyOf:
+          - type: string
+            const: explicit
+          - type: 'null'
+          title: Mode
+          description: Breakpoint mode; 'explicit' bounds cache retention to the prompt prefix ending at this content part.
+      type: object
+      title: PromptCacheBreakpoint
+    ChatCompletionContentPartVideo:
+      properties:
+        type:
+          type: string
+          const: video_url
+          title: Type
+        video_url:
+          $ref: '#/components/schemas/VideoURL'
+      type: object
+      required:
+      - type
+      - video_url
+      title: ChatCompletionContentPartVideo
   securitySchemes:
-    bearerAuth:
+    HTTPBearer:
       type: http
       scheme: bearer
-      description: DeepInfra API token (DEEPINFRA_TOKEN) sent as a Bearer token.

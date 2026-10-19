@@ -1,0 +1,394 @@
+openapi: 3.2.0
+info:
+  title: DeepInfra Decisions API
+  description: The DeepInfra API provides serverless AI inference, custom model deployments, and GPU rentals.
+  version: 1.0.0
+servers:
+- url: https://api.deepinfra.com
+tags:
+- name: Decisions
+paths:
+  /v1/decisions:
+    post:
+      tags:
+      - Decisions
+      summary: Systemone
+      operationId: systemone_v1_decisions_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              title: SystemOneRequest
+              additionalProperties: false
+              properties:
+                state:
+                  anyOf:
+                  - type: string
+                  - additionalProperties: true
+                    type: object
+                  - items: {}
+                    type: array
+                  title: State
+                model:
+                  title: Model
+                  type: string
+                questions:
+                  additionalProperties:
+                    discriminator:
+                      propertyName: type
+                    oneOf:
+                    - additionalProperties: false
+                      properties:
+                        type:
+                          const: noul
+                          title: Type
+                          type: string
+                        instructions:
+                          anyOf:
+                          - type: string
+                          - additionalProperties: true
+                            type: object
+                          - items: {}
+                            type: array
+                          title: Instructions
+                        criteria:
+                          anyOf:
+                          - additionalProperties: false
+                            properties:
+                              'true':
+                                anyOf:
+                                - type: string
+                                - additionalProperties: true
+                                  type: object
+                                - items: {}
+                                  type: array
+                                - type: 'null'
+                                title: 'True'
+                              'false':
+                                anyOf:
+                                - type: string
+                                - additionalProperties: true
+                                  type: object
+                                - items: {}
+                                  type: array
+                                - type: 'null'
+                                title: 'False'
+                            title: NoulCriteria
+                            type: object
+                          - type: 'null'
+                      required:
+                      - type
+                      - instructions
+                      title: NoulQuestion
+                      type: object
+                    - additionalProperties: false
+                      properties:
+                        type:
+                          const: choice
+                          title: Type
+                          type: string
+                        instructions:
+                          anyOf:
+                          - type: string
+                          - additionalProperties: true
+                            type: object
+                          - items: {}
+                            type: array
+                          title: Instructions
+                        criteria:
+                          additionalProperties:
+                            anyOf:
+                            - type: string
+                            - additionalProperties: true
+                              type: object
+                            - items: {}
+                              type: array
+                            - type: 'null'
+                          maxProperties: 52
+                          minProperties: 2
+                          title: Criteria
+                          type: object
+                      required:
+                      - type
+                      - instructions
+                      - criteria
+                      title: ChoiceQuestion
+                      type: object
+                    - additionalProperties: false
+                      properties:
+                        type:
+                          const: score
+                          title: Type
+                          type: string
+                        instructions:
+                          anyOf:
+                          - type: string
+                          - additionalProperties: true
+                            type: object
+                          - items: {}
+                            type: array
+                          title: Instructions
+                        criteria:
+                          items:
+                            anyOf:
+                            - type: string
+                            - additionalProperties: true
+                              type: object
+                            - items: {}
+                              type: array
+                          maxItems: 10
+                          minItems: 2
+                          title: Criteria
+                          type: array
+                      required:
+                      - type
+                      - instructions
+                      - criteria
+                      title: ScoreQuestion
+                      type: object
+                  maxProperties: 64
+                  minProperties: 1
+                  title: Questions
+                  type: object
+              required:
+              - state
+              - model
+              - questions
+              type: object
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemOneResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /typesafe/v1/models:
+    get:
+      tags:
+      - Decisions
+      summary: List Models
+      operationId: list_models_typesafe_v1_models_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListModelsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    NoulAnswer:
+      properties:
+        type:
+          type: string
+          const: noul
+          title: Type
+          default: noul
+        noul:
+          type: number
+          title: Noul
+      type: object
+      required:
+      - noul
+      title: NoulAnswer
+    ScoreAnswer:
+      properties:
+        type:
+          type: string
+          const: score
+          title: Type
+          default: score
+        score:
+          type: number
+          title: Score
+        legend:
+          additionalProperties:
+            type: string
+          type: object
+          title: Legend
+        probabilities:
+          additionalProperties:
+            type: number
+          type: object
+          title: Probabilities
+        confidence:
+          type: number
+          title: Confidence
+      type: object
+      required:
+      - score
+      - legend
+      - probabilities
+      - confidence
+      title: ScoreAnswer
+    ListModelsResponse:
+      properties:
+        models:
+          items:
+            $ref: '#/components/schemas/deepinfra__deepapi__systemone__wire__ModelMetadata'
+          type: array
+          title: Models
+      type: object
+      required:
+      - models
+      title: ListModelsResponse
+    deepinfra__deepapi__systemone__wire__ModelMetadata:
+      properties:
+        name:
+          type: string
+          title: Name
+        description:
+          type: string
+          title: Description
+        release_date:
+          type: string
+          title: Release Date
+      type: object
+      required:
+      - name
+      - description
+      - release_date
+      title: ModelMetadata
+    Usage:
+      properties:
+        input_tokens:
+          type: integer
+          title: Input Tokens
+        output_tokens:
+          type: integer
+          title: Output Tokens
+      type: object
+      required:
+      - input_tokens
+      - output_tokens
+      title: Usage
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    SystemOneResponse:
+      properties:
+        model:
+          type: string
+          title: Model
+        answers:
+          additionalProperties:
+            anyOf:
+            - $ref: '#/components/schemas/NoulAnswer'
+            - $ref: '#/components/schemas/ChoiceAnswer'
+            - $ref: '#/components/schemas/ScoreAnswer'
+          type: object
+          title: Answers
+        usage:
+          $ref: '#/components/schemas/Usage'
+      type: object
+      required:
+      - model
+      - answers
+      - usage
+      title: SystemOneResponse
+    ChoiceAnswer:
+      properties:
+        type:
+          type: string
+          const: choice
+          title: Type
+          default: choice
+        choice:
+          type: string
+          title: Choice
+        probabilities:
+          additionalProperties:
+            type: number
+          type: object
+          title: Probabilities
+        confidence:
+          type: number
+          title: Confidence
+      type: object
+      required:
+      - choice
+      - probabilities
+      - confidence
+      title: ChoiceAnswer
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

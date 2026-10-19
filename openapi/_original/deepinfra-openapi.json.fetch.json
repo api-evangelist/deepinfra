@@ -1,0 +1,12 @@
+{
+ "url": "https://api.deepinfra.com/openapi.json",
+ "final": "https://api.deepinfra.com/openapi.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 351578,
+ "sha256": "e928e0bf5d3063ef9c8dca1e8a028769894e19e6bd6180de6aa9e05801d5aaeb",
+ "fetched_at": "2026-10-19",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "re-archived: the provider's current document replaced a stale archive (roadmap#793); the old files are in openapi/_superseded/2026-10-19-stale"
+}

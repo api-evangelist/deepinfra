@@ -1,33 +1,44 @@
 {
   "provider": "deepinfra",
   "sources": [
-    "_original/deepinfra-openapi.yml"
+    "_original/deepinfra-openapi.json"
   ],
   "outputs": [
+    "deepinfra-account-api-openapi.yml",
+    "deepinfra-agents-api-openapi.yml",
     "deepinfra-audio-api-openapi.yml",
-    "deepinfra-chat-api-openapi.yml",
-    "deepinfra-completions-api-openapi.yml",
+    "deepinfra-authentication-api-openapi.yml",
+    "deepinfra-billing-api-openapi.yml",
+    "deepinfra-chat-completions-api-openapi.yml",
+    "deepinfra-decisions-api-openapi.yml",
+    "deepinfra-dedicated-models-api-openapi.yml",
     "deepinfra-embeddings-api-openapi.yml",
-    "deepinfra-images-api-openapi.yml",
-    "deepinfra-models-api-openapi.yml"
+    "deepinfra-files-batches-api-openapi.yml",
+    "deepinfra-gpu-rentals-api-openapi.yml",
+    "deepinfra-image-generation-api-openapi.yml",
+    "deepinfra-inference-api-openapi.yml",
+    "deepinfra-lora-adapters-api-openapi.yml",
+    "deepinfra-logs-metrics-api-openapi.yml",
+    "deepinfra-models-api-openapi.yml",
+    "deepinfra-responses-api-openapi.yml",
+    "deepinfra-sandboxes-api-openapi.yml",
+    "deepinfra-text-completions-api-openapi.yml",
+    "deepinfra-text-to-speech-api-openapi.yml",
+    "deepinfra-tokenizer-api-openapi.yml",
+    "deepinfra-utilities-api-openapi.yml",
+    "deepinfra-videos-api-openapi.yml"
   ],
-  "archived": [
-    "deleted 1 superseded output(s) from the previous generation"
-  ],
+  "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
     "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
-    "deepinfra-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "superseded outputs removed: deepinfra-chat-completions-api-openapi.yml",
-    "apis.yml register: written (+1 apis, 7 total)"
+    "deepinfra-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "deepinfra-openapi.json: declared missing tag: Decisions",
+    "deepinfra-openapi.json: declared missing tag: Responses",
+    "deepinfra-openapi.json: declared missing tag: Tokenizer",
+    "deepinfra-openapi.json: declared missing tag: Videos",
+    "apis.yml register: written (+19 apis, 24 total)"
   ],
-  "skipped": [
-    "deepinfra-audio-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "deepinfra-chat-completions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "deepinfra-completions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "deepinfra-embeddings-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "deepinfra-images-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "deepinfra-models-api-openapi.yml: previously refined output, superseded by openapi/_original/"
-  ]
+  "skipped": []
 }

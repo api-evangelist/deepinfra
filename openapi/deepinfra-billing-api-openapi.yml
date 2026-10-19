@@ -1,0 +1,1408 @@
+openapi: 3.2.0
+info:
+  title: DeepInfra Billing API
+  description: The DeepInfra API provides serverless AI inference, custom model deployments, and GPU rentals.
+  version: 1.0.0
+servers:
+- url: https://api.deepinfra.com
+tags:
+- name: Billing
+  description: Payment methods, usage tracking, and billing.
+paths:
+  /payment/checklist:
+    get:
+      summary: Get Checklist
+      operationId: get_checklist_payment_checklist_get
+      parameters:
+      - name: session
+        in: cookie
+        schema:
+          type: String
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Checklist'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      tags:
+      - Billing
+  /payment/config:
+    get:
+      summary: Get Config
+      operationId: get_config_payment_config_get
+      parameters:
+      - name: session
+        in: cookie
+        schema:
+          type: String
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      tags:
+      - Billing
+    post:
+      summary: Set Config
+      operationId: set_config_payment_config_post
+      parameters:
+      - name: session
+        in: cookie
+        schema:
+          type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfigIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      tags:
+      - Billing
+  /payment/key-limits:
+    get:
+      summary: Get Key Limits
+      operationId: get_key_limits_payment_key_limits_get
+      parameters:
+      - name: session
+        in: cookie
+        schema:
+          type: String
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/KeyLimitOut'
+                title: Response Get Key Limits Payment Key Limits Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      tags:
+      - Billing
+    post:
+      summary: Set Key Limit
+      operationId: set_key_limit_payment_key_limits_post
+      parameters:
+      - name: session
+        in: cookie
+        schema:
+          type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KeyLimitIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/KeyLimitOut'
+                title: Response Set Key Limit Payment Key Limits Post
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      tags:
+      - Billing
+  /payment/billing-portal:
+    get:
+      summary: Billing Portal
+      operationId: billing_portal_payment_billing_portal_get
+      parameters:
+      - name: return_url
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Return Url
+      - name: session
+        in: cookie
+        schema:
+          type: String
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillingPortalOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      tags:
+      - Billing
+  /payment/payment-methods/setup:
+    post:
+      summary: Add Card Checkout
+      description: 'Checkout page that saves a card, billing address included, so Add Funds
+
+        can show it later.'
+      operationId: add_card_checkout_payment_payment_methods_setup_post
+      parameters:
+      - name: session
+        in: cookie
+        schema:
+          type: String
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddCardOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      tags:
+      - Billing
+  /payment/invoices:
+    get:
+      summary: List Invoices
+      operationId: list_invoices_payment_invoices_get
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 50
+          minimum: 1
+          default: 10
+          title: Limit
+      - name: starting_after
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Starting After
+      - name: invoice_type
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Invoice Type
+      - name: session
+        in: cookie
+        schema:
+          type: String
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoicesOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      tags:
+      - Billing
+  /payment/usage:
+    get:
+      summary: Usage
+      operationId: usage_payment_usage_get
+      parameters:
+      - name: from
+        in: query
+        required: true
+        schema:
+          type: string
+          description: start of period in YYYY.MM, current(-N), unix_timestamp (in seconds, UTC) format
+          title: From
+        description: start of period in YYYY.MM, current(-N), unix_timestamp (in seconds, UTC) format
+      - name: to
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: end of period (if missing a single month marked by from is return), same format as from
+          title: To
+        description: end of period (if missing a single month marked by from is return), same format as from
+      - name: session
+        in: cookie
+        schema:
+          type: String
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsageOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      tags:
+      - Billing
+  /payment/usage/tokens:
+    get:
+      summary: Usage Tokens
+      operationId: usage_tokens_payment_usage_tokens_get
+      parameters:
+      - name: from
+        in: query
+        required: true
+        schema:
+          type: string
+          description: start of period in YYYY.MM, current(-N), unix_timestamp (in seconds, UTC) format
+          title: From
+        description: start of period in YYYY.MM, current(-N), unix_timestamp (in seconds, UTC) format
+      - name: to
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: end of period (if missing a single month marked by from is return), same format as from
+          title: To
+        description: end of period (if missing a single month marked by from is return), same format as from
+      - name: session
+        in: cookie
+        schema:
+          type: String
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsageOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      tags:
+      - Billing
+  /payment/usage/rent:
+    get:
+      summary: Usage Rent
+      operationId: usage_rent_payment_usage_rent_get
+      parameters:
+      - name: from
+        in: query
+        required: true
+        schema:
+          type: integer
+          description: start of period, in seconds since unix epoch
+          title: From
+        description: start of period, in seconds since unix epoch
+      - name: to
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: end of period, in seconds since unix epoch
+          title: To
+        description: end of period, in seconds since unix epoch
+      - name: session
+        in: cookie
+        schema:
+          type: String
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsageRentOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      tags:
+      - Billing
+  /payment/usage/id/{token_id}:
+    get:
+      summary: Usage Api Token By Id
+      description: 'Usage for a single API token, by token_id.
+
+
+        token_id comes from Get Api Tokens (`GET /v1/api-tokens`).'
+      operationId: usage_api_token_by_id_payment_usage_id__token_id__get
+      parameters:
+      - name: token_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Token Id
+      - name: from
+        in: query
+        required: true
+        schema:
+          type: string
+          description: start of period in YYYY.MM, current(-N), unix_timestamp (in seconds, UTC) format
+          title: From
+        description: start of period in YYYY.MM, current(-N), unix_timestamp (in seconds, UTC) format
+      - name: to
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: end of period (if missing a single month marked by from is return), same format as from
+          title: To
+        description: end of period (if missing a single month marked by from is return), same format as from
+      - name: session
+        in: cookie
+        schema:
+          type: String
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsageOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      tags:
+      - Billing
+  /payment/usage/{api_token}:
+    get:
+      summary: Usage Api Token
+      description: 'Deprecated: use Usage Api Token By Id (`GET /payment/usage/id/{token_id}`).'
+      operationId: usage_api_token_payment_usage__api_token__get
+      deprecated: true
+      parameters:
+      - name: api_token
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Api Token
+      - name: from
+        in: query
+        required: true
+        schema:
+          type: string
+          description: start of period in YYYY.MM, current(-N), unix_timestamp (in seconds, UTC) format
+          title: From
+        description: start of period in YYYY.MM, current(-N), unix_timestamp (in seconds, UTC) format
+      - name: to
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: end of period (if missing a single month marked by from is return), same format as from
+          title: To
+        description: end of period (if missing a single month marked by from is return), same format as from
+      - name: session
+        in: cookie
+        schema:
+          type: String
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsageOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      tags:
+      - Billing
+  /payment/deepstart/application:
+    post:
+      summary: Deepstart Apply
+      operationId: deepstart_apply_payment_deepstart_application_post
+      parameters:
+      - name: session
+        in: cookie
+        schema:
+          type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeepStartApplicationIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepStartApplicationOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      tags:
+      - Billing
+  /payment/funds:
+    post:
+      summary: Add Funds
+      operationId: add_funds_payment_funds_post
+      parameters:
+      - name: session
+        in: cookie
+        schema:
+          type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddFundsIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddFundsOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      tags:
+      - Billing
+  /payment/topup:
+    post:
+      summary: Setup Topup
+      operationId: setup_topup_payment_topup_post
+      parameters:
+      - name: session
+        in: cookie
+        schema:
+          type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TopUpIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      tags:
+      - Billing
+components:
+  schemas:
+    ConfigOut:
+      properties:
+        limit:
+          type: number
+          title: Limit
+          description: Spending limit (in USD). Negative means no limit
+      type: object
+      required:
+      - limit
+      title: ConfigOut
+    ModelMeta:
+      properties:
+        provider:
+          type: string
+          title: Provider
+        model_name:
+          type: string
+          title: Model Name
+        task:
+          type: string
+          title: Task
+        plan_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Plan Id
+        private:
+          type: boolean
+          title: Private
+          default: false
+        contract:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Contract
+          description: bare-metal contract description, shown like on invoices
+      type: object
+      required:
+      - provider
+      - model_name
+      - task
+      title: ModelMeta
+    SuspendReason:
+      type: string
+      enum:
+      - balance
+      - payment-method
+      - overdue-invoices
+      - limit-reached
+      - admin
+      - bad-cc
+      - missing-address
+      title: SuspendReason
+    AddFundsIn:
+      properties:
+        amount:
+          type: integer
+          title: Amount
+          description: Amount to add in cents
+      type: object
+      required:
+      - amount
+      title: AddFundsIn
+    PaymentMethodCashApp:
+      properties:
+        cashtag:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cashtag
+      type: object
+      title: PaymentMethodCashApp
+    DiscountMeta:
+      properties:
+        name:
+          type: string
+          title: Name
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: description of the discount, only for display purposes
+      type: object
+      required:
+      - name
+      title: DiscountMeta
+    InceptionMemberCheckStatus:
+      type: string
+      enum:
+      - approved
+      - rejected
+      - error
+      title: InceptionMemberCheckStatus
+    DeepStartApplicationIn:
+      properties:
+        id:
+          type: string
+          title: Id
+        uid:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Uid
+        company:
+          type: string
+          title: Company
+        ceo:
+          type: string
+          title: Ceo
+        funding:
+          type: string
+          title: Funding
+        founded_on:
+          type: string
+          title: Founded On
+        website:
+          type: string
+          title: Website
+        country_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Country Code
+        nvidia_consent:
+          type: boolean
+          title: Nvidia Consent
+          default: false
+        created_at:
+          type: integer
+          title: Created At
+        status:
+          type: string
+          title: Status
+          default: pending
+        deal:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Deal
+        inception_check:
+          anyOf:
+          - $ref: '#/components/schemas/InceptionMemberCheck'
+          - type: 'null'
+      type: object
+      required:
+      - company
+      - ceo
+      - funding
+      - founded_on
+      - website
+      title: DeepStartApplicationIn
+    KeyLimitOut:
+      properties:
+        token_id:
+          type: string
+          title: Token Id
+        name:
+          type: string
+          title: Name
+          description: Api key name
+        limit:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Limit
+          description: Monthly spending limit (in USD), if set
+        spend:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Spend
+          description: Spent so far this month (in USD). Null when not yet computed for this key
+      type: object
+      required:
+      - token_id
+      - name
+      - limit
+      - spend
+      title: KeyLimitOut
+    Checklist:
+      properties:
+        email:
+          type: boolean
+          title: Email
+          default: false
+        billing_address:
+          type: boolean
+          title: Billing Address
+          default: false
+        billing_address_info:
+          anyOf:
+          - $ref: '#/components/schemas/BillingAddressOut'
+          - type: 'null'
+        payment_method:
+          type: boolean
+          title: Payment Method
+          default: false
+        payment_method_info:
+          anyOf:
+          - $ref: '#/components/schemas/PaymentMethodOut'
+          - type: 'null'
+        suspended:
+          type: boolean
+          title: Suspended
+          default: false
+        overdue_invoices:
+          type: number
+          title: Overdue Invoices
+          default: 0.0
+        last_checked:
+          type: integer
+          title: Last Checked
+          default: 0
+        stripe_balance:
+          type: number
+          title: Stripe Balance
+          description: Negative value indicates funds ready-to-spend. Positive value indicates money owed
+        recent:
+          type: number
+          title: Recent
+          description: usage since most recent invoice
+        limit:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Limit
+        suspend_reason:
+          anyOf:
+          - $ref: '#/components/schemas/SuspendReason'
+          - type: 'null'
+        topup:
+          type: boolean
+          title: Topup
+          default: false
+        topup_amount:
+          type: integer
+          title: Topup Amount
+          default: 0
+        topup_threshold:
+          type: integer
+          title: Topup Threshold
+          default: 0
+        topup_failed:
+          type: boolean
+          title: Topup Failed
+          default: false
+        billing_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Billing Type
+        scoped_credits:
+          items:
+            $ref: '#/components/schemas/ScopedCredit'
+          type: array
+          title: Scoped Credits
+      type: object
+      required:
+      - stripe_balance
+      - recent
+      - limit
+      - suspend_reason
+      title: Checklist
+    UsageItem:
+      properties:
+        model:
+          $ref: '#/components/schemas/ModelMeta'
+        units:
+          type: integer
+          title: Units
+          description: billed seconds or tokens
+        rate:
+          type: number
+          title: Rate
+          description: rate in cents/sec or cents per token
+        cost:
+          type: integer
+          title: Cost
+          description: model cost in cents
+        pricing_type:
+          type: string
+          title: Pricing Type
+          description: pricing type
+        interval:
+          $ref: '#/components/schemas/TimeInterval'
+          description: time interval with this particular pricing
+        discount:
+          anyOf:
+          - $ref: '#/components/schemas/DiscountMeta'
+          - type: 'null'
+          description: discount meta, only if pricing_type is discount
+      type: object
+      required:
+      - model
+      - units
+      - rate
+      - cost
+      - pricing_type
+      - interval
+      title: UsageItem
+    UsageOut:
+      properties:
+        months:
+          items:
+            $ref: '#/components/schemas/UsageMonth'
+          type: array
+          title: Months
+        initial_month:
+          type: string
+          title: Initial Month
+          description: The first month for this account
+      type: object
+      required:
+      - months
+      - initial_month
+      title: UsageOut
+    InvoicesOut:
+      properties:
+        invoices:
+          items:
+            $ref: '#/components/schemas/InvoiceListItem'
+          type: array
+          title: Invoices
+        has_more:
+          type: boolean
+          title: Has More
+        next_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Cursor
+      type: object
+      required:
+      - invoices
+      - has_more
+      - next_cursor
+      title: InvoicesOut
+    TopUpIn:
+      properties:
+        amount:
+          type: integer
+          title: Amount
+          description: Amount to top up in cents
+          default: 0
+        threshold:
+          type: integer
+          title: Threshold
+          description: Top up threshold in cents, if balance goes below this value, top up will be triggered
+          default: 0
+        enabled:
+          type: boolean
+          title: Enabled
+          description: If true, top up will be triggered when balance goes below threshold
+          default: true
+      type: object
+      title: TopUpIn
+    UsageMonth:
+      properties:
+        period:
+          type: string
+          title: Period
+          description: YYYY.MM formatted period
+        interval:
+          $ref: '#/components/schemas/TimeInterval'
+          description: time interval in this period
+        items:
+          items:
+            $ref: '#/components/schemas/UsageItem'
+          type: array
+          title: Items
+        total_cost:
+          type: integer
+          title: Total Cost
+          description: total cost for all items in cents
+        invoice_id:
+          type: string
+          title: Invoice Id
+          description: Stripe Invoice ID, or EMPTY|NOT_FINAL
+          default: NOT_FINAL
+      type: object
+      required:
+      - period
+      - interval
+      - items
+      - total_cost
+      title: UsageMonth
+    InceptionMemberCheck:
+      properties:
+        status:
+          $ref: '#/components/schemas/InceptionMemberCheckStatus'
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reason
+        company:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Company
+        member_date:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Member Date
+        benefit_request_date:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Benefit Request Date
+        checked_at:
+          type: integer
+          title: Checked At
+        next_check_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Next Check At
+      type: object
+      required:
+      - status
+      title: InceptionMemberCheck
+      description: NVIDIA Member Lookup API result for one application, separate from its approval status.
+    TimeInterval:
+      properties:
+        fr:
+          type: integer
+          title: Fr
+          default: 0
+        to:
+          type: integer
+          title: To
+          default: 4000000000000
+      type: object
+      title: TimeInterval
+      description: Inclusive, in ms
+    PaymentMethodCard:
+      properties:
+        brand:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Brand
+        last4:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last4
+        wallet:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Wallet
+      type: object
+      title: PaymentMethodCard
+    PaymentMethodOut:
+      properties:
+        type:
+          type: string
+          title: Type
+        card:
+          anyOf:
+          - $ref: '#/components/schemas/PaymentMethodCard'
+          - type: 'null'
+        us_bank_account:
+          anyOf:
+          - $ref: '#/components/schemas/PaymentMethodBank'
+          - type: 'null'
+        cashapp:
+          anyOf:
+          - $ref: '#/components/schemas/PaymentMethodCashApp'
+          - type: 'null'
+      type: object
+      required:
+      - type
+      title: PaymentMethodOut
+    ScopedCredit:
+      properties:
+        name:
+          type: string
+          title: Name
+        description:
+          type: string
+          title: Description
+          default: ''
+        granted_cents:
+          type: number
+          title: Granted Cents
+        remaining_cents:
+          type: number
+          title: Remaining Cents
+        granted_ts:
+          type: integer
+          title: Granted Ts
+        expires_ts:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Expires Ts
+        expired:
+          type: boolean
+          title: Expired
+          default: false
+      type: object
+      required:
+      - name
+      - granted_cents
+      - remaining_cents
+      - granted_ts
+      title: ScopedCredit
+      description: 'A credit spendable only on certain models, with what is left of it.
+
+
+        Backed by a capped discount rather than a balance, so `remaining_cents` is
+
+        the cap minus what has been spent, and it stops moving once the term lapses.'
+    AddFundsOut:
+      properties:
+        checkout_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Checkout Url
+          description: Stripe Checkout Session URL to complete payment. Non-null when no saved payment method is on file.
+      type: object
+      title: AddFundsOut
+    ConfigIn:
+      properties:
+        limit:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Limit
+          description: Set usage limit (in USD). Negative means no limit.null/not-set means don't change it
+      type: object
+      title: ConfigIn
+    BillingPortalOut:
+      properties:
+        url:
+          type: string
+          title: Url
+      type: object
+      required:
+      - url
+      title: BillingPortalOut
+    UsageRentOut:
+      properties:
+        id_to_duration:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Id To Duration
+          description: container id to duration in seconds
+      type: object
+      required:
+      - id_to_duration
+      title: UsageRentOut
+    PaymentMethodBank:
+      properties:
+        bank_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Bank Name
+        last4:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last4
+      type: object
+      title: PaymentMethodBank
+    DeepError:
+      properties:
+        error:
+          type: string
+          title: Error
+          description: Error
+          examples:
+          - Model not found
+      type: object
+      required:
+      - error
+      title: DeepError
+    AddCardOut:
+      properties:
+        checkout_url:
+          type: string
+          title: Checkout Url
+          description: Stripe Checkout Session URL that saves a card with its billing address.
+      type: object
+      required:
+      - checkout_url
+      title: AddCardOut
+    DeepStartApplicationOut:
+      properties:
+        id:
+          type: string
+          title: Id
+        uid:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Uid
+        company:
+          type: string
+          title: Company
+        ceo:
+          type: string
+          title: Ceo
+        funding:
+          type: string
+          title: Funding
+        founded_on:
+          type: string
+          title: Founded On
+        website:
+          type: string
+          title: Website
+        country_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Country Code
+        nvidia_consent:
+          type: boolean
+          title: Nvidia Consent
+          default: false
+        created_at:
+          type: integer
+          title: Created At
+        status:
+          type: string
+          title: Status
+          default: pending
+        deal:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Deal
+        inception_check:
+          anyOf:
+          - $ref: '#/components/schemas/InceptionMemberCheck'
+          - type: 'null'
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+      type: object
+      required:
+      - company
+      - ceo
+      - funding
+      - founded_on
+      - website
+      title: DeepStartApplicationOut
+    InvoiceListItem:
+      properties:
+        id:
+          type: string
+          title: Id
+        status:
+          type: string
+          title: Status
+        total:
+          type: integer
+          title: Total
+        amount_due:
+          type: integer
+          title: Amount Due
+        created:
+          type: integer
+          title: Created
+        due_date:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Due Date
+        period:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Period
+        invoice_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Invoice Type
+        hosted_invoice_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Hosted Invoice Url
+        invoice_pdf:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Invoice Pdf
+      type: object
+      required:
+      - id
+      - status
+      - total
+      - amount_due
+      - created
+      title: InvoiceListItem
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    BillingAddressOut:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+        line1:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Line1
+        line2:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Line2
+        city:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: City
+        state:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: State
+        postal_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Postal Code
+        country:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Country
+      type: object
+      title: BillingAddressOut
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    KeyLimitIn:
+      properties:
+        token_id:
+          type: string
+          title: Token Id
+          description: Api key id, as returned by /v1/api-tokens
+        limit:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Limit
+          description: Monthly spending limit (in USD) for this key. Null or negative removes it; 0 blocks the key
+      type: object
+      required:
+      - token_id
+      title: KeyLimitIn
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

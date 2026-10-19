@@ -1,0 +1,806 @@
+openapi: 3.2.0
+info:
+  title: DeepInfra Files & Batches API
+  description: The DeepInfra API provides serverless AI inference, custom model deployments, and GPU rentals.
+  version: 1.0.0
+servers:
+- url: https://api.deepinfra.com
+tags:
+- name: Files & Batches
+  description: File uploads and batch processing.
+paths:
+  /v1/files:
+    get:
+      tags:
+      - Files & Batches
+      summary: List Files
+      operationId: list_files_v1_files_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: after
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: After
+      - name: purpose
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Purpose
+      - name: order
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Order
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 10000
+          title: Limit
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Files & Batches
+      summary: Openai Files
+      operationId: openai_files_v1_files_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_openai_files_v1_files_post'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/files/{file_id}:
+    get:
+      tags:
+      - Files & Batches
+      summary: Get File
+      operationId: get_file_v1_files__file_id__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: file_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: File Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAIFile'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Files & Batches
+      summary: Delete File
+      operationId: delete_file_v1_files__file_id__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: file_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: File Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/files/{file_id}/content:
+    get:
+      tags:
+      - Files & Batches
+      summary: Get File Content
+      operationId: get_file_content_v1_files__file_id__content_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: file_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: File Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/batches:
+    get:
+      tags:
+      - Files & Batches
+      summary: Retrieve Openai Batches
+      operationId: retrieve_openai_batches_v1_batches_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: after
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: After
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 20
+          title: Limit
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Files & Batches
+      summary: Create Openai Batch
+      operationId: create_openai_batch_v1_batches_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OpenAIBatchesIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAIBatchesOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/batches/{batch_id}:
+    get:
+      tags:
+      - Files & Batches
+      summary: Retrieve Openai Batch
+      operationId: retrieve_openai_batch_v1_batches__batch_id__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: batch_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Batch Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAIBatchesOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/batches/{batch_id}/cancel:
+    post:
+      tags:
+      - Files & Batches
+      summary: Cancel Openai Batch
+      operationId: cancel_openai_batch_v1_batches__batch_id__cancel_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: batch_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Batch Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAIBatchesOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    OpenAIFile:
+      properties:
+        id:
+          type: string
+          title: Id
+        object:
+          type: string
+          const: file
+          title: Object
+        created_at:
+          type: integer
+          title: Created At
+        filename:
+          type: string
+          title: Filename
+        bytes:
+          type: integer
+          title: Bytes
+        purpose:
+          type: string
+          enum:
+          - batch
+          - batch_output
+          - fine-tune
+          title: Purpose
+        expires_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Expires At
+      type: object
+      required:
+      - id
+      - object
+      - created_at
+      - filename
+      - bytes
+      - purpose
+      title: OpenAIFile
+    BatchRequestCounts:
+      properties:
+        total:
+          type: integer
+          title: Total
+          description: Total number of requests in the batch.
+          default: 0
+        completed:
+          type: integer
+          title: Completed
+          description: Number of requests that completed successfully.
+          default: 0
+        failed:
+          type: integer
+          title: Failed
+          description: Number of requests that failed.
+          default: 0
+      type: object
+      title: BatchRequestCounts
+    BatchErrors:
+      properties:
+        object:
+          type: string
+          title: Object
+          description: The object type, which is always list.
+          default: list
+        data:
+          items:
+            $ref: '#/components/schemas/BatchErrorData'
+          type: array
+          title: Data
+          description: List of error objects.
+      type: object
+      title: BatchErrors
+    OpenAIBatchesOut:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: The batch ID.
+        object:
+          type: string
+          const: batch
+          title: Object
+          description: The object type, which is always batch.
+          default: batch
+        endpoint:
+          type: string
+          title: Endpoint
+          description: The API endpoint used for the batch.
+        errors:
+          anyOf:
+          - $ref: '#/components/schemas/BatchErrors'
+          - type: 'null'
+          description: Errors that occurred during the batch.
+        input_file_id:
+          type: string
+          title: Input File Id
+          description: The ID of the input file for the batch.
+        completion_window:
+          type: string
+          title: Completion Window
+          description: The time frame within which the batch should be processed.
+        status:
+          type: string
+          title: Status
+          description: The current status of the batch.
+        output_file_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Output File Id
+          description: The ID of the output file.
+        error_file_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error File Id
+          description: The ID of the error file.
+        created_at:
+          type: integer
+          title: Created At
+          description: The Unix timestamp of when the batch was created.
+        in_progress_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: In Progress At
+          description: The Unix timestamp of when the batch started processing.
+        expires_at:
+          type: integer
+          title: Expires At
+          description: The Unix timestamp of when the batch will expire.
+        finalizing_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Finalizing At
+          description: The Unix timestamp of when the batch started finalizing.
+        completed_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Completed At
+          description: The Unix timestamp of when the batch completed.
+        failed_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Failed At
+          description: The Unix timestamp of when the batch failed.
+        expired_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Expired At
+          description: The Unix timestamp of when the batch expired.
+        cancelling_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Cancelling At
+          description: The Unix timestamp of when the batch started cancelling.
+        cancelled_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Cancelled At
+          description: The Unix timestamp of when the batch was cancelled.
+        request_counts:
+          anyOf:
+          - $ref: '#/components/schemas/BatchRequestCounts'
+          - type: 'null'
+          description: Request counts for the batch.
+        metadata:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          title: Metadata
+          description: Metadata associated with the batch.
+        model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model
+          description: The model used for the batch.
+        usage:
+          anyOf:
+          - $ref: '#/components/schemas/BatchUsage'
+          - type: 'null'
+          description: Token usage accumulated for the batch.
+      type: object
+      required:
+      - id
+      - endpoint
+      - input_file_id
+      - completion_window
+      - status
+      - created_at
+      - expires_at
+      title: OpenAIBatchesOut
+    BatchErrorData:
+      properties:
+        code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Code
+          description: An error code identifying the error type.
+        line:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Line
+          description: The line number of the input file where the error occurred.
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+          description: A human-readable message describing the error.
+        param:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Param
+          description: The name of the parameter that caused the error.
+      type: object
+      title: BatchErrorData
+    BatchUsage:
+      properties:
+        input_tokens:
+          type: integer
+          title: Input Tokens
+          default: 0
+        input_tokens_details:
+          $ref: '#/components/schemas/BatchInputTokensDetails'
+        output_tokens:
+          type: integer
+          title: Output Tokens
+          default: 0
+        output_tokens_details:
+          $ref: '#/components/schemas/BatchOutputTokensDetails'
+        total_tokens:
+          type: integer
+          title: Total Tokens
+          default: 0
+      type: object
+      title: BatchUsage
+    Body_openai_files_v1_files_post:
+      properties:
+        purpose:
+          type: string
+          title: Purpose
+        file:
+          items:
+            type: string
+            format: binary
+          type: array
+          title: File
+      type: object
+      required:
+      - purpose
+      - file
+      title: Body_openai_files_v1_files_post
+    BatchInputTokensDetails:
+      properties:
+        cached_tokens:
+          type: integer
+          title: Cached Tokens
+          default: 0
+      type: object
+      title: BatchInputTokensDetails
+    BatchOutputTokensDetails:
+      properties:
+        reasoning_tokens:
+          type: integer
+          title: Reasoning Tokens
+          default: 0
+      type: object
+      title: BatchOutputTokensDetails
+    BatchOutputExpiresAfter:
+      properties:
+        anchor:
+          type: string
+          const: created_at
+          title: Anchor
+          description: The anchor timestamp after which the expiration policy applies. Currently only created_at is supported.
+          default: created_at
+        seconds:
+          type: integer
+          maximum: 2592000.0
+          minimum: 3600.0
+          title: Seconds
+          description: The number of seconds after the anchor time that the output and error files will expire. Must be between 3600 (1 hour) and 2592000 (30 days).
+          default: 2592000
+      type: object
+      title: BatchOutputExpiresAfter
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    OpenAIBatchesIn:
+      properties:
+        input_file_id:
+          type: string
+          title: Input File Id
+          description: The ID of an uploaded file that contains requests for the new batch.
+        endpoint:
+          type: string
+          enum:
+          - /v1/chat/completions
+          - /v1/completions
+          - /v1/embeddings
+          title: Endpoint
+          description: The endpoint to be used for all requests in the batch. Currently /v1/chat/completions, /v1/completions, /v1/embeddings are supported.
+        completion_window:
+          type: string
+          const: 24h
+          title: Completion Window
+          description: The time frame within which the batch should be processed. Currently only 24h is supported.
+        metadata:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          title: Metadata
+          description: Optional metadata to be stored with the batch.
+        output_expires_after:
+          anyOf:
+          - $ref: '#/components/schemas/BatchOutputExpiresAfter'
+          - type: 'null'
+          description: The expiration policy for the output and/or error file generated for the batch.
+      type: object
+      required:
+      - input_file_id
+      - endpoint
+      - completion_window
+      title: OpenAIBatchesIn
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

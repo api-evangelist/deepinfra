@@ -1,0 +1,435 @@
+openapi: 3.2.0
+info:
+  title: DeepInfra Logs & Metrics API
+  description: The DeepInfra API provides serverless AI inference, custom model deployments, and GPU rentals.
+  version: 1.0.0
+servers:
+- url: https://api.deepinfra.com
+tags:
+- name: Logs & Metrics
+  description: Query inference logs, deployment logs, and usage metrics.
+paths:
+  /v1/metrics/live:
+    get:
+      tags:
+      - Logs & Metrics
+      summary: Get Live Metrics
+      description: Get the latest values for the Live metrics section on the web front page.
+      operationId: get_live_metrics_v1_metrics_live_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebLiveMetricsOut'
+  /v1/logs/query:
+    get:
+      tags:
+      - Logs & Metrics
+      summary: Logs Query
+      description: 'Query inference logs.
+
+        * Without timestamps (from/to) returns last `limit` messages (in last month).
+
+        * With `from` only, returns first `limit` messages after `from` (inclusive).
+
+        * With `to` only, returns last `limit` messages before `to` (inclusive).
+
+        * With both `from` and `to`, return the first `limit` messages after `from`, but not later than `to`.
+
+        * `from` and `to` should be no more than a month apart.'
+      operationId: logs_query_v1_logs_query_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: deploy_id
+        in: query
+        required: true
+        schema:
+          type: string
+          description: the deploy id to get the logs from
+          title: Deploy Id
+        description: the deploy id to get the logs from
+      - name: from
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: start of period, in fractional seconds since unix epoch (inclusive)
+          title: From
+        description: start of period, in fractional seconds since unix epoch (inclusive)
+      - name: to
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: end of period, in fractional seconds since unix epoch (exclusive)
+          title: To
+        description: end of period, in fractional seconds since unix epoch (exclusive)
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: how many items to return at most (default 100, in [1, 1000])
+          default: 100
+          title: Limit
+        description: how many items to return at most (default 100, in [1, 1000])
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogQueryOut'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/deployment_logs/query:
+    get:
+      tags:
+      - Logs & Metrics
+      summary: Deployment Logs Query
+      description: 'Query deployment logs.
+
+        * Without timestamps (from/to) returns last `limit` messages (in last month).
+
+        * With `from` only, returns first `limit` messages after `from` (inclusive).
+
+        * With `to` only, returns last `limit` messages before `to` (inclusive).
+
+        * With both `from` and `to`, return the first `limit` messages after `from`, but not later than `to`.
+
+        * `from` and `to` should be no more than a month apart.'
+      operationId: deployment_logs_query_v1_deployment_logs_query_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: deploy_id
+        in: query
+        required: true
+        schema:
+          type: string
+          description: the deploy id to get the logs from
+          title: Deploy Id
+        description: the deploy id to get the logs from
+      - name: pod_name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: the pod name to get the logs from
+          title: Pod Name
+        description: the pod name to get the logs from
+      - name: from
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: start of period, in fractional seconds since unix epoch (inclusive)
+          title: From
+        description: start of period, in fractional seconds since unix epoch (inclusive)
+      - name: to
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: end of period, in fractional seconds since unix epoch (exclusive)
+          title: To
+        description: end of period, in fractional seconds since unix epoch (exclusive)
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: how many items to return at most (default 100, in [1, 1000])
+          default: 100
+          title: Limit
+        description: how many items to return at most (default 100, in [1, 1000])
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeploymentLogQueryOut'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/request-costs:
+    post:
+      tags:
+      - Logs & Metrics
+      summary: Get Request Costs
+      operationId: get_request_costs_v1_request_costs_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestCostQuery'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestCostResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    WebLiveMetricsOut:
+      properties:
+        tokens_per_second:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Tokens Per Second
+          description: Tokens per second
+        time_to_first_token:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Time To First Token
+          description: Time to first token in seconds
+        requests_per_second:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Requests Per Second
+          description: Requests per second
+        total_tflops:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Total Tflops
+          description: Total TFLOPS
+      type: object
+      required:
+      - tokens_per_second
+      - time_to_first_token
+      - requests_per_second
+      - total_tflops
+      title: WebLiveMetricsOut
+    LogEntry:
+      prefixItems:
+      - type: string
+        title: Ts
+        description: timestamp in fractional seconds since unix epoch (ns precision)
+      - type: string
+        title: Line
+        description: a single log line
+      type: array
+      maxItems: 2
+      minItems: 2
+    RequestCostResponse:
+      properties:
+        requests:
+          items:
+            $ref: '#/components/schemas/RequestCostItem'
+          type: array
+          title: Requests
+      type: object
+      required:
+      - requests
+      title: RequestCostResponse
+    DeepError:
+      properties:
+        error:
+          type: string
+          title: Error
+          description: Error
+          examples:
+          - Model not found
+      type: object
+      required:
+      - error
+      title: DeepError
+    DeploymentLogQueryOut:
+      properties:
+        entries:
+          additionalProperties:
+            items:
+              $ref: '#/components/schemas/DeploymentLogEntry'
+            type: array
+          type: object
+          title: Entries
+          description: mapping of pod names to log lines ordered by increasing timestamp
+      type: object
+      title: DeploymentLogQueryOut
+    LogQueryOut:
+      properties:
+        entries:
+          items:
+            $ref: '#/components/schemas/LogEntry'
+          type: array
+          title: Entries
+          description: list of log lines ordered by increasing timestamp
+      type: object
+      title: LogQueryOut
+    DeploymentLogEntry:
+      prefixItems:
+      - type: string
+        title: Ts
+        description: timestamp in fractional seconds since unix epoch (ns precision)
+      - type: string
+        title: Line
+        description: a single log line
+      type: array
+      maxItems: 2
+      minItems: 2
+    RequestCostItem:
+      properties:
+        requestId:
+          type: string
+          title: Requestid
+        costNanoUsd:
+          type: integer
+          title: Costnanousd
+      type: object
+      required:
+      - requestId
+      - costNanoUsd
+      title: RequestCostItem
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    RequestCostQuery:
+      properties:
+        requestIds:
+          items:
+            type: string
+          type: array
+          title: Requestids
+      type: object
+      required:
+      - requestIds
+      title: RequestCostQuery
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

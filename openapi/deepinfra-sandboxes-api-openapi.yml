@@ -1,0 +1,817 @@
+openapi: 3.2.0
+info:
+  title: DeepInfra Sandboxes API
+  description: The DeepInfra API provides serverless AI inference, custom model deployments, and GPU rentals.
+  version: 1.0.0
+servers:
+- url: https://api.deepinfra.com
+tags:
+- name: Sandboxes
+  description: Create and manage isolated sandbox environments.
+paths:
+  /v1/sandboxes:
+    post:
+      tags:
+      - Sandboxes
+      summary: Create Sandbox
+      description: Create a new sandbox instance with the given plan and settings. The sandbox starts in CREATING state and transitions to RUNNING asynchronously.
+      operationId: sandbox_create_v1_sandboxes_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SandboxCreateIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SandboxCreateOut'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '429':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Too Many Requests
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Service Unavailable
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Sandboxes
+      summary: List Sandboxes
+      operationId: sandbox_list_v1_sandboxes_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SandboxOut'
+                title: Response Sandbox List V1 Sandboxes Get
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/sandboxes/catalog:
+    get:
+      tags:
+      - Sandboxes
+      summary: List Sandbox Plans
+      description: Returns all available sandbox plans with their resource specs and pricing.
+      operationId: sandbox_catalog_v1_sandboxes_catalog_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SandboxPlanOut'
+                title: Response Sandbox Catalog V1 Sandboxes Catalog Get
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/sandboxes/{sandbox_id}:
+    get:
+      tags:
+      - Sandboxes
+      summary: Get Sandbox
+      operationId: sandbox_get_v1_sandboxes__sandbox_id__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: sandbox_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Sandbox Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SandboxOut'
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Sandboxes
+      summary: Delete Sandbox
+      operationId: sandbox_delete_v1_sandboxes__sandbox_id__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: sandbox_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Sandbox Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/sandboxes/{sandbox_id}/stop:
+    post:
+      tags:
+      - Sandboxes
+      summary: Stop Sandbox
+      operationId: sandbox_stop_v1_sandboxes__sandbox_id__stop_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: sandbox_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Sandbox Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Conflict
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/sandboxes/{sandbox_id}/start:
+    post:
+      tags:
+      - Sandboxes
+      summary: Start Sandbox
+      operationId: sandbox_start_v1_sandboxes__sandbox_id__start_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: sandbox_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Sandbox Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Conflict
+        '429':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Too Many Requests
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Service Unavailable
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/sandboxes/{sandbox_id}/exec:
+    post:
+      tags:
+      - Sandboxes
+      summary: Exec Command
+      description: 'Run a command in the sandbox. Streams NDJSON lines (application/x-ndjson): {"stdout": ...}/{"stderr": ...} chunks followed by exactly one terminal {"returncode": N} or {"error": msg} line.'
+      operationId: sandbox_exec_v1_sandboxes__sandbox_id__exec_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: sandbox_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Sandbox Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SandboxExecIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Conflict
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/sandboxes/{sandbox_id}/fs/content:
+    put:
+      tags:
+      - Sandboxes
+      summary: Write File
+      description: Write the raw request body (application/octet-stream, max 100 MiB) to an absolute path inside the sandbox.
+      operationId: sandbox_fs_write_v1_sandboxes__sandbox_id__fs_content_put
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: sandbox_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Sandbox Id
+      - name: path
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Path
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Conflict
+        '413':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Request Entity Too Large
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Sandboxes
+      summary: Read File
+      description: Read a file from an absolute path inside the sandbox; returns raw bytes (application/octet-stream).
+      operationId: sandbox_fs_read_v1_sandboxes__sandbox_id__fs_content_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: sandbox_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Sandbox Id
+      - name: path
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Path
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Conflict
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    SandboxPlanOut:
+      properties:
+        id:
+          type: string
+          title: Id
+        vcpu:
+          type: integer
+          title: Vcpu
+        ram_gb:
+          type: integer
+          title: Ram Gb
+        disk_gb:
+          type: integer
+          title: Disk Gb
+        price_per_hour:
+          type: number
+          title: Price Per Hour
+      type: object
+      required:
+      - id
+      - vcpu
+      - ram_gb
+      - disk_gb
+      - price_per_hour
+      title: SandboxPlanOut
+    SandboxCreateIn:
+      properties:
+        plan:
+          type: string
+          title: Plan
+          default: ''
+        tags:
+          additionalProperties:
+            type: string
+          type: object
+          title: Tags
+        timeout_seconds:
+          type: integer
+          title: Timeout Seconds
+          default: 0
+      type: object
+      title: SandboxCreateIn
+    DeepError:
+      properties:
+        error:
+          type: string
+          title: Error
+          description: Error
+          examples:
+          - Model not found
+      type: object
+      required:
+      - error
+      title: DeepError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    SandboxCreateOut:
+      properties:
+        sandbox_id:
+          type: string
+          title: Sandbox Id
+      type: object
+      required:
+      - sandbox_id
+      title: SandboxCreateOut
+    SandboxExecIn:
+      properties:
+        command:
+          items:
+            type: string
+          type: array
+          title: Command
+        timeout_seconds:
+          type: integer
+          title: Timeout Seconds
+          description: Seconds to allow the command to run before it's killed. 0 uses the server default (60s). Capped at 1800s (30 minutes).
+          default: 0
+      type: object
+      required:
+      - command
+      title: SandboxExecIn
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    SandboxOut:
+      properties:
+        sandbox_id:
+          type: string
+          title: Sandbox Id
+        plan:
+          type: string
+          title: Plan
+        image:
+          type: string
+          title: Image
+        state:
+          type: string
+          title: State
+        tags:
+          additionalProperties:
+            type: string
+          type: object
+          title: Tags
+        created_at:
+          type: integer
+          title: Created At
+        provider:
+          type: string
+          title: Provider
+        fail_reason:
+          type: string
+          title: Fail Reason
+          default: ''
+      type: object
+      required:
+      - sandbox_id
+      - plan
+      - image
+      - state
+      - tags
+      - created_at
+      - provider
+      title: SandboxOut
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

@@ -1,0 +1,938 @@
+openapi: 3.2.0
+info:
+  title: DeepInfra Authentication API
+  description: The DeepInfra API provides serverless AI inference, custom model deployments, and GPU rentals.
+  version: 1.0.0
+servers:
+- url: https://api.deepinfra.com
+tags:
+- name: Authentication
+  description: API tokens, SSH keys, scoped JWTs, and login flows.
+paths:
+  /github/login:
+    get:
+      tags:
+      - Authentication
+      summary: Github Login
+      description: Initiate github SSO login flow. Callback is /github/callback
+      operationId: github_login_github_login_get
+      parameters:
+      - name: login_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Login Id
+      - name: origin
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Origin
+      - name: deal
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Deal
+      - name: ti_token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ti Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /okta/login:
+    get:
+      tags:
+      - Authentication
+      summary: Okta Login
+      operationId: okta_login_okta_login_get
+      parameters:
+      - name: team_id
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Team Id
+      - name: origin
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Origin
+      - name: login_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Login Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /github/cli/login:
+    get:
+      tags:
+      - Authentication
+      summary: Github Cli Login
+      description: 'deepctl is calling this request waiting for auth token during login.
+
+        The token is stored in /github/callback'
+      operationId: github_cli_login_github_cli_login_get
+      parameters:
+      - name: login_id
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Login Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /google/login:
+    get:
+      tags:
+      - Authentication
+      summary: Google Login
+      description: Initiate Google SSO login flow. Callback is /google/callback
+      operationId: google_login_google_login_get
+      parameters:
+      - name: login_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Login Id
+      - name: origin
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Origin
+      - name: deal
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Deal
+      - name: ti_token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ti Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/api-tokens:
+    get:
+      tags:
+      - Authentication
+      summary: Get Api Tokens
+      operationId: get_api_tokens_v1_api_tokens_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiToken'
+                title: Response Get Api Tokens V1 Api Tokens Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Authentication
+      summary: Create Api Token
+      description: Create an API token. The reply carries the secret; no later call returns it.
+      operationId: create_api_token_v1_api_tokens_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiTokenIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedApiToken'
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Conflict
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/api-tokens/id/{token_id}:
+    get:
+      tags:
+      - Authentication
+      summary: Get Api Token By Id
+      description: 'One API token''s metadata, by token_id.
+
+
+        token_id comes from Get Api Tokens (`GET /v1/api-tokens`).'
+      operationId: get_api_token_by_id_v1_api_tokens_id__token_id__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: token_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Token Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiToken'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Authentication
+      summary: Delete Api Token By Id
+      description: 'Delete an API token, by token_id.
+
+
+        token_id comes from Get Api Tokens (`GET /v1/api-tokens`).'
+      operationId: delete_api_token_by_id_v1_api_tokens_id__token_id__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: token_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Token Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/api-tokens/vercel_export:
+    post:
+      tags:
+      - Authentication
+      summary: Export Api Token To Vercel By Body
+      operationId: export_api_token_to_vercel_by_body_v1_api_tokens_vercel_export_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiTokenVercelExportBodyIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scoped-jwt:
+    post:
+      tags:
+      - Authentication
+      summary: Create Scoped Jwt
+      operationId: _create_scoped_jwt_v1_scoped_jwt_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScopedJWTIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScopedJWTOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Authentication
+      summary: Inspect Scoped Jwt
+      operationId: inspect_scoped_jwt_v1_scoped_jwt_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: jwtoken
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Jwtoken
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InspectScopedJWTOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/ssh_keys:
+    get:
+      tags:
+      - Authentication
+      summary: Get Ssh Keys
+      operationId: get_ssh_keys_v1_ssh_keys_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SshKeyOut'
+                title: Response Get Ssh Keys V1 Ssh Keys Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Authentication
+      summary: Create Ssh Key
+      operationId: create_ssh_key_v1_ssh_keys_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SshKeyIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SshKeyOut'
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Conflict
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/ssh_keys/{ssh_key_id}:
+    delete:
+      tags:
+      - Authentication
+      summary: Delete Ssh Key
+      operationId: delete_ssh_key_v1_ssh_keys__ssh_key_id__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: ssh_key_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Ssh Key Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ScopedJWTIn:
+      properties:
+        api_key_name:
+          type: string
+          title: Api Key Name
+        models:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Models
+          description: allow inference only to the specified model names
+        expires_delta:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Expires Delta
+          description: how many seconds in the future should the token be valid for
+        expires_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Expires At
+          description: unix timestamp when the token should expire
+        spending_limit:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Spending Limit
+          description: only allow spending that much USD until the token becomes invalid
+      type: object
+      required:
+      - api_key_name
+      title: ScopedJWTIn
+    ApiTokenIn:
+      properties:
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - name
+      title: ApiTokenIn
+    CreatedApiToken:
+      properties:
+        created_at:
+          type: integer
+          title: Created At
+          description: creation unix timestamp
+        name:
+          type: string
+          title: Name
+        token_id:
+          type: string
+          title: Token Id
+        allowed_ips:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Allowed Ips
+        prefix:
+          type: string
+          title: Prefix
+          description: '`sk-di-`, or empty on a token minted before it'
+          default: ''
+        fragment:
+          type: string
+          title: Fragment
+          description: display suffix; last 5 chars of the secret
+          default: ''
+        token:
+          type: string
+          title: Token
+          description: the secret; this reply is the only place it is ever returned
+      type: object
+      required:
+      - created_at
+      - name
+      - token_id
+      - token
+      title: CreatedApiToken
+    ApiTokenVercelExportBodyIn:
+      properties:
+        project_id_or_name:
+          type: string
+          title: Project Id Or Name
+        is_sensitive:
+          type: boolean
+          title: Is Sensitive
+        env_development:
+          type: boolean
+          title: Env Development
+        env_preview:
+          type: boolean
+          title: Env Preview
+        env_production:
+          type: boolean
+          title: Env Production
+        api_token:
+          type: string
+          format: password
+          title: Api Token
+          writeOnly: true
+      type: object
+      required:
+      - project_id_or_name
+      - is_sensitive
+      - env_development
+      - env_preview
+      - env_production
+      - api_token
+      title: ApiTokenVercelExportBodyIn
+    InspectScopedJWTOut:
+      properties:
+        expires_at:
+          type: integer
+          title: Expires At
+          description: unix timestamp of when the token expires
+        models:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Models
+          description: which models is the token limited to
+        spending_limit:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Spending Limit
+          description: how much is the total spending limit set at creation
+        spending_current:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Spending Current
+          description: how much of the spending limit (if any) is used, in USD
+      type: object
+      required:
+      - expires_at
+      title: InspectScopedJWTOut
+    SshKeyOut:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: SSH Key ID
+        name:
+          type: string
+          minLength: 1
+          title: Name
+          description: SSH Key name
+        key:
+          type: string
+          minLength: 1
+          title: Key
+          description: SSH Key content
+        created_at:
+          type: integer
+          title: Created At
+      type: object
+      required:
+      - id
+      - name
+      - key
+      title: SshKeyOut
+    ApiToken:
+      properties:
+        created_at:
+          type: integer
+          title: Created At
+          description: creation unix timestamp
+        name:
+          type: string
+          title: Name
+        token_id:
+          type: string
+          title: Token Id
+        allowed_ips:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Allowed Ips
+        prefix:
+          type: string
+          title: Prefix
+          description: '`sk-di-`, or empty on a token minted before it'
+          default: ''
+        fragment:
+          type: string
+          title: Fragment
+          description: display suffix; last 5 chars of the secret
+          default: ''
+      type: object
+      required:
+      - created_at
+      - name
+      - token_id
+      title: ApiToken
+    ScopedJWTOut:
+      properties:
+        token:
+          type: string
+          title: Token
+          description: The newly minted scoped JWT ready for use
+      type: object
+      required:
+      - token
+      title: ScopedJWTOut
+    DeepError:
+      properties:
+        error:
+          type: string
+          title: Error
+          description: Error
+          examples:
+          - Model not found
+      type: object
+      required:
+      - error
+      title: DeepError
+    SshKeyIn:
+      properties:
+        name:
+          type: string
+          maxLength: 64
+          minLength: 1
+          title: Name
+          description: SSH Key name
+        key:
+          type: string
+          maxLength: 32000
+          minLength: 1
+          title: Key
+          description: SSH Key content
+      type: object
+      required:
+      - name
+      - key
+      title: SshKeyIn
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

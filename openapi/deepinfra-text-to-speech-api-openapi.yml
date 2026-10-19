@@ -1,0 +1,556 @@
+openapi: 3.2.0
+info:
+  title: DeepInfra Text to Speech API
+  description: The DeepInfra API provides serverless AI inference, custom model deployments, and GPU rentals.
+  version: 1.0.0
+servers:
+- url: https://api.deepinfra.com
+tags:
+- name: Text To Speech
+  description: ElevenLabs-compatible TTS endpoints and voice management.
+paths:
+  /v1/voices:
+    get:
+      tags:
+      - Text To Speech
+      summary: Get Voices
+      description: Get available voices for a given user
+      operationId: get_voices_v1_voices_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetVoicesOut'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/text-to-speech/{voice_id}/stream:
+    post:
+      tags:
+      - Text To Speech
+      summary: Text To Speech Stream
+      operationId: text_to_speech_stream_v1_text_to_speech__voice_id__stream_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: voice_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Voice Id
+      - name: output_format
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Output Format
+        example: wav
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ElevenLabsTextToSpeechIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/text-to-speech/{voice_id}:
+    post:
+      tags:
+      - Text To Speech
+      summary: Text To Speech
+      operationId: text_to_speech_v1_text_to_speech__voice_id__post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: voice_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Voice Id
+      - name: output_format
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Output Format
+        example: wav
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ElevenLabsTextToSpeechIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/voices/{voice_id}:
+    get:
+      tags:
+      - Text To Speech
+      summary: Get Voice
+      description: Get a voice by its id
+      operationId: get_voice_v1_voices__voice_id__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: voice_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Voice Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Voice'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Text To Speech
+      summary: Delete Voice
+      operationId: delete_voice_v1_voices__voice_id__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: voice_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Voice Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/voices/add:
+    post:
+      tags:
+      - Text To Speech
+      summary: Create Voice
+      description: Create a new voice
+      operationId: create_voice_v1_voices_add_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_create_voice_v1_voices_add_post'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Voice'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Bad Request
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/voices/{voice_id}/edit:
+    post:
+      tags:
+      - Text To Speech
+      summary: Update Voice
+      operationId: update_voice_v1_voices__voice_id__edit_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: voice_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Voice Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Body_update_voice_v1_voices__voice_id__edit_post'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Voice'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    Body_update_voice_v1_voices__voice_id__edit_post:
+      properties:
+        name:
+          type: string
+          title: Name
+        description:
+          type: string
+          title: Description
+      type: object
+      required:
+      - name
+      - description
+      title: Body_update_voice_v1_voices__voice_id__edit_post
+    Body_create_voice_v1_voices_add_post:
+      properties:
+        name:
+          type: string
+          title: Name
+        description:
+          type: string
+          title: Description
+        files:
+          items:
+            type: string
+            format: binary
+          type: array
+          title: Files
+      type: object
+      required:
+      - name
+      - description
+      - files
+      title: Body_create_voice_v1_voices_add_post
+    ElevenLabsTextToSpeechIn:
+      properties:
+        text:
+          type: string
+          title: Text
+          description: Text to convert to speech
+          examples:
+          - 'I''m beginnin'' to feel like a Rap God, Rap God
+
+            All my people from the front to the back nod, back nod
+
+            Now, who thinks their arms are long enough to slap box, slap box?
+
+            They said I rap like a robot, so call me Rap-bot'
+        model_id:
+          type: string
+          title: Model Id
+          description: Model ID to use for the conversion
+          default: hexgrad/Kokoro-82M
+        output_format:
+          $ref: '#/components/schemas/TtsResponseFormat'
+          description: Output format for the speech
+        language_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Language Code
+          description: ISO 639-1, 2-letter language code
+      type: object
+      required:
+      - text
+      title: ElevenLabsTextToSpeechIn
+    TtsResponseFormat:
+      type: string
+      enum:
+      - mp3
+      - opus
+      - flac
+      - wav
+      - pcm
+      title: TtsResponseFormat
+      description: Select the desired format for the speech output. Supported formats include mp3, opus, flac, wav, and pcm.
+      default: wav
+      examples:
+      - mp3
+      - opus
+      - flac
+      - wav
+      - pcm
+    DeepError:
+      properties:
+        error:
+          type: string
+          title: Error
+          description: Error
+          examples:
+          - Model not found
+      type: object
+      required:
+      - error
+      title: DeepError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    Voice:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        voice_id:
+          type: string
+          title: Voice Id
+        name:
+          type: string
+          title: Name
+        description:
+          type: string
+          title: Description
+          default: ''
+        created_at:
+          type: integer
+          title: Created At
+        updated_at:
+          type: integer
+          title: Updated At
+      type: object
+      required:
+      - user_id
+      - voice_id
+      - name
+      title: Voice
+    GetVoicesOut:
+      properties:
+        voices:
+          items:
+            $ref: '#/components/schemas/Voice'
+          type: array
+          title: Voices
+      type: object
+      title: GetVoicesOut
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

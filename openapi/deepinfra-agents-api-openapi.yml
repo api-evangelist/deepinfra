@@ -1,0 +1,1100 @@
+openapi: 3.2.0
+info:
+  title: DeepInfra Agents API
+  description: The DeepInfra API provides serverless AI inference, custom model deployments, and GPU rentals.
+  version: 1.0.0
+servers:
+- url: https://api.deepinfra.com
+tags:
+- name: Agents
+  description: Manage agent-framework instances (OpenClaw and friends).
+paths:
+  /v1/agents:
+    post:
+      tags:
+      - Agents
+      summary: Create Instance
+      operationId: openclaw_create_v1_agents_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentCreateIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentCreateOut'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Payment Required
+        '429':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Too Many Requests
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Service Unavailable
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Agents
+      summary: List Instances
+      operationId: openclaw_list_v1_agents_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: state
+        in: query
+        required: false
+        schema:
+          enum:
+          - active
+          - inactive
+          - all
+          type: string
+          description: 'Which instances to return: active, inactive, or all (both)'
+          default: active
+          title: State
+        description: 'Which instances to return: active, inactive, or all (both)'
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AgentInstanceOut'
+                title: Response Openclaw List V1 Agents Get
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/agents/catalog:
+    get:
+      tags:
+      - Agents
+      summary: Get Catalog
+      operationId: openclaw_catalog_v1_agents_catalog_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentCatalogOut'
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/agents/{instance_id}:
+    get:
+      tags:
+      - Agents
+      summary: Get Instance
+      operationId: openclaw_get_v1_agents__instance_id__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: instance_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Instance Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentInstanceOut'
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Agents
+      summary: Rename Instance
+      operationId: openclaw_update_v1_agents__instance_id__patch
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: instance_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Instance Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentUpdateIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Agents
+      summary: Delete Instance
+      operationId: openclaw_delete_v1_agents__instance_id__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: instance_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Instance Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/agents/{instance_id}/launch_token:
+    post:
+      tags:
+      - Agents
+      summary: Create Dashboard Launch Token
+      description: 'Mint a single-use launch URL for the dashboard.
+
+
+        Called by the launcher page right when readyz flips ready. The launch URL
+
+        is used as a top-level navigation; /launch then sets the oc_auth cookie
+
+        and 302s into the proxied dashboard.
+
+
+        The user''s bearer token is stashed in Redis under the token''s jti and
+
+        retrieved (atomic GETDEL) on /launch redeem — this keeps the bearer out of
+
+        the URL and out of any signed payload while preserving the existing proxy
+
+        auth flow (oc_auth cookie value = bearer token).
+
+
+        Refuses instances whose agent_type has has_dashboard=False (e.g. hermes).'
+      operationId: openclaw_launch_token_v1_agents__instance_id__launch_token_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: instance_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Instance Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenClawLaunchTokenOut'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/agents/{instance_id}/stop:
+    post:
+      tags:
+      - Agents
+      summary: Stop Instance
+      operationId: openclaw_stop_v1_agents__instance_id__stop_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: instance_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Instance Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Conflict
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/agents/{instance_id}/start:
+    post:
+      tags:
+      - Agents
+      summary: Start Instance
+      operationId: openclaw_start_v1_agents__instance_id__start_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: instance_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Instance Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Conflict
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/agents/{instance_id}/update:
+    post:
+      tags:
+      - Agents
+      summary: Update Instance Version
+      operationId: openclaw_update_version_v1_agents__instance_id__update_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: instance_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Instance Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Conflict
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/agents/{instance_id}/backups:
+    get:
+      tags:
+      - Agents
+      summary: List Backups
+      operationId: openclaw_list_backups_v1_agents__instance_id__backups_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: instance_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Instance Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AgentBackupOut'
+                title: Response Openclaw List Backups V1 Agents  Instance Id  Backups Get
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/agents/{instance_id}/backup:
+    post:
+      tags:
+      - Agents
+      summary: Create Backup
+      operationId: openclaw_trigger_backup_v1_agents__instance_id__backup_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: instance_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Instance Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Conflict
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/agents/{instance_id}/backups/{backup_id}/restore:
+    post:
+      tags:
+      - Agents
+      summary: Restore Backup
+      operationId: openclaw_restore_backup_v1_agents__instance_id__backups__backup_id__restore_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: instance_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Instance Id
+      - name: backup_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Backup Id
+      - name: xi-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Xi-Api-Key
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Not Found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeepError'
+          description: Conflict
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    OpenClawLaunchTokenOut:
+      properties:
+        dashboard_url:
+          type: string
+          title: Dashboard Url
+          description: Single-use URL that opens the dashboard. Short TTL; mint right before navigating.
+      type: object
+      required:
+      - dashboard_url
+      title: OpenClawLaunchTokenOut
+    AgentPlanOut:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Plan identifier
+        vcpu:
+          type: integer
+          title: Vcpu
+          description: Number of vCPUs
+        ram_gb:
+          type: integer
+          title: Ram Gb
+          description: RAM in GB
+        price_per_hour:
+          type: number
+          title: Price Per Hour
+          description: Price in USD per hour
+        monthly_egress_gb:
+          type: integer
+          title: Monthly Egress Gb
+          description: Included monthly egress allowance in GB
+      type: object
+      required:
+      - id
+      - vcpu
+      - ram_gb
+      - price_per_hour
+      - monthly_egress_gb
+      title: AgentPlanOut
+    AgentInstanceState:
+      type: string
+      enum:
+      - creating
+      - starting
+      - running
+      - stopping
+      - stopped
+      - failed
+      - deleted
+      title: AgentInstanceState
+    AgentUpdateIn:
+      properties:
+        name:
+          type: string
+          maxLength: 64
+          minLength: 1
+          title: Name
+          description: Instance name
+      additionalProperties: false
+      type: object
+      required:
+      - name
+      title: AgentUpdateIn
+    AgentTypeMetaOut:
+      properties:
+        pretty_name:
+          type: string
+          title: Pretty Name
+          description: Human-readable display name for the framework
+        version:
+          type: string
+          title: Version
+          description: Agent framework version
+        has_dashboard:
+          type: boolean
+          title: Has Dashboard
+          description: Whether instances of this framework expose a dashboard via the nginx proxy. False -> SSH-only; the UI should hide the dashboard launch affordance and surface the SSH connection string instead.
+        self_service_update_command:
+          type: string
+          title: Self Service Update Command
+          description: 'Non-empty when instances of this framework update themselves: the command the customer runs over SSH. POST /{id}/update refuses such instances, so the UI should show this command instead of the in-place Update action and skip the catalog-version comparison (the instance''s version pin does not move after a self-service update).'
+          default: ''
+        plans:
+          items:
+            $ref: '#/components/schemas/AgentPlanOut'
+          type: array
+          title: Plans
+          description: Plans available for this agent type
+      type: object
+      required:
+      - pretty_name
+      - version
+      - has_dashboard
+      - plans
+      title: AgentTypeMetaOut
+    DeepError:
+      properties:
+        error:
+          type: string
+          title: Error
+          description: Error
+          examples:
+          - Model not found
+      type: object
+      required:
+      - error
+      title: DeepError
+    AgentBackupOut:
+      properties:
+        snapshot_name:
+          type: string
+          title: Snapshot Name
+        size_in_gb:
+          type: integer
+          title: Size In Gb
+        state:
+          type: string
+          title: State
+        created_at_unix:
+          type: integer
+          title: Created At Unix
+      type: object
+      required:
+      - snapshot_name
+      - size_in_gb
+      - state
+      - created_at_unix
+      title: AgentBackupOut
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    AgentInstanceOut:
+      properties:
+        id:
+          type: string
+          title: Id
+        name:
+          type: string
+          title: Name
+        state:
+          $ref: '#/components/schemas/AgentInstanceState'
+        start_ts:
+          type: integer
+          title: Start Ts
+        state_ts:
+          type: integer
+          title: State Ts
+        stop_ts:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Stop Ts
+        price_per_hour:
+          type: number
+          title: Price Per Hour
+        region:
+          type: string
+          title: Region
+        last_backup_ts:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Last Backup Ts
+        ssh_port:
+          type: integer
+          title: Ssh Port
+        fail_reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Fail Reason
+        public_ip:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Public Ip
+        version:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Version
+        agent_type:
+          type: string
+          title: Agent Type
+        ssh_user:
+          type: string
+          title: Ssh User
+          description: POSIX user the agent runs as inside the VM; also the SSH login user.
+        plan_id:
+          type: string
+          title: Plan Id
+      type: object
+      required:
+      - id
+      - name
+      - state
+      - start_ts
+      - state_ts
+      - stop_ts
+      - price_per_hour
+      - region
+      - last_backup_ts
+      - ssh_port
+      - fail_reason
+      - public_ip
+      - version
+      - agent_type
+      - ssh_user
+      - plan_id
+      title: AgentInstanceOut
+    AgentCreateIn:
+      properties:
+        name:
+          type: string
+          maxLength: 64
+          minLength: 1
+          title: Name
+          description: Instance name
+        agent_type_id:
+          type: string
+          title: Agent Type Id
+          description: Agent type identifier
+          default: openclaw
+        plan_id:
+          type: string
+          title: Plan Id
+          description: Plan identifier
+          default: standard
+      type: object
+      required:
+      - name
+      title: AgentCreateIn
+    AgentCreateOut:
+      properties:
+        instance_id:
+          type: string
+          title: Instance Id
+          description: Instance ID
+      type: object
+      required:
+      - instance_id
+      title: AgentCreateOut
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    AgentCatalogOut:
+      additionalProperties:
+        $ref: '#/components/schemas/AgentTypeMetaOut'
+      type: object
+      title: AgentCatalogOut
+      description: 'Per-agent-type catalog: keyed by agent_type_id, each entry carries the
+
+        current version and the plans available for that type.'
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
