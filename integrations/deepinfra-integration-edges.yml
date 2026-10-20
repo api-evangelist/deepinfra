@@ -1,4 +1,23 @@
 edges:
+- partner_name: LlamaIndex
+  partner: llamaindex
+  partner_match: framework
+  channel: partner-built
+  direction: partner-built
+  type: coverage
+  relationship: system-coverage
+  evidence: https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/embeddings/llama-index-embeddings-deepinfra
+  coverage_role:
+  - embeddings
+  framework_signals:
+    packages:
+    - llama-index-embeddings-deepinfra
+    roles:
+    - embeddings
+    vendor_domain: deepinfra.com
+  matched_by: verified-domain-table
+  detected_by: sweep-rag-vector.py
+  first_seen: '2026-10-15'
 - partner_name: OpenRouter
   partner: openrouter
   partner_match: router
@@ -11,11 +30,11 @@ edges:
   - inference-host
   router_signals:
     inference-host:
-      models: 76
+      models: 78
       router_ids:
       - DeepInfra
-      tools_share: 0.82
-      structured_output_share: 0.91
+      tools_share: 0.83
+      structured_output_share: 0.92
   matched_by: verified-token-table
   detected_by: sweep-model-routing.py
   first_seen: '2026-10-13'
@@ -31,11 +50,11 @@ edges:
   - provider
   router_signals:
     provider:
-      models: 134
+      models: 136
       router_ids:
       - deepinfra
       tools_share: 0.91
-      structured_output_share: 0.48
+      structured_output_share: 0.49
   matched_by: verified-token-table
   detected_by: sweep-model-routing.py
   first_seen: '2026-10-13'
@@ -51,11 +70,11 @@ edges:
   - provider
   router_signals:
     provider:
-      models: 32
+      models: 33
       router_ids:
       - deepinfra
-      tools_share: 0.75
-      structured_output_share: 0.75
+      tools_share: 0.76
+      structured_output_share: 0.76
   matched_by: verified-token-table
   detected_by: sweep-model-routing.py
   first_seen: '2026-10-13'
@@ -84,7 +103,7 @@ edges:
   channel: provider-built
   relationship: compatible
   direction: provider-built
-  evidence: https://github.com/api-evangelist/deepinfra/blob/main/openapi/deepinfra-chat-completions-api-openapi.yml#L4
+  evidence: https://github.com/api-evangelist/deepinfra/blob/main/openapi/_superseded/2026-10-19-stale/deepinfra-chat-completions-api-openapi.yml#L4
   contract_reference:
     repo: deepinfra
     spec_file: deepinfra-chat-completions-api-openapi.yml
@@ -93,28 +112,9 @@ edges:
     note: 'deepinfra declares OpenAI compatibility: ''description: OpenAI-compatible inference API for DeepInfra''s
       100+ open-source models. Covers chat completions, text completions, embeddings, audio (transcriptio'''
     detected_by: sweep-model-routing.py
-    detected: '2026-10-15'
+    detected: '2026-10-19'
   detected_by: sweep-model-routing.py
   first_seen: '2026-10-13'
-- partner_name: LlamaIndex
-  partner: llamaindex
-  partner_match: framework
-  channel: partner-built
-  direction: partner-built
-  type: coverage
-  relationship: system-coverage
-  evidence: https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/embeddings/llama-index-embeddings-deepinfra
-  coverage_role:
-  - embeddings
-  framework_signals:
-    packages:
-    - llama-index-embeddings-deepinfra
-    roles:
-    - embeddings
-    vendor_domain: deepinfra.com
-  matched_by: verified-domain-table
-  detected_by: sweep-rag-vector.py
-  first_seen: '2026-10-15'
 generated: '2026-10-13'
 method: searched
 checked:
