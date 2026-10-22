@@ -78,3 +78,16 @@
     detected: '2026-10-19'
   status: not-a-workflow
   arazzo: null
+- slug: deepinfra-vercel-own
+  label: Vercel (own)
+  partner: vercel
+  partner_name: Vercel (own)
+  category: AI
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://vercel.com/marketplace/deepinfra
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
