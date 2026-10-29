@@ -1,4 +1,4 @@
-# DeepInfra (deepinfra)
+# DeepInfra
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,72 +66,128 @@
 
 DeepInfra is a serverless inference platform for open-source models. Hosts 100+ LLMs (Llama, Qwen, DeepSeek, Mixtral) plus image (Flux, Stable Diffusion), video, audio (Whisper, TTS, Voxtral), embeddings/reranking, and vision/OCR models. Includes fine-tuning, dedicated GPU rentals, and private deployments. OpenAI- and Anthropic- compatible endpoints.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/deepinfra/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/deepinfra/refs/heads/main/apis.yml)
+**Areas:** Artificial Intelligence · LLM · Inference · Serverless · Open Source · OpenAI-Compatible · Anthropic Compatible · Image Generation · Audio · Embeddings
 
-## Tags
+## DeepInfra on APIs.io
 
-- AI
-- LLM
-- Inference
-- Serverless
-- Open Source
-- OpenAI Compatible
-- Anthropic Compatible
-- Image Generation
-- Audio
-- Embeddings
+Everything profiled for DeepInfra is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/deepinfra/](https://apis.io/providers/deepinfra/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (7)
 
-- **Created:** 2026-05-08
-- **Modified:** 2026-05-08
+- [DeepInfra Platform API](https://apis.io/apis/deepinfra/platform/) — OpenAI- and Anthropic-compatible inference API for 100+ open-source models. Surfaces include chat completions, anthropic messages, embeddings, reranking,…
+- [DeepInfra Audio API](https://apis.io/apis/deepinfra/deepinfra-audio-api/) — The Audio API from DeepInfra — 3 operation(s) for audio.
+- [DeepInfra Completions API](https://apis.io/apis/deepinfra/deepinfra-completions-api/) — The Completions API from DeepInfra — 1 operation(s) for completions.
+- [DeepInfra Embeddings API](https://apis.io/apis/deepinfra/deepinfra-embeddings-api/) — The Embeddings API from DeepInfra — 1 operation(s) for embeddings.
+- [DeepInfra Images API](https://apis.io/apis/deepinfra/deepinfra-images-api/) — The Images API from DeepInfra — 1 operation(s) for images.
+- [DeepInfra Models API](https://apis.io/apis/deepinfra/deepinfra-models-api/) — The Models API from DeepInfra — 2 operation(s) for models.
+- [DeepInfra Chat Completions API](https://apis.io/apis/deepinfra/deepinfra-chat-completions-api/) — The Chat Completions API from DeepInfra — 1 operation(s) for chat completions.
 
-## APIs
+### Published properties
 
-### DeepInfra Platform API
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-OpenAI- and Anthropic-compatible inference API for 100+ open-source models. Surfaces include chat completions, anthropic messages, embeddings, reranking, audio (speech/transcriptions/translations), image generation, video generation, vision/OCR, dedicated-model deployments, fine-tuning, billing, and account management. Base URL https://api.deepinfra.com/v1/openai (OpenAI-compatible) and https://api.deepinfra.com (native).
+#### Agentic access (1)
 
-- **Human URL:** [https://docs.deepinfra.com/](https://docs.deepinfra.com/)
-- **Base URL:** `https://api.deepinfra.com/v1/openai`
+Which operations an agent can call, which act, and which need a human in the loop.
 
-#### Tags
+- [Deepinfra Agentic Access](https://apis.io/agentic-access/deepinfra/deepinfra-agentic-access/)
 
-- AI
-- LLM
-- Chat Completions
-- Embeddings
-- Reranking
-- Image Generation
-- Audio
-- Vision
-- OCR
-- Fine Tuning
-- Dedicated GPUs
+#### Collections (7)
 
-#### Properties
+Postman and Open Collection request collections.
 
-- [Documentation](https://docs.deepinfra.com/)
-- [Sign Up](https://deepinfra.com/dash/api_keys)
-- [Pricing](https://deepinfra.com/pricing)
-- [Rate Limits](https://docs.deepinfra.com/account/rate-limits)
-- [Webhooks](https://docs.deepinfra.com/account/webhooks)
-- [Anthropic Compatible](https://api.deepinfra.com/v1/openai/anthropic)
-- [Postman Collection](collections/deepinfra.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/deepinfra.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [DeepInfra Inference API](https://apis.io/collections/deepinfra/open-deepinfra/)
+- [DeepInfra Inference Audio API](https://apis.io/collections/deepinfra/open-deepinfra-audio-api/)
+- [DeepInfra Inference Audio Chat API](https://apis.io/collections/deepinfra/open-deepinfra-chat-api/)
+- [DeepInfra Inference Audio Completions API](https://apis.io/collections/deepinfra/open-deepinfra-completions-api/)
+- [DeepInfra Inference Audio Embeddings API](https://apis.io/collections/deepinfra/open-deepinfra-embeddings-api/)
+- [DeepInfra Inference Audio Images API](https://apis.io/collections/deepinfra/open-deepinfra-images-api/)
+- [DeepInfra Inference Audio Models API](https://apis.io/collections/deepinfra/open-deepinfra-models-api/)
 
-## Common Properties
+#### Security (3)
 
-- [GitHub Organization](https://github.com/deepinfra)
-- [LinkedIn](https://www.linkedin.com/company/deep-infra)
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Deepinfra Authentication](https://apis.io/security/deepinfra/deepinfra-authentication/)
+- [Deepinfra Domain Security](https://apis.io/security/deepinfra/deepinfra-domain-security/)
+- [Deepinfra Trust Center](https://apis.io/security/deepinfra/deepinfra-trust-center/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Deepinfra Plans Pricing](https://apis.io/plans/deepinfra/deepinfra-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Deepinfra Rate Limits](https://apis.io/rate-limits/deepinfra/deepinfra-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Deepinfra Finops](https://apis.io/finops/deepinfra/deepinfra-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
 - [Website](https://deepinfra.com/)
 - [Documentation](https://docs.deepinfra.com/)
-- [Plans](plans/deepinfra-plans-pricing.yml)
-- [Rate Limits](rate-limits/deepinfra-rate-limits.yml)
-- [Fin Ops](finops/deepinfra-finops.yml)
-- [L L Ms Txt](https://docs.deepinfra.com/llms.txt)
+- [Blog](https://deepinfra.com/blog)
+- [GitHub](https://github.com/deepinfra)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 31.0** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 42.3 |
+| Contract governance | 0.0 |
+| Operational transparency | 15.8 |
+| Developer ergonomics | 23.8 |
+| Access clarity | 36.8 |
+
+**Agent readiness 23.7** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | unknown |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 15.5** — AI & Biometrics
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/deepinfra/](https://apis.io/providers/deepinfra/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for DeepInfra: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/deepinfra/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
